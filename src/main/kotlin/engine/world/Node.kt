@@ -19,6 +19,11 @@ class Node (val scene: Scene, var name: String = "New Node") : Iterable<Componen
     infix fun<T: Component> contains(type: KClass<T>) = componentMap.contains(type)
     infix fun<T: Component> delete(type: KClass<T>) = componentMap.remove(type) as? T
 
+    fun<T: Component> addComponent(type: Class<T>) = this add type.kotlin
+    fun<T: Component> getComponent(type: Class<T>) = this get type.kotlin
+    fun<T: Component> containsComponent(type: Class<T>) = this contains type.kotlin
+    fun<T: Component> deleteComponent(type: Class<T>) = this delete type.kotlin
+
 
     // Iterable<Component> implementation
     override fun iterator() = componentMap.values.iterator()

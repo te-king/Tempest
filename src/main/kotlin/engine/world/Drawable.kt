@@ -1,7 +1,7 @@
 package engine.world
 
-import wrappers.opengl.RenderCommandBuffer
+import wrappers.opengl.CommandBuffer
 
 interface Drawable {
-    fun draw(buffer: RenderCommandBuffer)
+    fun draw(buffer: CommandBuffer)
 }

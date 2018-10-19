@@ -54,12 +54,8 @@ class Device (val capabilities: GLCapabilities) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun createRenderCommandBuffer() = RenderCommandBuffer(this)
-    fun createBlitCommandBuffer() = BlitCommandBuffer(this)
-
-    abstract class CommandBuffer(val device: Device) {
-        protected val commands = mutableListOf<() -> Unit>()
-        fun submit() { device.commandQueue.addAll(commands) }
+    fun commandBuffer() = object: CommandBuffer(this) {
+        override fun submit() { commandQueue.addAll(commands) }
     }
 
 }

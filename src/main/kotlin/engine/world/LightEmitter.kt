@@ -1,6 +1,6 @@
 package engine.world
 
-import wrappers.opengl.RenderCommandBuffer
+import wrappers.opengl.CommandBuffer
 
 class LightEmitter(node: Node) : Component(node) {
 
@@ -10,7 +10,7 @@ class LightEmitter(node: Node) : Component(node) {
     //var type: Light = Light.Ambient(Float3(1f, 0f, 0f), 1f)
 
 
-    fun draw(buffer: RenderCommandBuffer) {
+    fun draw(buffer: CommandBuffer) {
 
         buffer.bindUniformBuffer(2, transform.buffer)
         //type.draw(buffer)

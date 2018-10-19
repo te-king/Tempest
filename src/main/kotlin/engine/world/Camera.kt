@@ -100,7 +100,7 @@ class Camera (node: Node) : Component(node), Updatable {
         if (projectionInvalid) validateProjection()
 
         // Render scene into geometryFramebuffer
-        device.createRenderCommandBuffer().apply {
+        device.commandBuffer().apply {
 
             // Bind camera transform
             bindUniformBuffer(0, transform.buffer)
@@ -154,10 +154,6 @@ class Camera (node: Node) : Component(node), Updatable {
 
 
              */
-
-        }.submit()
-
-        device.createBlitCommandBuffer().apply {
 
             copyFramebuffer(
                 geometryFramebuffer, Int4(0, 0, 640, 480),

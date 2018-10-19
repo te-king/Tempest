@@ -1,0 +1,21 @@
+package wrappers.opengl
+
+import org.lwjgl.opengl.GL45.*
+
+enum class TextureFormat(val native: Int) {
+    R8(GL_R8),
+    R16(GL_R16),
+    RG8(GL_RG8),
+    RG16(GL_RG16),
+    RGB8(GL_RGB8),
+    RGB16(GL_RGB16),
+    RGBA8(GL_RGBA8),
+
+    RGBA32F(GL_RGBA32F),
+
+    DEPTH16(GL_DEPTH_COMPONENT16),
+    DEPTH24(GL_DEPTH_COMPONENT24),
+    DEPTH32(GL_DEPTH_COMPONENT32),
+    DEPTH24STENCIL8(GL_DEPTH24_STENCIL8),
+    STENCIL8(GL_STENCIL_INDEX8)
+}

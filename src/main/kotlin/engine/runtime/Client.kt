@@ -24,8 +24,8 @@ object Client {
     }
 
     init {
-        glfwSetKeyCallback(window.window) { window: Long, key: Int, scanCode: Int, action: Int, mods: Int ->
-            Input.keys[Key.fromInt(key)!!] = action != GLFW_RELEASE
+        window.onKeyPress { window, key, action, mods ->
+            Input.keys[key] = action != GLFW_RELEASE
         }
     }
 
@@ -41,7 +41,8 @@ object Client {
         // Begin render loop
         var oldTime = System.nanoTime()
         var frames = 0L
-        while (!window.shouldClose()) {
+
+        window.loop {
 
             val newTime = System.nanoTime()
             val delta = (newTime - oldTime).toFloat() / 1_000_000_000f
@@ -57,10 +58,7 @@ object Client {
             oldTime = newTime
             frames++
 
-            if (frames % 20 == 0L) window.setTitle("FPS: %.2f FRAMES: %s".format(1.0 / delta, frames))
-
-            // Fire window events
-            glfwPollEvents()
+            if (frames % 20 == 0L) window.title = "FPS: %.2f FRAMES: %s".format(1.0 / delta, frames)
 
         }
 

@@ -4,7 +4,7 @@ import wrappers.opengl.CommandBuffer
 import engine.graphics.Material
 import engine.graphics.Mesh
 
-class MeshRenderer (node: Node) : Component(node), Drawable {
+class MeshRenderer (node: Node) : Component(node) {
 
     private val transform = node add Transform::class
 
@@ -14,7 +14,7 @@ class MeshRenderer (node: Node) : Component(node), Drawable {
     var material: Material? = null
 
 
-    override fun draw(buffer: CommandBuffer) {
+    fun draw(buffer: CommandBuffer) {
         mesh?.let { mesh ->
             material?.let { material ->
                 buffer.bindUniformBuffer(2, transform.buffer)

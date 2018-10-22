@@ -157,7 +157,7 @@ class Camera (node: Node) : Component(node), Updatable {
 
             copyFramebuffer(
                 geometryFramebuffer, Int4(0, 0, 640, 480),
-                null, Int4(0, 0, 640, 480),
+                null, Int4(0, 0, window?.width ?: 0, window?.height ?: 0),
                 CopyFramebufferMask.COLOR_BUFFER_BIT,
                 CopyFramebufferFilter.NEAREST
             )

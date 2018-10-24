@@ -10,8 +10,9 @@ class Device (val capabilities: GLCapabilities) {
     private val commandQueue = mutableListOf<() -> Unit>()
 
     fun executeCommandQueue() {
-        commandQueue.forEach { it() }
+        val copy = commandQueue.toList()
         commandQueue.clear()
+        copy.forEach { it() }
         glFinish()
     }
 

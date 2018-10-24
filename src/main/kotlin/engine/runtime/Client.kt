@@ -1,5 +1,6 @@
 package engine.runtime
 
+import engine.graphics.StandardObjectShader
 import wrappers.opengl.Device
 import wrappers.glfw.Window
 import org.lwjgl.glfw.GLFW.*
@@ -22,6 +23,8 @@ object Client {
         window.makeContextCurrent()
         Device(GL.createCapabilities())
     }
+
+    val standardObjectShader = StandardObjectShader(device)
 
     init {
         window.onKeyPress { window, key, action, mods ->

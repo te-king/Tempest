@@ -1,5 +1,6 @@
 package engine.graphics
 
+import engine.runtime.Client
 import engine.world.*
 import math.Float3
 import math.Quaternion
@@ -123,7 +124,7 @@ class Asset (val file: File) {
 
         val materials = Array<AIMaterial>(aiScene.mNumMaterials()) { AIMaterial.create(aiScene.mMaterials()!!.get(it)) }.map { aiMaterial: AIMaterial ->
 
-            val result = StandardObjectShader.Material()
+            val result = Client.standardObjectShader.Material()
 
             // TODO: Fix texture loading
             resourceAt("""assets/diffuse.jpg""").loadI8(scene.device)?.let {

@@ -16,7 +16,7 @@ class Camera (node: Node) : Component(node), Updatable {
 
 
     // Parameters
-    var fieldOfView: Float = Math.toRadians(65.0).toFloat()
+    var fieldOfView: Float = Math.toRadians(45.0).toFloat()
         set(value) {
             invalidateProjection()
             field = value

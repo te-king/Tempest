@@ -12,16 +12,16 @@ class StandardObjectShader(val device: Device) {
     private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, ProgramType.VERTEX)
     private val fragmentProgram = resourceAt("""shaders/StandardFragmentShader.glsl""").loadShaderSource(device, ProgramType.FRAGMENT)
 
-    private val pipeline = device.pipeline().apply {
+    val pipeline = device.pipeline().apply {
         setStage(ProgramType.VERTEX, vertexProgram)
         setStage(ProgramType.FRAGMENT, fragmentProgram)
     }
 
     inner class Material: engine.graphics.Material {
 
-        override val pipeline get() = this@StandardObjectShader.pipeline
+        override val buffer = device.buffer().apply { allocateImmutable(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, GL_DYNAMIC_STORAGE_BIT) }
 
-        override val buffer = device.buffer().apply { allocateImmutable( Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, GL_DYNAMIC_STORAGE_BIT) }
+        override val pipeline get() = this@StandardObjectShader.pipeline
 
 
         var diffuseColor = Float4(0f, 0f, 0f, 0f)

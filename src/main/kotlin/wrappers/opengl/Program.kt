@@ -2,7 +2,7 @@ package wrappers.opengl
 
 import org.lwjgl.opengl.GL45C.*
 
-abstract class Program() {
+abstract class Program {
 
     abstract val device: Device
     abstract val id: Int
@@ -12,4 +12,3 @@ abstract class Program() {
     fun delete() = glDeleteProgram(id)
 
 }
-

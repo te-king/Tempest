@@ -17,6 +17,7 @@ abstract class CommandBuffer(val device: Device) {
     fun bindFramebuffer(framebuffer: Framebuffer?) = commands.add { glBindFramebuffer(GL_FRAMEBUFFER, framebuffer?.id ?: 0) }
 
     // Context management
+    fun setDepthFunc(func: DepthFunc) = commands.add { glDepthFunc(func.native) }
     fun setCullMode(mode: CullMode) = commands.add { glCullFace(mode.native) }
     fun setFrontFace(winding: FaceWinding) = commands.add { glFrontFace(winding.native) }
     fun setTriangleFillMode(mode: TriangleFillMode) = commands.add { glPolygonMode(GL_FRONT_AND_BACK, mode.native) }

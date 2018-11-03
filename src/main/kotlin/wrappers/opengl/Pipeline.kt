@@ -17,4 +17,3 @@ abstract class Pipeline {
     fun delete() = glDeleteProgramPipelines(id)
 
 }
-

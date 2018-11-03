@@ -21,20 +21,20 @@ class Asset (val file: File) {
 
     fun loadShaderSource(device: Device, type: ProgramType) = device.program(type, file.readText())
 
-    fun loadI8(device: Device, layers: Int = 1, channels: Int = 0): Texture? {
+    fun loadI8(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture(TextureTarget.TEXTURE_2D)
-            result.allocate2d(layers, TextureFormat.RGB8, w[0], h[0])
+            val result = device.texture2d()
+            result.allocate(layers, TextureFormat.RGB8, w[0], h[0])
 
             when (c[0]) {
-                1 -> result[0].setSubImage2d(0, 0, w[0], h[0], PixelLayout.RED, PixelType.BYTE, it)
-                2 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RG, PixelType.BYTE, it)
-                3 -> result[0].setSubImage2d(0, 0, w[0], h[0], PixelLayout.RGB, PixelType.BYTE, it)
-                4 -> result[0].setSubImage2d(0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.BYTE, it)
+                1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.BYTE, it)
+                2 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RG, PixelType.BYTE, it)
+                3 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGB, PixelType.BYTE, it)
+                4 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.BYTE, it)
             }
 
             STBImage.stbi_image_free(it)
@@ -44,20 +44,20 @@ class Asset (val file: File) {
         return null
     }
 
-    fun loadI16(device: Device, layers: Int = 1, channels: Int = 0): Texture? {
+    fun loadI16(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load_16(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture(TextureTarget.TEXTURE_2D)
-            result.allocate2d(layers, TextureFormat.RGB16, w[0], h[0])
+            val result = device.texture2d()
+            result.allocate(layers, TextureFormat.RGB16, w[0], h[0])
 
             when (c[0]) {
-                1 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RED, PixelType.SHORT, it)
-                2 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RG, PixelType.SHORT, it)
-                3 -> result[0].setSubImage2d(0, 0, w[0], h[0], PixelLayout.RGB, PixelType.SHORT, it)
-                4 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.SHORT, it)
+                1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.SHORT, it)
+                2 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RG, PixelType.SHORT, it)
+                3 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGB, PixelType.SHORT, it)
+                4 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.SHORT, it)
             }
 
             STBImage.stbi_image_free(it)
@@ -67,20 +67,20 @@ class Asset (val file: File) {
         return null
     }
 
-    fun loadU8(device: Device, layers: Int = 1, channels: Int = 0): Texture? {
+    fun loadU8(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture(TextureTarget.TEXTURE_2D)
-            result.allocate2d(layers, TextureFormat.RGB8, w[0], h[0])
+            val result = device.texture2d()
+            result.allocate(layers, TextureFormat.RGB8, w[0], h[0])
 
             when (c[0]) {
-                1 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_BYTE, it)
-                2 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RG, PixelType.UNSIGNED_BYTE, it)
-                3 -> result[0].setSubImage2d(0, 0, w[0], h[0], PixelLayout.RGB, PixelType.UNSIGNED_BYTE, it)
-                4 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.UNSIGNED_BYTE, it)
+                1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_BYTE, it)
+                2 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RG, PixelType.UNSIGNED_BYTE, it)
+                3 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGB, PixelType.UNSIGNED_BYTE, it)
+                4 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.UNSIGNED_BYTE, it)
             }
 
             STBImage.stbi_image_free(it)
@@ -90,20 +90,20 @@ class Asset (val file: File) {
         return null
     }
 
-    fun loadU16(device: Device, layers: Int = 1, channels: Int = 0): Texture? {
+    fun loadU16(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load_16(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture(TextureTarget.TEXTURE_2D)
-            result.allocate2d(layers, TextureFormat.RGB16, w[0], h[0])
+            val result = device.texture2d()
+            result.allocate(layers, TextureFormat.RGB16, w[0], h[0])
 
             when (c[0]) {
-                1 -> result[0].setSubImage2d(0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_SHORT, it)
-                2 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RG, PixelType.UNSIGNED_SHORT, it)
-                3 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RGB, PixelType.UNSIGNED_SHORT, it)
-                4 -> result[0].setSubImage2d( 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.UNSIGNED_SHORT, it)
+                1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_SHORT, it)
+                2 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RG, PixelType.UNSIGNED_SHORT, it)
+                3 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGB, PixelType.UNSIGNED_SHORT, it)
+                4 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RGBA, PixelType.UNSIGNED_SHORT, it)
             }
 
             STBImage.stbi_image_free(it)

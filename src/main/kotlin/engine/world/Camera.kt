@@ -70,14 +70,14 @@ class Camera (node: Node) : Component(node), Updatable {
 
     private val geometryFramebuffer = device.framebuffer().apply {
 
-        val colorTexture = device.texture(TextureTarget.TEXTURE_2D)
-        colorTexture.allocate2d(1, TextureFormat.RGB8, 640, 480)
+        val colorTexture = device.texture2d()
+        colorTexture.allocate(1, TextureFormat.RGB8, 640, 480)
 
-        val normalTexture = device.texture(TextureTarget.TEXTURE_2D)
-        normalTexture.allocate2d(1, TextureFormat.RGB8, 640, 480)
+        val normalTexture = device.texture2d()
+        normalTexture.allocate(1, TextureFormat.RGB8, 640, 480)
 
-        val depthTexture = device.texture(TextureTarget.TEXTURE_2D)
-        depthTexture.allocate2d(1, TextureFormat.DEPTH24, 640, 480)
+        val depthTexture = device.texture2d()
+        depthTexture.allocate(1, TextureFormat.DEPTH24, 640, 480)
 
         this.namedFramebufferTexture(GL_COLOR_ATTACHMENT0, colorTexture, 0)
         this.namedFramebufferTexture(GL_COLOR_ATTACHMENT1, normalTexture, 0)
@@ -87,8 +87,8 @@ class Camera (node: Node) : Component(node), Updatable {
 
     private val illuminationFramebuffer = device.framebuffer().apply {
 
-        val illuminationTexture = device.texture(TextureTarget.TEXTURE_2D)
-        illuminationTexture.allocate2d(1, TextureFormat.RGB8, 640, 480)
+        val illuminationTexture = device.texture2d()
+        illuminationTexture.allocate(1, TextureFormat.RGB8, 640, 480)
 
         this.namedFramebufferTexture(GL_COLOR_ATTACHMENT0, illuminationTexture, 0)
 

@@ -11,7 +11,7 @@ abstract class CommandBuffer(val device: Device) {
     // Binding
     fun bindStorageBuffer(index: Int, buffer: Buffer) = commands.add { glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, buffer.id) }
     fun bindUniformBuffer(index: Int, buffer: Buffer) = commands.add { glBindBufferBase(GL_UNIFORM_BUFFER, index, buffer.id) }
-    fun bindTexture(index: Int, texture: Texture?) = commands.add { glBindTextureUnit(index, texture?.id ?: 0) }
+    fun bindTexture(index: Int, texture: Texture2d?) = commands.add { glBindTextureUnit(index, texture?.id ?: 0) }
     fun bindPipeline(renderPipeline: Pipeline?) = commands.add { glBindProgramPipeline(renderPipeline?.id ?: 0) }
     fun bindVertexArray(vertexArray: VertexArray?) = commands.add { glBindVertexArray(vertexArray?.id ?: 0) }
     fun bindFramebuffer(framebuffer: Framebuffer?) = commands.add { glBindFramebuffer(GL_FRAMEBUFFER, framebuffer?.id ?: 0) }

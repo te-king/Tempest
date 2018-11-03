@@ -11,7 +11,7 @@ abstract class Framebuffer {
     // Native Functions
     fun namedFramebufferRenderbuffer(attachment: GLenum, renderbuffertarget: GLenum, renderbuffer: GLuint) = glNamedFramebufferRenderbuffer(id, attachment, renderbuffertarget, renderbuffer)
     fun namedFramebufferParameteri(pname: GLenum, param: GLint) = glNamedFramebufferParameteri(id, pname, param)
-    fun namedFramebufferTexture(attachment: GLenum, texture: Texture?, level: GLint) = glNamedFramebufferTexture(id, attachment, texture?.id ?: 0, level)
+    fun namedFramebufferTexture(attachment: GLenum, texture: Texture2d?, level: GLint) = glNamedFramebufferTexture(id, attachment, texture?.id ?: 0, level)
     fun namedFramebufferTextureLayer(attachment: GLenum, texture: GLuint, level: GLint, layer: GLint) = glNamedFramebufferTextureLayer(id, attachment, texture, level, layer)
     fun namedFramebufferDrawBuffer(buf: GLenum) = glNamedFramebufferDrawBuffer(id, buf)
     fun namedFramebufferReadBuffer(src: GLenum) = glNamedFramebufferReadBuffer(id, src)

@@ -24,10 +24,21 @@ class Device (val capabilities: GLCapabilities) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun texture(textureTarget: TextureTarget) = object: Texture() {
+    fun texture1d() = object: Texture1d() {
         override val device = this@Device
-        override val id = glCreateTextures(textureTarget.native)
-        override val target = textureTarget
+        override val id = glCreateTextures(target)
+        fun finalize() { commandQueue.add(::delete) }
+    }
+
+    fun texture2d() = object: Texture2d() {
+        override val device = this@Device
+        override val id = glCreateTextures(target)
+        fun finalize() { commandQueue.add(::delete) }
+    }
+
+    fun texture3d() = object: Texture3d() {
+        override val device = this@Device
+        override val id = glCreateTextures(target)
         fun finalize() { commandQueue.add(::delete) }
     }
 

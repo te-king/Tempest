@@ -1,11 +1,10 @@
 package engine.graphics
 
-import engine.runtime.Client
 import math.Float4
 import org.lwjgl.opengl.GL45.GL_DYNAMIC_STORAGE_BIT
 import wrappers.opengl.Device
 import wrappers.opengl.ProgramType
-import wrappers.opengl.Texture
+import wrappers.opengl.Texture2d
 
 class StandardObjectShader(val device: Device) {
 
@@ -30,13 +29,13 @@ class StandardObjectShader(val device: Device) {
                 field = value
             }
 
-        var diffuseMap: Texture? = null
+        var diffuseMap: Texture2d? = null
             set(value) {
                 buffer.setSubData(Float4.SIZE_BYTES.toLong(), longArrayOf(value?.handle ?: 0))
                 field = value
             }
 
-        var normalMap: Texture? = null
+        var normalMap: Texture2d? = null
             set(value) {
                 buffer.setSubData(Float4.SIZE_BYTES.toLong() + Long.SIZE_BYTES.toLong(), longArrayOf(value?.handle ?: 0))
                 field = value

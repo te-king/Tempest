@@ -3,10 +3,9 @@ package wrappers.opengl
 import org.lwjgl.opengl.GL45C.*
 import java.nio.IntBuffer
 
-abstract class Framebuffer {
+open class Framebuffer(val device: Device) {
 
-    abstract val device: Device
-    abstract val id: Int
+    val id = glCreateFramebuffers()
 
     // Native Functions
     fun namedFramebufferRenderbuffer(attachment: GLenum, renderbuffertarget: GLenum, renderbuffer: GLuint) = glNamedFramebufferRenderbuffer(id, attachment, renderbuffertarget, renderbuffer)

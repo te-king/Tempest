@@ -103,10 +103,10 @@ class Camera (node: Node) : Component(node), Updatable {
         device.commandBuffer().apply {
 
             // Bind camera transform
-            bindUniformBuffer(0, transform.buffer)
+            bindBuffer(0, transform.buffer)
 
             // Bind camera data
-            bindUniformBuffer(1, buffer)
+            bindBuffer(1, buffer)
 
 
             // -- GEOMETRY PASS

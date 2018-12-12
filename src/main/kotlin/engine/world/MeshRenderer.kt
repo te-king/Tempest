@@ -17,11 +17,22 @@ class MeshRenderer (node: Node) : Component(node) {
     fun draw(buffer: CommandBuffer) {
         mesh?.let { mesh ->
             material?.let { material ->
-                buffer.bindUniformBuffer(2, transform.buffer)
-                buffer.bindUniformBuffer(3, material.buffer)
+
                 buffer.bindPipeline(material.pipeline)
-                buffer.bindVertexArray(mesh.vao)
-                buffer.drawIndexedPrimitives(mesh.primitiveType, mesh.indexCount, mesh.indexType)
+                buffer.bindVertexArray(material.layout)
+
+                buffer.bindBuffer(2, transform.buffer)
+                buffer.bindBuffer(3, material.buffer)
+
+                mesh.vertexBuffers.forEach(buffer::bindVertexBuffer)
+
+                mesh.indexBuffers.forEach { indexBuffer ->
+                    buffer.bindElementBuffer(indexBuffer)
+                    buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
+                }
+
+                mesh.vertexBuffers.mapValues { null }.forEach(buffer::bindVertexBuffer)
+
             }
         }
     }

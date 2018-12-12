@@ -2,10 +2,9 @@ package wrappers.opengl
 
 import org.lwjgl.opengl.GL45C.*
 
-abstract class Program {
+open class Program(val device: Device, type: ProgramType, source: String) {
 
-    abstract val device: Device
-    abstract val id: Int
+    val id = glCreateShaderProgramv(type.native, source)
 
     val infoLog get() = glGetProgramInfoLog(id)
 

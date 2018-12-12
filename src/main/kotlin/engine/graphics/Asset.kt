@@ -145,68 +145,41 @@ class Asset (val file: File) {
 
             val mesh = Mesh(scene.device)
 
-            // Vertices
-            mesh.vertexBuffers[0] = aiMesh.mVertices().run {
-                val buffer = scene.device.buffer()//.apply { allocateImmutable(sizeof() * remaining().toLong(), Pointer<Unit>(address()), 0) }
+            val vertices =  aiMesh.mVertices().run {
+                val buffer = scene.device.buffer()
                 buffer.allocateImmutable(this, 0)
-
-                mesh[0].apply {
-                    bufferIndex = 0
-                    format(3, GL_FLOAT)
-                    enabled = true
-                }
-
                 Mesh.VertexBuffer(buffer, 0, sizeof())
             }
 
-            // Normals
-            mesh.vertexBuffers[1] = aiMesh.mNormals()?.run {
-                val buffer = scene.device.buffer()//.apply { allocateImmutable(sizeof() * remaining().toLong(), Pointer<Unit>(address()), 0) }
+            val normals = aiMesh.mNormals()?.run {
+                val buffer = scene.device.buffer()
                 buffer.allocateImmutable(this, 0)
-
-                mesh[1].apply {
-                    bufferIndex = 1
-                    format(3, GL_FLOAT)
-                    enabled = true
-                }
-
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
-            // Uvs
-            mesh.vertexBuffers[2] = aiMesh.mTextureCoords(0)?.run {
-                val buffer = scene.device.buffer()//.apply { allocateImmutable(sizeof() * remaining().toLong(), Pointer<Unit>(address()), 0) }
+            val uvs = aiMesh.mTextureCoords(0)?.run {
+                val buffer = scene.device.buffer()
                 buffer.allocateImmutable(this, 0)
-
-                mesh[2].apply {
-                    bufferIndex = 2
-                    format(3, GL_FLOAT)
-                    enabled = true
-                }
-
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
-            // Tangents
-            mesh.vertexBuffers[3] = aiMesh.mTangents()?.run {
-                val buffer = scene.device.buffer()//.apply { allocateImmutable(sizeof() * remaining().toLong(), Pointer<Unit>(address()), 0) }
+            val tangents = aiMesh.mTangents()?.run {
+                val buffer = scene.device.buffer()
                 buffer.allocateImmutable(this, 0)
-
-                mesh[3].apply {
-                    bufferIndex = 3
-                    format(3, GL_FLOAT)
-                    enabled = true
-                }
-
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
-            val indices = aiMesh.mFaces().flatMap {  (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray()
+            val indices = aiMesh.mFaces().flatMap {  (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
+                val buffer = scene.device.buffer()
+                buffer.allocateImmutable(this, 0)
+                Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.TRIANGLES)
+            }
 
-            mesh.indexBuffer = scene.device.buffer().apply { allocateImmutable(indices, 0) }
-            mesh.indexCount = aiMesh.mNumFaces() * aiMesh.mFaces().mNumIndices()
-            mesh.indexType = IndexType.UNSIGNED_INT
-            mesh.primitiveType = PrimitiveType.TRIANGLES
+            vertices.let { mesh.vertexBuffers[0] = it }
+            normals?.let { mesh.vertexBuffers[1] = it }
+            uvs?.let { mesh.vertexBuffers[2] = it }
+            tangents?.let { mesh.vertexBuffers[3] = it }
+            indices.let { mesh.indexBuffers += it }
 
             mesh to materials[aiMesh.mMaterialIndex()]
 

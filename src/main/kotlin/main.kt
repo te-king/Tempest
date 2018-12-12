@@ -1,18 +1,19 @@
-import engine.graphics.Asset
 import engine.graphics.resourceAt
 import engine.runtime.Client
 import engine.world.*
 import org.lwjgl.opengl.GLUtil
-import wrappers.opengl.Device
-import wrappers.opengl.TextureFormat
 
 fun main(args: Array<String>) {
 
     val scene = Client.scene
 
+    val v = GLUtil.setupDebugMessageCallback()
+
     // Load object
-    val node = resourceAt("""assets/cube.obj""").loadNode(scene)!!
-    node add RotationScript::class
+    for (i in 0 until 1) {
+        val node = resourceAt("""assets/cube.obj""").loadNode(scene)!!
+        node add RotationScript::class
+    }
 
     // Initialize camera
     val cameraNode = Node(scene)

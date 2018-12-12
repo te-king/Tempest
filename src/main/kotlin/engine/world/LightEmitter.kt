@@ -12,7 +12,7 @@ class LightEmitter(node: Node) : Component(node) {
 
     fun draw(buffer: CommandBuffer) {
 
-        buffer.bindUniformBuffer(2, transform.buffer)
+        buffer.bindBuffer(2, transform.buffer)
         //type.draw(buffer)
 
     }

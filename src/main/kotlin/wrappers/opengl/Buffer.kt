@@ -4,10 +4,9 @@ import org.lwjgl.opengl.GL45C.*
 import org.lwjgl.system.CustomBuffer
 import java.nio.*
 
-abstract class Buffer {
+open class Buffer(val device: Device) {
 
-    abstract val device: Device
-    abstract val id: Int
+    val id = glCreateBuffers()
 
     val size get() = glGetNamedBufferParameteri(id, GL_BUFFER_SIZE)
     val immutable get() = glGetNamedBufferParameteri(id, GL_BUFFER_IMMUTABLE_STORAGE) == GL_TRUE

@@ -1,5 +1,6 @@
 package wrappers.opengl
 
+import engine.graphics.Mesh
 import math.Int4
 import org.lwjgl.opengl.GL45.*
 
@@ -9,12 +10,48 @@ abstract class CommandBuffer(val device: Device) {
 
 
     // Binding
-    fun bindStorageBuffer(index: Int, buffer: Buffer) = commands.add { glBindBufferBase(GL_SHADER_STORAGE_BUFFER, index, buffer.id) }
-    fun bindUniformBuffer(index: Int, buffer: Buffer) = commands.add { glBindBufferBase(GL_UNIFORM_BUFFER, index, buffer.id) }
-    fun bindTexture(index: Int, texture: Texture2d?) = commands.add { glBindTextureUnit(index, texture?.id ?: 0) }
-    fun bindPipeline(renderPipeline: Pipeline?) = commands.add { glBindProgramPipeline(renderPipeline?.id ?: 0) }
-    fun bindVertexArray(vertexArray: VertexArray?) = commands.add { glBindVertexArray(vertexArray?.id ?: 0) }
-    fun bindFramebuffer(framebuffer: Framebuffer?) = commands.add { glBindFramebuffer(GL_FRAMEBUFFER, framebuffer?.id ?: 0) }
+    fun bindBuffer(index: Int, buffer: Buffer?) {
+        val id = buffer?.id ?: 0
+        commands.add { glBindBufferBase(GL_UNIFORM_BUFFER, index, id) }
+    }
+
+    fun bindPipeline(pipeline: Pipeline?) {
+        val id = pipeline?.id ?: 0
+        commands.add { glBindProgramPipeline(id) }
+    }
+
+    fun bindVertexArray(vertexArray: VertexArray?) {
+        val id = vertexArray?.id ?: 0
+        commands.add { glBindVertexArray(id) }
+    }
+
+    fun bindFramebuffer(framebuffer: Framebuffer?) {
+        val id = framebuffer?.id ?: 0
+        commands.add { glBindFramebuffer(GL_FRAMEBUFFER, id) }
+    }
+
+    fun bindVertexBuffer(index: Int, vertexBuffer: Mesh.VertexBuffer?) {
+        if (vertexBuffer == null)
+            commands.add {
+                glDisableVertexAttribArray(index)
+            }
+        else
+            commands.add {
+                glEnableVertexAttribArray(index)
+                glBindVertexBuffer(index, vertexBuffer.buffer.id, vertexBuffer.offset, vertexBuffer.stride)
+            }
+    }
+
+    fun bindElementBuffer(indexBuffer: Mesh.IndexBuffer?) {
+        if (indexBuffer == null)
+            commands.add {
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
+            }
+        else
+            commands.add {
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.buffer.id)
+            }
+    }
 
     // Context management
     fun setDepthFunc(func: DepthFunc) = commands.add { glDepthFunc(func.native) }
@@ -34,4 +71,3 @@ abstract class CommandBuffer(val device: Device) {
     abstract fun submit()
 
 }
-

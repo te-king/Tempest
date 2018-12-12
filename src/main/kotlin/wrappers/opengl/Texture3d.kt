@@ -3,9 +3,7 @@ package wrappers.opengl
 import org.lwjgl.opengl.GL45C.*
 import java.nio.*
 
-abstract class Texture3d: Texture() {
-
-    override val target = GL_TEXTURE_3D
+abstract class Texture3d(device: Device) : Texture(device, GL_TEXTURE_3D) {
 
     fun allocate(levels: GLsizei, internalformat: TextureFormat, width: GLsizei, height: GLsizei, depth: GLsizei) = glTextureStorage3D(id, levels, internalformat.native, width, height, depth)
 

@@ -3,11 +3,9 @@ package wrappers.opengl
 import org.lwjgl.opengl.ARBBindlessTexture.*
 import org.lwjgl.opengl.GL45C.*
 
-abstract class Texture {
+open class Texture(val device: Device, val target: Int) {
 
-    abstract val device: Device
-    abstract val id: Int
-    abstract val target: Int
+    val id = glCreateTextures(target)
 
 
     val handle get() = glGetTextureHandleARB(id)

@@ -1,6 +1,7 @@
 package engine.graphics
 
 import math.Float4
+import org.lwjgl.opengl.GL11C.GL_FLOAT
 import org.lwjgl.opengl.GL45.GL_DYNAMIC_STORAGE_BIT
 import wrappers.opengl.Device
 import wrappers.opengl.ProgramType
@@ -16,11 +17,27 @@ class StandardObjectShader(val device: Device) {
         setStage(ProgramType.FRAGMENT, fragmentProgram)
     }
 
+    val layout = device.vertexArray().apply {
+        formatFloatAttribute(0, 3, GL_FLOAT, false, 0)
+        bindAttribute(0, 0)
+
+        formatFloatAttribute(1, 3, GL_FLOAT, false, 0)
+        bindAttribute(1, 1)
+
+        formatFloatAttribute(2, 3, GL_FLOAT, false, 0)
+        bindAttribute(2, 2)
+
+        formatFloatAttribute(3, 3, GL_FLOAT, false, 0)
+        bindAttribute(3, 3)
+    }
+
     inner class Material: engine.graphics.Material {
 
         override val buffer = device.buffer().apply { allocateImmutable(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, GL_DYNAMIC_STORAGE_BIT) }
 
         override val pipeline get() = this@StandardObjectShader.pipeline
+
+        override val layout get() = this@StandardObjectShader.layout
 
 
         var diffuseColor = Float4(0f, 0f, 0f, 0f)

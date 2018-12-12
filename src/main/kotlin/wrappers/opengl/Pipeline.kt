@@ -4,10 +4,9 @@ package wrappers.opengl
 
 import org.lwjgl.opengl.GL45C.*
 
-abstract class Pipeline {
+open class Pipeline(val device: Device) {
 
-    abstract val device: Device
-    abstract val id: Int
+    val id = glCreateProgramPipelines()
 
     val infoLog get() = glGetProgramPipelineInfoLog(id)
 

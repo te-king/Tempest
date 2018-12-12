@@ -18,51 +18,35 @@ class Device (val capabilities: GLCapabilities) {
 
 
     // Resource factory
-    fun buffer() = object: Buffer() {
-        override val device = this@Device
-        override val id = glCreateBuffers()
+    fun buffer() = object: Buffer(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun texture1d() = object: Texture1d() {
-        override val device = this@Device
-        override val id = glCreateTextures(target)
+    fun framebuffer() = object: Framebuffer(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun texture2d() = object: Texture2d() {
-        override val device = this@Device
-        override val id = glCreateTextures(target)
+    fun pipeline() = object: Pipeline(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun texture3d() = object: Texture3d() {
-        override val device = this@Device
-        override val id = glCreateTextures(target)
+    fun program(type: ProgramType, source: String) = object: Program(this, type, source) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun pipeline() = object: Pipeline() {
-        override val device = this@Device
-        override val id = glCreateProgramPipelines()
+    fun texture1d() = object: Texture1d(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun framebuffer() = object: Framebuffer() {
-        override val device = this@Device
-        override val id = glCreateFramebuffers()
+    fun texture2d() = object: Texture2d(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun program(type: ProgramType, source: String) = object: Program() {
-        override val device = this@Device
-        override val id = glCreateShaderProgramv(type.native, source)
+    fun texture3d() = object: Texture3d(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 
-    fun vertexArray() = object: VertexArray() {
-        override val device = this@Device
-        override val id = glCreateVertexArrays()
+    fun vertexArray() = object: VertexArray(this) {
         fun finalize() { commandQueue.add(::delete) }
     }
 

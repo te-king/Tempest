@@ -1,6 +1,5 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL41
 import org.lwjgl.opengl.GL45.*
 import org.lwjgl.opengl.GLCapabilities
 import org.lwjgl.system.CustomBuffer
@@ -20,39 +19,39 @@ class Device (val capabilities: GLCapabilities) {
 
 
     // Buffers
-    fun buffer(size: Long, flags: GLbitfield): Buffer {
+    fun buffer(size: Long, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
-        glNamedBufferStorage(id, size, flags)
+        glNamedBufferStorage(id, size, usage.native)
         return Buffer(this, id)
     }
 
-    fun buffer(data: CustomBuffer<*>, flags: GLbitfield): Buffer {
+    fun buffer(data: CustomBuffer<*>, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
-        nglNamedBufferStorage(id, data.sizeof() * data.limit().toLong(), data.address(), flags)
+        nglNamedBufferStorage(id, data.sizeof() * data.limit().toLong(), data.address(), usage.native)
         return Buffer(this, id)
     }
 
-    fun buffer(data: ShortArray, flags: GLbitfield): Buffer {
+    fun buffer(data: ShortArray, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, flags)
+        glNamedBufferStorage(id, data, usage.native)
         return Buffer(this, id)
     }
 
-    fun buffer(data: IntArray, flags: GLbitfield): Buffer {
+    fun buffer(data: IntArray, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, flags)
+        glNamedBufferStorage(id, data, usage.native)
         return Buffer(this, id)
     }
 
-    fun buffer(data: FloatArray, flags: GLbitfield): Buffer {
+    fun buffer(data: FloatArray, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, flags)
+        glNamedBufferStorage(id, data, usage.native)
         return Buffer(this, id)
     }
 
-    fun buffer(data: DoubleArray, flags: GLbitfield): Buffer {
+    fun buffer(data: DoubleArray, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, flags)
+        glNamedBufferStorage(id, data, usage.native)
         return Buffer(this, id)
     }
 

@@ -12,7 +12,7 @@ class Camera (node: Node) : Component(node), Updatable {
 
 
     //
-    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, GL_DYNAMIC_STORAGE_BIT)
+    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, BufferUsage.DYNAMIC)
 
 
     // Parameters

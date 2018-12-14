@@ -3,6 +3,7 @@ package engine.graphics
 import math.Float4
 import org.lwjgl.opengl.GL11C.GL_FLOAT
 import org.lwjgl.opengl.GL45.GL_DYNAMIC_STORAGE_BIT
+import wrappers.opengl.BufferUsage
 import wrappers.opengl.Device
 import wrappers.opengl.ProgramType
 import wrappers.opengl.Texture2d
@@ -33,7 +34,7 @@ class StandardObjectShader(val device: Device) {
 
     inner class Material: engine.graphics.Material {
 
-        override val buffer = device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, GL_DYNAMIC_STORAGE_BIT)
+        override val buffer = device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, BufferUsage.DYNAMIC)
 
         override val pipeline get() = this@StandardObjectShader.pipeline
 

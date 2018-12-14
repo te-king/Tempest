@@ -12,7 +12,7 @@ class Camera (node: Node) : Component(node), Updatable {
 
 
     //
-    val buffer = device.buffer().apply { allocateImmutable(Int.SIZE_BYTES.toLong() * 16, GL_DYNAMIC_STORAGE_BIT) }
+    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, GL_DYNAMIC_STORAGE_BIT)
 
 
     // Parameters
@@ -67,7 +67,17 @@ class Camera (node: Node) : Component(node), Updatable {
     }
 
 
+    private val geometryFramebuffer = device.framebuffer(
+        GL_COLOR_ATTACHMENT0 to device.texture2d(1, TextureFormat.RGB8, 640, 480),
+        GL_COLOR_ATTACHMENT1 to device.texture2d(1, TextureFormat.RGB8, 640, 480),
+        GL_DEPTH_ATTACHMENT to device.texture2d(1, TextureFormat.DEPTH24, 640, 480)
+    )
 
+    private val illuminationFramebuffer = device.framebuffer(
+        GL_COLOR_ATTACHMENT0 to device.texture2d(1, TextureFormat.RGB8, 640, 480)
+    )
+
+/*
     private val geometryFramebuffer = device.framebuffer().apply {
 
         val colorTexture = device.texture2d()
@@ -92,7 +102,7 @@ class Camera (node: Node) : Component(node), Updatable {
 
         this.namedFramebufferTexture(GL_COLOR_ATTACHMENT0, illuminationTexture, 0)
 
-    }
+    }*/
 
 
     override fun update(delta: Float) {

@@ -3,10 +3,9 @@ package wrappers.opengl
 import org.lwjgl.opengl.GL45C.*
 import java.nio.IntBuffer
 
-open class Framebuffer(val device: Device) {
+class Framebuffer(device: Device, val id: Int): Device.DeviceResource(device) {
 
-    val id = glCreateFramebuffers()
-
+    /*
     // Native Functions
     fun namedFramebufferRenderbuffer(attachment: GLenum, renderbuffertarget: GLenum, renderbuffer: GLuint) = glNamedFramebufferRenderbuffer(id, attachment, renderbuffertarget, renderbuffer)
     fun namedFramebufferParameteri(pname: GLenum, param: GLint) = glNamedFramebufferParameteri(id, pname, param)
@@ -31,7 +30,8 @@ open class Framebuffer(val device: Device) {
     //clearNamedFramebufferiv
     //clearNamedFramebufferuiv
     //clearNamedFramebufferfv
+    */
 
-    fun delete() = glDeleteFramebuffers(id)
+    override fun delete() = glDeleteFramebuffers(id)
 
 }

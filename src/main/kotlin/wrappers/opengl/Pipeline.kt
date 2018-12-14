@@ -4,15 +4,8 @@ package wrappers.opengl
 
 import org.lwjgl.opengl.GL45C.*
 
-open class Pipeline(val device: Device) {
+class Pipeline(device: Device, val id: Int): Device.DeviceResource(device) {
 
-    val id = glCreateProgramPipelines()
-
-    val infoLog get() = glGetProgramPipelineInfoLog(id)
-
-
-    fun setStage(stage: ProgramType, value: Program?) = glUseProgramStages(id, stage.bit, value?.id ?: 0)
-
-    fun delete() = glDeleteProgramPipelines(id)
+    override fun delete() = glDeleteProgramPipelines(id)
 
 }

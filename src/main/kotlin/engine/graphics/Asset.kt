@@ -27,8 +27,7 @@ class Asset (val file: File) {
         val c = intArrayOf(0)
 
         STBImage.stbi_load(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d()
-            result.allocate(layers, TextureFormat.RGB8, w[0], h[0])
+            val result = device.texture2d(layers, TextureFormat.RGB8, w[0], h[0])
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.BYTE, it)
@@ -50,8 +49,7 @@ class Asset (val file: File) {
         val c = intArrayOf(0)
 
         STBImage.stbi_load_16(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d()
-            result.allocate(layers, TextureFormat.RGB16, w[0], h[0])
+            val result = device.texture2d(layers, TextureFormat.RGB16, w[0], h[0])
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.SHORT, it)
@@ -73,8 +71,7 @@ class Asset (val file: File) {
         val c = intArrayOf(0)
 
         STBImage.stbi_load(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d()
-            result.allocate(layers, TextureFormat.RGB8, w[0], h[0])
+            val result = device.texture2d(layers, TextureFormat.RGB8, w[0], h[0])
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_BYTE, it)
@@ -96,8 +93,7 @@ class Asset (val file: File) {
         val c = intArrayOf(0)
 
         STBImage.stbi_load_16(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d()
-            result.allocate(layers, TextureFormat.RGB16, w[0], h[0])
+            val result = device.texture2d(layers, TextureFormat.RGB16, w[0], h[0])
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_SHORT, it)
@@ -146,32 +142,27 @@ class Asset (val file: File) {
             val mesh = Mesh(scene.device)
 
             val vertices =  aiMesh.mVertices().run {
-                val buffer = scene.device.buffer()
-                buffer.allocateImmutable(this, 0)
+                val buffer = scene.device.buffer(this, 0)
                 Mesh.VertexBuffer(buffer, 0, sizeof())
             }
 
             val normals = aiMesh.mNormals()?.run {
-                val buffer = scene.device.buffer()
-                buffer.allocateImmutable(this, 0)
+                val buffer = scene.device.buffer(this, 0)
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val uvs = aiMesh.mTextureCoords(0)?.run {
-                val buffer = scene.device.buffer()
-                buffer.allocateImmutable(this, 0)
+                val buffer = scene.device.buffer(this, 0)
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val tangents = aiMesh.mTangents()?.run {
-                val buffer = scene.device.buffer()
-                buffer.allocateImmutable(this, 0)
+                val buffer = scene.device.buffer(this, 0)
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val indices = aiMesh.mFaces().flatMap {  (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
-                val buffer = scene.device.buffer()
-                buffer.allocateImmutable(this, 0)
+                val buffer = scene.device.buffer(this, 0)
                 Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.TRIANGLES)
             }
 

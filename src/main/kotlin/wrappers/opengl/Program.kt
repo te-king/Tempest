@@ -2,12 +2,8 @@ package wrappers.opengl
 
 import org.lwjgl.opengl.GL45C.*
 
-open class Program(val device: Device, type: ProgramType, source: String) {
+class Program(device: Device, val id: Int): Device.DeviceResource(device) {
 
-    val id = glCreateShaderProgramv(type.native, source)
-
-    val infoLog get() = glGetProgramInfoLog(id)
-
-    fun delete() = glDeleteProgram(id)
+    override fun delete() = glDeleteProgram(id)
 
 }

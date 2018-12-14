@@ -3,9 +3,7 @@ package wrappers.opengl
 import org.lwjgl.opengl.GL45C.*
 import java.nio.*
 
-open class Texture1d(device: Device) : Texture(device, GL_TEXTURE_1D) {
-
-    fun allocate(levels: GLsizei, internalformat: TextureFormat, width: GLsizei) = glTextureStorage1D(id, levels, internalformat.native, width)
+class Texture1d(device: Device, id: Int) : Texture(device, id) {
 
     fun setSubImage(level: Int, xoffset: GLint, width: GLsizei, format: PixelLayout, type: PixelType, pixels: ByteBuffer) = glTextureSubImage1D(id, level, xoffset, width, format.native, type.native, pixels)
     fun setSubImage(level: Int, xoffset: GLint, width: GLsizei, format: PixelLayout, type: PixelType, pixels: ShortBuffer) = glTextureSubImage1D(id, level, xoffset, width, format.native, type.native, pixels)

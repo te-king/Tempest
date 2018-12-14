@@ -3,10 +3,7 @@ package wrappers.opengl
 import org.lwjgl.opengl.ARBBindlessTexture.*
 import org.lwjgl.opengl.GL45C.*
 
-open class Texture(val device: Device, val target: Int) {
-
-    val id = glCreateTextures(target)
-
+abstract class Texture(device: Device, val id: Int): Device.DeviceResource(device) {
 
     val handle get() = glGetTextureHandleARB(id)
 
@@ -15,7 +12,7 @@ open class Texture(val device: Device, val target: Int) {
         set(value) = if (value) glMakeTextureHandleResidentARB(handle) else glMakeTextureHandleNonResidentARB(handle)
 
 
-    fun delete() = glDeleteTextures(id)
+    override fun delete() = glDeleteTextures(id)
 
 }
 

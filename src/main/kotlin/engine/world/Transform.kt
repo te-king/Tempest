@@ -18,7 +18,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
 
 
     // Buffer
-    val buffer = device.buffer().apply{ allocateImmutable(Int.SIZE_BYTES.toLong() * 16 * 2, GL_DYNAMIC_STORAGE_BIT) }
+    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, GL_DYNAMIC_STORAGE_BIT)
 
 
     // Transforms

@@ -1,5 +1,6 @@
 package math
 
+import org.lwjgl.assimp.AIVector3D
 import kotlin.math.sqrt
 
 
@@ -19,6 +20,7 @@ data class Float3(val x: Float, val y: Float, val z: Float) {
 
 
     constructor(): this(0f, 0f, 0f)
+    internal constructor(other: AIVector3D): this(other.x(), other.y(), other.z())
 
 
     val lengthSquared get() = x * x + y * y + z * z

@@ -77,33 +77,6 @@ class Camera (node: Node) : Component(node), Updatable {
         GL_COLOR_ATTACHMENT0 to device.texture2d(1, TextureFormat.RGB8, 640, 480)
     )
 
-/*
-    private val geometryFramebuffer = device.framebuffer().apply {
-
-        val colorTexture = device.texture2d()
-        colorTexture.allocate(1, TextureFormat.RGB8, 640, 480)
-
-        val normalTexture = device.texture2d()
-        normalTexture.allocate(1, TextureFormat.RGB8, 640, 480)
-
-        val depthTexture = device.texture2d()
-        depthTexture.allocate(1, TextureFormat.DEPTH24, 640, 480)
-
-        this.namedFramebufferTexture(GL_COLOR_ATTACHMENT0, colorTexture, 0)
-        this.namedFramebufferTexture(GL_COLOR_ATTACHMENT1, normalTexture, 0)
-        this.namedFramebufferTexture(GL_DEPTH_ATTACHMENT, depthTexture, 0)
-
-    }
-
-    private val illuminationFramebuffer = device.framebuffer().apply {
-
-        val illuminationTexture = device.texture2d()
-        illuminationTexture.allocate(1, TextureFormat.RGB8, 640, 480)
-
-        this.namedFramebufferTexture(GL_COLOR_ATTACHMENT0, illuminationTexture, 0)
-
-    }*/
-
 
     override fun update(delta: Float) {
 
@@ -132,38 +105,6 @@ class Camera (node: Node) : Component(node), Updatable {
             // Draw each meshRenderer
             for (meshRenderer in scene.mapNotNull { it get MeshRenderer::class })
                 meshRenderer.draw(this)
-
-
-            // -- ILLUMINATION PASS
-
-            // Render both sides (not needed?)
-            setCullMode(CullMode.FRONT_AND_BACK)
-
-            // Set render target
-            bindFramebuffer(illuminationFramebuffer)
-            clearFramebuffer()
-
-            // Draw each LightEmitter
-            for (lightEmitter in scene.mapNotNull { it get LightEmitter::class })
-                lightEmitter.draw(this)
-
-
-            // -- GATHER PASS
-            /*
-            TODO: Implement gather pipeline, For the timebeing just use the final blit
-
-            - max = Find max average light of frame
-
-            -
-
-            - bind fb 0
-
-            - Shader:
-                brightness = calculatedBrightness / max
-                color = albedo * brightness
-
-
-             */
 
             copyFramebuffer(
                 geometryFramebuffer, Int4(0, 0, 640, 480),

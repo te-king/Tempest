@@ -1,18 +1,17 @@
 import engine.graphics.resourceAt
 import engine.runtime.Client
-import engine.world.*
-import org.lwjgl.opengl.GLUtil
+import engine.world.Camera
+import engine.world.DebugCameraController
+import engine.world.LightEmitter
+import engine.world.Node
 
-fun main(args: Array<String>) {
+fun main() {
 
     val scene = Client.scene
 
-    val v = GLUtil.setupDebugMessageCallback()
-
     // Load object
     for (i in 0 until 1) {
-        val node = resourceAt("""assets/cube.obj""").loadNode(scene)!!
-        node add RotationScript::class
+        val node = resourceAt("""assets/obj/testb.obj""").loadNode(scene)!!
     }
 
     // Initialize camera

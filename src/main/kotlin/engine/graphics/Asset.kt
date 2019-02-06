@@ -1,12 +1,15 @@
 package engine.graphics
 
 import engine.runtime.Client
-import engine.world.*
+import engine.world.MeshRenderer
+import engine.world.Node
+import engine.world.Scene
+import engine.world.Transform
 import math.Float3
+import math.Float4
 import math.Quaternion
 import org.lwjgl.assimp.*
 import org.lwjgl.assimp.Assimp.*
-import org.lwjgl.opengl.GL11.GL_FLOAT
 import org.lwjgl.stb.STBImage
 import wrappers.opengl.*
 import java.io.File
@@ -16,7 +19,7 @@ import java.io.FileNotFoundException
 class Asset (val file: File) {
 
     init {
-        if (!file.exists()) throw FileNotFoundException("External asset not found.")
+        if (!file.exists()) throw FileNotFoundException("External asset not found: $file")
     }
 
     fun loadShaderSource(device: Device, type: ProgramType) = device.program(type, file.readText())
@@ -117,31 +120,52 @@ class Asset (val file: File) {
         // Apply post processing
         aiApplyPostProcessing(aiScene, aiProcessPreset_TargetRealtime_Quality)
 
-
-        val materials = Array<AIMaterial>(aiScene.mNumMaterials()) { AIMaterial.create(aiScene.mMaterials()!!.get(it)) }.map { aiMaterial: AIMaterial ->
+        val materials = Array<AIMaterial>(aiScene.mNumMaterials()) { AIMaterial.create(aiScene.mMaterials()!!.get(it)) }.map { aiMaterial ->
 
             val result = Client.standardObjectShader.Material()
 
-            // TODO: Fix texture loading
-            resourceAt("""assets/diffuse.jpg""").loadI8(scene.device)?.let {
-                result.diffuseMap = it
-                it.resident = true
+            // Resolve colors
+            val aiDiffuseColor = AIColor4D.create()
+            aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_DIFFUSE, 0, 0, aiDiffuseColor)
+            result.diffuseColor = aiDiffuseColor.let(::Float4)
+
+            println(result.diffuseColor)
+
+
+            // Resolve textures
+            if (aiGetMaterialTextureCount(aiMaterial, aiTextureType_DIFFUSE) == 1) {
+
+                val path = AIString.create()
+                aiGetMaterialTexture(aiMaterial, aiTextureType_DIFFUSE, 0, path, null as IntArray?, null, null, null, null, null)
+
+                Asset(File(file.parentFile, path.dataString())).loadI8(scene.device)?.let {
+                    result.diffuseMap = it
+                    it.resident = true
+                }
+
             }
 
-            resourceAt( """assets/normal.png""").loadU16(scene.device)?.let {
-                result.normalMap = it
-                it.resident = true
+            if (aiGetMaterialTextureCount(aiMaterial, aiTextureType_NORMALS) == 1) {
+
+                val path = AIString.create()
+                aiGetMaterialTexture(aiMaterial, aiTextureType_NORMALS, 0, path, null as IntArray?, null, null, null, null, null)
+
+                Asset(File(file.parentFile, path.dataString())).loadI8(scene.device)?.let {
+                    result.normalMap = it
+                    it.resident = true
+                }
+
             }
 
             result
 
         }
 
-        val meshMaterialPairs = Array<AIMesh>(aiScene.mNumMeshes()) { AIMesh.create(aiScene.mMeshes()!!.get(it)) }.map { aiMesh: AIMesh ->
+        val meshMaterialPairs = Array<AIMesh>(aiScene.mNumMeshes()) { AIMesh.create(aiScene.mMeshes()!!.get(it)) }.map { aiMesh ->
 
             val mesh = Mesh(scene.device)
 
-            val vertices =  aiMesh.mVertices().run {
+            val vertices = aiMesh.mVertices().run {
                 val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
                 Mesh.VertexBuffer(buffer, 0, sizeof())
             }
@@ -172,12 +196,14 @@ class Asset (val file: File) {
             tangents?.let { mesh.vertexBuffers[3] = it }
             indices.let { mesh.indexBuffers += it }
 
-            mesh to materials[aiMesh.mMaterialIndex()]
+            println(aiMesh.mMaterialIndex())
+
+            mesh to materials[aiMesh.mMaterialIndex()] as Material
 
         }
 
         // TODO:
-        // Textures
+        // Textures??
         // Animations
         // Cameras
 
@@ -202,14 +228,9 @@ class Asset (val file: File) {
             transform.rotation = Quaternion(rotation.x(), rotation.y(), rotation.z(), rotation.w())
             transform.translation = Float3(position.x(), position.y(), position.z())
 
-            if (node.mNumMeshes() == 1) {
-                val meshRenderer = this add MeshRenderer::class
 
-                meshMaterialPairs[node.mMeshes()!!.get(0)].run {
-                    meshRenderer.mesh = first
-                    meshRenderer.material = second
-                }
-            }
+            val meshRenderer = this add MeshRenderer::class
+            meshRenderer.pairs += Array(node.mNumMeshes()) { meshMaterialPairs[node.mMeshes()!!.get(it)] }
 
             Array(node.mNumChildren()) { AINode.create(node.mChildren()!!.get(it)) }.forEach { aiChild ->
                 val child = generateNode(aiChild)
@@ -230,4 +251,4 @@ class Asset (val file: File) {
 }
 
 fun assetAt(path: String) = Asset(File(path))
-fun resourceAt(path: String) = assetAt(Asset::class.java.classLoader.getResource(path).file.apply(::println))
+fun resourceAt(path: String) = assetAt(Asset::class.java.classLoader.getResource(path).file)

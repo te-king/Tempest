@@ -1,5 +1,6 @@
 #version 450
 #extension GL_ARB_bindless_texture : require
+#extension GL_ARB_gpu_shader_int64 : require
 
 
 layout(std140, binding = 3) uniform objectData {
@@ -24,6 +25,11 @@ void main() {
                                     bitangent,
                                     normal);
 
-    outAlbedo = texture(diffuseMap, uv);
+    // TODO: Convert to non-branching code
+    if (uint64_t(diffuseMap) > 0)
+        outAlbedo = texture(diffuseMap, uv);
+    else
+        outAlbedo = diffuseColor;
+
     outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1f);
 }

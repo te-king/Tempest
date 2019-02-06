@@ -132,4 +132,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
         if (worldInvalid) validateWorld()
     }
 
+
+    override fun toString() = """Position: $translation, Scale: $scale, Rotation: $rotation"""
+
 }

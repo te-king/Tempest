@@ -8,33 +8,35 @@ class MeshRenderer (node: Node) : Component(node) {
 
     private val transform = node add Transform::class
 
-
-    var mesh: Mesh? = null
-
-    var material: Material? = null
+    val pairs = mutableListOf<Pair<Mesh, Material?>>()
 
 
     fun draw(buffer: CommandBuffer) {
-        mesh?.let { mesh ->
-            material?.let { material ->
 
+        // Bind transform
+        buffer.bindBuffer(2, transform.buffer)
+
+        for ((mesh, material) in pairs) {
+
+            // Bind material information
+            if (material != null) {
+                buffer.bindBuffer(3, material.buffer)
                 buffer.bindPipeline(material.pipeline)
                 buffer.bindVertexArray(material.layout)
-
-                buffer.bindBuffer(2, transform.buffer)
-                buffer.bindBuffer(3, material.buffer)
-
-                mesh.vertexBuffers.forEach(buffer::bindVertexBuffer)
-
-                mesh.indexBuffers.forEach { indexBuffer ->
-                    buffer.bindElementBuffer(indexBuffer)
-                    buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
-                }
-
-                mesh.vertexBuffers.mapValues { null }.forEach(buffer::bindVertexBuffer)
-
             }
+
+            mesh.vertexBuffers.forEach(buffer::bindVertexBuffer)
+
+            mesh.indexBuffers.forEach { indexBuffer ->
+                buffer.bindElementBuffer(indexBuffer)
+                buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
+            }
+
+            mesh.vertexBuffers.mapValues { null }.forEach(buffer::bindVertexBuffer)
+
+
         }
+
     }
 
 }

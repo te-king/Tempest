@@ -60,7 +60,8 @@ class Device (val capabilities: GLCapabilities) {
     fun framebuffer(vararg textures: Pair<Int, Texture>): Framebuffer {
         val id = glCreateFramebuffers()
         for ((key, value) in textures) glNamedFramebufferTexture(id, key, value.id, 0)
-        glNamedFramebufferDrawBuffers(id, textures.map { it.first }.toIntArray())
+        // TODO: For some reason this was required?
+        //glNamedFramebufferDrawBuffers(id, textures.map { it.first }.toIntArray())
         return Framebuffer(this, id)
     }
 

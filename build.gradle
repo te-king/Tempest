@@ -5,6 +5,7 @@ plugins {
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -14,17 +15,14 @@ dependencies {
     implementation "org.lwjgl:lwjgl:3.2.2-SNAPSHOT"
     runtimeOnly "org.lwjgl:lwjgl:3.2.2-SNAPSHOT:natives-windows"
 
-    implementation "org.lwjgl:lwjgl-assimp:3.2.2-SNAPSHOT"
-    runtimeOnly "org.lwjgl:lwjgl-assimp:3.2.2-SNAPSHOT:natives-windows"
-
-    implementation "org.lwjgl:lwjgl-bullet:3.2.2-SNAPSHOT"
-    runtimeOnly "org.lwjgl:lwjgl-bullet:3.2.2-SNAPSHOT:natives-windows"
-
     implementation "org.lwjgl:lwjgl-glfw:3.2.2-SNAPSHOT"
     runtimeOnly "org.lwjgl:lwjgl-glfw:3.2.2-SNAPSHOT:natives-windows"
 
     implementation "org.lwjgl:lwjgl-opengl:3.2.2-SNAPSHOT"
     runtimeOnly "org.lwjgl:lwjgl-opengl:3.2.2-SNAPSHOT:natives-windows"
+
+    implementation "org.lwjgl:lwjgl-assimp:3.2.2-SNAPSHOT"
+    runtimeOnly "org.lwjgl:lwjgl-assimp:3.2.2-SNAPSHOT:natives-windows"
 
     implementation "org.lwjgl:lwjgl-stb:3.2.2-SNAPSHOT"
     runtimeOnly "org.lwjgl:lwjgl-stb:3.2.2-SNAPSHOT:natives-windows"

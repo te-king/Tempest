@@ -129,8 +129,6 @@ class Asset (val file: File) {
             aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_DIFFUSE, 0, 0, aiDiffuseColor)
             result.diffuseColor = aiDiffuseColor.let(::Float4)
 
-            println(result.diffuseColor)
-
 
             // Resolve textures
             if (aiGetMaterialTextureCount(aiMaterial, aiTextureType_DIFFUSE) == 1) {
@@ -195,8 +193,6 @@ class Asset (val file: File) {
             uvs?.let { mesh.vertexBuffers[2] = it }
             tangents?.let { mesh.vertexBuffers[3] = it }
             indices.let { mesh.indexBuffers += it }
-
-            println(aiMesh.mMaterialIndex())
 
             mesh to materials[aiMesh.mMaterialIndex()] as Material
 

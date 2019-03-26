@@ -61,6 +61,9 @@ object Client {
             oldTime = newTime
             frames++
 
+            // Resolves AMD GPUs not limiting framerates
+            Thread.sleep(2)
+
             if (frames % 20 == 0L) window.title = "FPS: %.2f FRAMES: %s".format(1.0 / delta, frames)
 
         }

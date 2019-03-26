@@ -22,6 +22,8 @@ class Device (val capabilities: GLCapabilities) {
     fun buffer(size: Long, usage: BufferUsage): Buffer {
         val id = glCreateBuffers()
         glNamedBufferStorage(id, size, usage.native)
+        // Resolves AMD GPUs not limiting clearing allocated memory
+        glNamedBufferSubData(id, 0, ShortArray(size.toInt() / 2))
         return Buffer(this, id)
     }
 

@@ -30,5 +30,9 @@ void main() {
     else
         outAlbedo = texture(diffuseMap, uv);
 
-    outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1.0f);
+    //outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1.0f);
 }
+
+/*
+    Note, reading from an empty sampler causes a crash on AMD devices.
+*/

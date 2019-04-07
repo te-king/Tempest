@@ -30,7 +30,12 @@ void main() {
     else
         outAlbedo = texture(diffuseMap, uv);
 
-    //outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1.0f);
+    if (uvec2(normalMap) == uvec2(0, 0))
+        outNormal = vec4(tangentToWorldspace * normal, 1);
+    else
+        outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1.0f);
+
+    outAlbedo = outNormal;
 }
 
 /*

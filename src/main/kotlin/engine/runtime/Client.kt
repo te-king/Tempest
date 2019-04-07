@@ -1,6 +1,7 @@
 package engine.runtime
 
-import engine.graphics.StandardObjectShader
+import engine.graphics.RaymarchShader
+import engine.graphics.StandardShader
 import wrappers.opengl.Device
 import wrappers.glfw.Window
 import org.lwjgl.glfw.GLFW.*
@@ -24,7 +25,8 @@ object Client {
         Device(GL.createCapabilities())
     }
 
-    val standardObjectShader = StandardObjectShader(device)
+    val standardObjectShader = StandardShader(device)
+    val raymarchShader = RaymarchShader(device)
 
     init {
         window.onKeyPress { window, key, action, mods ->

@@ -25,10 +25,19 @@ layout(location = 0) out vec4 outAlbedo;
 layout(location = 1) out vec4 outNormal;
 
 
+const int MAX_STEPS = 64;
+const float MIN_STEP_SIZE = 0.01f;
+const float MAX_STEP_SIZE = 100.0f;
+const float NORMAL_EPSILON = 0.01f;
+
+
+// SHAPES
 float sphereSDF(vec3 p, float radius) {
     return length(p) - radius;
 }
 
+
+// SCENE
 float sceneSDF(vec3 p) {
     return sphereSDF(p, 1.0f);
 }
@@ -42,21 +51,29 @@ void main() {
     const vec4 rayForward = cameraWorldMatrix * vec4(screenPosition, -1, 1);
     const vec4 rayDirection = rayForward - rayOrigin;
 
-    float distanceTraveled = 0.0f;
+    for (float f = gl_FragCoord.z / gl_FragCoord.w; f < MAX_STEPS; f += MIN_STEP_SIZE) {
 
-    for (int i = 0; i < 100; ++i) {
+        const vec3 position = rayOrigin.xyz + rayDirection.xyz * f;
+        const float distanceToScene = sceneSDF(position);
 
-        const float distanceToScene = sceneSDF(rayOrigin.xyz + rayDirection.xyz * distanceTraveled);
+        if (distanceToScene <= 0.0) {
 
-        if (distanceToScene <= 0.1f) {
-            outAlbedo = vec4(0, 1, 0, 1);
+            float x = sceneSDF(position + vec3(NORMAL_EPSILON, 0, 0));
+            float y = sceneSDF(position + vec3(0, NORMAL_EPSILON, 0));
+            float z = sceneSDF(position + vec3(0, 0, NORMAL_EPSILON));
+
+            outAlbedo = vec4(1, 1, 1, 1);
+            outNormal = vec4((vec3(x, y, z) - position) / NORMAL_EPSILON, 1);
+
+            outAlbedo = outNormal;
+
             return;
         }
 
-        distanceTraveled += distanceToScene;
+        f += distanceToScene;
 
     }
 
-    outAlbedo = vec4(1, 0, 0, 1);
+    outAlbedo = vec4(0.125, 0.125, 0.125, 1);
 
 }

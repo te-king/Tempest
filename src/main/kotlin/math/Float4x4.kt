@@ -1,5 +1,8 @@
 package math
 
+import extensions.SIZE_BITS
+import extensions.SIZE_BYTES
+
 
 inline class Float4x4 (val data: FloatArray) {
 

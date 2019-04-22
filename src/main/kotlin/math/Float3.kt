@@ -1,5 +1,7 @@
 package math
 
+import extensions.SIZE_BITS
+import extensions.SIZE_BYTES
 import org.lwjgl.assimp.AIVector3D
 import kotlin.math.sqrt
 

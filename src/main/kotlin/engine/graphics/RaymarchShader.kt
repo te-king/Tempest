@@ -1,7 +1,6 @@
 package engine.graphics
 
-import math.Float4
-import math.SIZE_BYTES
+import extensions.SIZE_BYTES
 import org.lwjgl.opengl.GL11C
 import wrappers.opengl.*
 

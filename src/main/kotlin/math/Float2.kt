@@ -1,5 +1,7 @@
 package math
 
+import extensions.SIZE_BITS
+import extensions.SIZE_BYTES
 import kotlin.math.sqrt
 
 

@@ -15,4 +15,8 @@ class Texture1d(device: Device, id: Int) : Texture(device, id) {
     fun setSubImage(level: Int, xoffset: GLint, width: GLsizei, format: PixelLayout, type: PixelType, pixels: FloatArray) = glTextureSubImage1D(id, level, xoffset, width, format.native, type.native, pixels)
     fun setSubImage(level: Int, xoffset: GLint, width: GLsizei, format: PixelLayout, type: PixelType, pixels: DoubleArray) = glTextureSubImage1D(id, level, xoffset, width, format.native, type.native, pixels)
 
+
+    operator fun get(index: Int) = Image1d(this, index)
+
 }
+

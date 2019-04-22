@@ -16,3 +16,6 @@ abstract class Texture(device: Device, val id: Int): Device.DeviceResource(devic
 
 }
 
+
+
+

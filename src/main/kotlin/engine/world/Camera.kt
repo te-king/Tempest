@@ -3,6 +3,7 @@ package engine.world
 import math.Int4
 import wrappers.glfw.Window
 import math.ProjectionMatrix
+import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL45C.*
 import wrappers.opengl.*
 
@@ -68,13 +69,13 @@ class Camera (node: Node) : Component(node), Updatable {
 
 
     private val geometryFramebuffer = device.framebuffer(
-        GL_COLOR_ATTACHMENT0 to device.texture2d(1, TextureFormat.RGB8, 640, 480),
-        GL_COLOR_ATTACHMENT1 to device.texture2d(1, TextureFormat.RGB8, 640, 480),
-        GL_DEPTH_ATTACHMENT to device.texture2d(1, TextureFormat.DEPTH24, 640, 480)
+        GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGB8, 640, 480),
+        GL_COLOR_ATTACHMENT1 to device.image2d(TextureFormat.RGB8, 640, 480),
+        GL_DEPTH_ATTACHMENT to device.image2d(TextureFormat.DEPTH24, 640, 480)
     )
 
     private val illuminationFramebuffer = device.framebuffer(
-        GL_COLOR_ATTACHMENT0 to device.texture2d(1, TextureFormat.RGB8, 640, 480)
+        GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGB8, 640, 480)
     )
 
 

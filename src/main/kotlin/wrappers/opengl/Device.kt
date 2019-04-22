@@ -59,11 +59,9 @@ class Device (val capabilities: GLCapabilities) {
 
 
     // Framebuffers
-    fun framebuffer(vararg textures: Pair<Int, Texture>): Framebuffer {
+    fun framebuffer(vararg textures: Pair<Int, Image2d>): Framebuffer {
         val id = glCreateFramebuffers()
-        for ((key, value) in textures) glNamedFramebufferTexture(id, key, value.id, 0)
-        // TODO: For some reason this was required?
-        //glNamedFramebufferDrawBuffers(id, textures.map { it.first }.toIntArray())
+        for ((key, value) in textures) glNamedFramebufferTexture(id, key, value.texture.id, value.index)
         return Framebuffer(this, id)
     }
 
@@ -94,6 +92,18 @@ class Device (val capabilities: GLCapabilities) {
         glTextureStorage2D(id, levels, internalFormat.native, width, height)
         return Texture2d(this, id)
     }
+
+    // Images
+    fun image1d(internalFormat: TextureFormat, width: Int): Image1d {
+        val texture = texture1d(1, internalFormat, width)
+        return Image1d(texture, 0)
+    }
+
+    fun image2d(internalFormat: TextureFormat, width: Int, height: Int): Image2d {
+        val texture = texture2d(1, internalFormat, width, height)
+        return Image2d(texture, 0)
+    }
+
 
     // Vertex Array
     fun vertexArray(): VertexArray {

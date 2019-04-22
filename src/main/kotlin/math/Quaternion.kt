@@ -8,11 +8,11 @@ import kotlin.math.sqrt
 inline class Quaternion(val vector: Float4) {
 
     companion object {
-        fun identity() = Quaternion(0f, 0f, 0f, 1f)
+        val identity = Quaternion(0f, 0f, 0f, 1f)
 
         fun fromAxisAngle(axis: Float3, angle: Float) =
                 if (axis.lengthSquared == 0.0f)
-                    identity()
+                    identity
                 else
                     Quaternion(axis.normalized * sin(angle * 0.5f), cos(angle * 0.5f))
     }

@@ -30,7 +30,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
         }
 
 
-    var rotation = Quaternion.identity()
+    var rotation = Quaternion.identity
         set(value) {
             invalidateLocal()
             field = value

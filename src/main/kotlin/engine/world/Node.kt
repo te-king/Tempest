@@ -11,7 +11,7 @@ class Node (val scene: Scene, var name: String = "New Node") : Iterable<Componen
 
     val device get() = scene.device
 
-    private val componentMap = hashMapOf<KClass<*>, Component>()
+    private val componentMap = hashMapOf<KClass<out Component>, Component>()
 
 
     infix fun<T: Component> add(type: KClass<T>) = componentMap.getOrPut(type) { type.constructors.first().call(this) } as T

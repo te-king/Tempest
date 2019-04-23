@@ -23,7 +23,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
 
 
     // Transforms
-    var translation = Float3(0f, 0f, 0f)
+    var translation = Float3.zero
         set(value) {
             invalidateLocal()
             field = value
@@ -36,7 +36,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
             field = value
         }
 
-    var scale = Float3(1f, 1f, 1f)
+    var scale = Float3.one
         set(value) {
             invalidateLocal()
             field = value

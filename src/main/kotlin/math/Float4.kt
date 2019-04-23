@@ -11,6 +11,9 @@ data class Float4(val x: Float, val y: Float, val z: Float, val w: Float) {
     companion object {
         val SIZE_BITS = Float.SIZE_BITS * 4
         val SIZE_BYTES = Float.SIZE_BYTES * 4
+
+        val zero = Float4(0f, 0f, 0f, 0f)
+        val one = Float4(1f, 1f, 1f, 1f)
     }
 
 

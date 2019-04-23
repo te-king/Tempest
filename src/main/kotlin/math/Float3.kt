@@ -12,6 +12,9 @@ data class Float3(val x: Float, val y: Float, val z: Float) {
         val SIZE_BITS = Float.SIZE_BITS * 3
         val SIZE_BYTES = Float.SIZE_BYTES * 3
 
+        val zero = Float3(0f, 0f, 0f)
+        val one = Float3(1f, 1f, 1f)
+
         val up = Float3(0f, 1f, 0f)
         val down = -up
         val left = Float3(-1f, 0f, 0f)

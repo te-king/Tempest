@@ -4,14 +4,14 @@ import wrappers.opengl.CommandBuffer
 import engine.graphics.Material
 import engine.graphics.Mesh
 
-class MeshRenderer (node: Node) : Component(node) {
+class MeshRenderer (node: Node) : Component(node), Renderable {
 
     private val transform = node add Transform::class
 
     val pairs = mutableListOf<Pair<Mesh, Material?>>()
 
 
-    fun draw(buffer: CommandBuffer) {
+    override fun draw(buffer: CommandBuffer) {
 
         // Bind transform
         buffer.bindBuffer(2, transform.buffer)

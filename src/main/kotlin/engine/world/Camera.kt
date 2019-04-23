@@ -103,9 +103,9 @@ class Camera (node: Node) : Component(node), Updatable {
             bindFramebuffer(geometryFramebuffer)
             clearFramebuffer()
 
-            // Draw each meshRenderer
-            for (meshRenderer in scene.mapNotNull { it get MeshRenderer::class })
-                meshRenderer.draw(this)
+            // Draw each renderer
+            for (renderer in scene.flatMap { it.filterIsInstance<Renderable>() })
+                renderer.draw(this)
 
             copyFramebuffer(
                 geometryFramebuffer, Int4(0, 0, 640, 480),

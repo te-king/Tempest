@@ -16,6 +16,8 @@ class Transform (node: Node) : Component(node), Updatable {
 
     internal val childrenSet = mutableSetOf<Transform>()
 
+    val children get() = childrenSet.asSequence()
+
 
     // Buffer
     val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, BufferUsage.DYNAMIC)

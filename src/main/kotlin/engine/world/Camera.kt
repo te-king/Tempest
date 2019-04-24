@@ -54,7 +54,7 @@ class Camera (node: Node) : Component(node), Updatable {
             return field
         }
         private set(value) {
-            buffer.setSubData(0, value.matrix.data)
+            buffer.setSubData(0, value.matrix.toFloatArray())
             field = value
         }
 

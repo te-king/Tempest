@@ -3,63 +3,64 @@ package math
 import extensions.SIZE_BITS
 import extensions.SIZE_BYTES
 
-
-inline class Float4x4 (val data: FloatArray) {
-
+data class Float4x4(val m00: Float, val m01: Float, val m02: Float, val m03: Float,
+                    val m10: Float, val m11: Float, val m12: Float, val m13: Float,
+                    val m20: Float, val m21: Float, val m22: Float, val m23: Float,
+                    val m30: Float, val m31: Float, val m32: Float, val m33: Float) {
+    
     companion object {
         val SIZE_BITS = Float.SIZE_BITS * 16
         val SIZE_BYTES = Float.SIZE_BYTES * 16
 
-        const val WIDTH = 4
-        const val HEIGHT = 4
-
-        val identity = Float4x4(floatArrayOf(
+        val identity get() = Float4x4(
             1f, 0f, 0f, 0f,
             0f, 1f, 0f, 0f,
             0f, 0f, 1f, 0f,
             0f, 0f, 0f, 1f
-        ))
+        )
     }
-
-
-    constructor(c0: Float4, c1: Float4, c2: Float4, c3: Float4): this(c0.toFloatArray() + c1.toFloatArray() + c2.toFloatArray() + c3.toFloatArray())
 
 
     fun column(index: Int) = when (index) {
-        0 -> Float4(data[0], data[1], data[2], data[3])
-        1 -> Float4(data[4], data[5], data[6], data[7])
-        2 -> Float4(data[8], data[9], data[10], data[11])
-        3 -> Float4(data[12], data[13], data[14], data[15])
+        0 -> Float4(m00, m01, m02, m03)
+        1 -> Float4(m10, m11, m12, m13)
+        2 -> Float4(m20, m21, m22, m23)
+        3 -> Float4(m30, m31, m32, m33)
         else -> throw IndexOutOfBoundsException("$index")
     }
 
+    fun toFloatArray() = floatArrayOf(
+        m00, m01,  m02, m03,
+        m10, m11,  m12, m13,
+        m20, m21,  m22, m23,
+        m30, m31,  m32, m33
+    )
 
-    operator fun get(i: Int, j: Int) = data[i * WIDTH + j]
 
-    operator fun times (other: Float4x4) = Float4x4(floatArrayOf(
-        other[0, 0] * this[0, 0] + other[0, 1] * this[1, 0] + other[0, 2] * this[2, 0] + other[0, 3] * this[3, 0],
-        other[0, 0] * this[0, 1] + other[0, 1] * this[1, 1] + other[0, 2] * this[2, 1] + other[0, 3] * this[3, 1],
-        other[0, 0] * this[0, 2] + other[0, 1] * this[1, 2] + other[0, 2] * this[2, 2] + other[0, 3] * this[3, 2],
-        other[0, 0] * this[0, 3] + other[0, 1] * this[1, 3] + other[0, 2] * this[2, 3] + other[0, 3] * this[3, 3],
-        other[1, 0] * this[0, 0] + other[1, 1] * this[1, 0] + other[1, 2] * this[2, 0] + other[1, 3] * this[3, 0],
-        other[1, 0] * this[0, 1] + other[1, 1] * this[1, 1] + other[1, 2] * this[2, 1] + other[1, 3] * this[3, 1],
-        other[1, 0] * this[0, 2] + other[1, 1] * this[1, 2] + other[1, 2] * this[2, 2] + other[1, 3] * this[3, 2],
-        other[1, 0] * this[0, 3] + other[1, 1] * this[1, 3] + other[1, 2] * this[2, 3] + other[1, 3] * this[3, 3],
-        other[2, 0] * this[0, 0] + other[2, 1] * this[1, 0] + other[2, 2] * this[2, 0] + other[2, 3] * this[3, 0],
-        other[2, 0] * this[0, 1] + other[2, 1] * this[1, 1] + other[2, 2] * this[2, 1] + other[2, 3] * this[3, 1],
-        other[2, 0] * this[0, 2] + other[2, 1] * this[1, 2] + other[2, 2] * this[2, 2] + other[2, 3] * this[3, 2],
-        other[2, 0] * this[0, 3] + other[2, 1] * this[1, 3] + other[2, 2] * this[2, 3] + other[2, 3] * this[3, 3],
-        other[3, 0] * this[0, 0] + other[3, 1] * this[1, 0] + other[3, 2] * this[2, 0] + other[3, 3] * this[3, 0],
-        other[3, 0] * this[0, 1] + other[3, 1] * this[1, 1] + other[3, 2] * this[2, 1] + other[3, 3] * this[3, 1],
-        other[3, 0] * this[0, 2] + other[3, 1] * this[1, 2] + other[3, 2] * this[2, 2] + other[3, 3] * this[3, 2],
-        other[3, 0] * this[0, 3] + other[3, 1] * this[1, 3] + other[3, 2] * this[2, 3] + other[3, 3] * this[3, 3]
-    ))
+    operator fun times (other: Float4x4) = Float4x4(
+        other.m00 * this.m00 + other.m01 * this.m10 + other.m02 * this.m20 + other.m03 * this.m30,
+        other.m00 * this.m01 + other.m01 * this.m11 + other.m02 * this.m21 + other.m03 * this.m31,
+        other.m00 * this.m02 + other.m01 * this.m12 + other.m02 * this.m22 + other.m03 * this.m32,
+        other.m00 * this.m03 + other.m01 * this.m13 + other.m02 * this.m23 + other.m03 * this.m33,
+        other.m10 * this.m00 + other.m11 * this.m10 + other.m12 * this.m20 + other.m13 * this.m30,
+        other.m10 * this.m01 + other.m11 * this.m11 + other.m12 * this.m21 + other.m13 * this.m31,
+        other.m10 * this.m02 + other.m11 * this.m12 + other.m12 * this.m22 + other.m13 * this.m32,
+        other.m10 * this.m03 + other.m11 * this.m13 + other.m12 * this.m23 + other.m13 * this.m33,
+        other.m20 * this.m00 + other.m21 * this.m10 + other.m22 * this.m20 + other.m23 * this.m30,
+        other.m20 * this.m01 + other.m21 * this.m11 + other.m22 * this.m21 + other.m23 * this.m31,
+        other.m20 * this.m02 + other.m21 * this.m12 + other.m22 * this.m22 + other.m23 * this.m32,
+        other.m20 * this.m03 + other.m21 * this.m13 + other.m22 * this.m23 + other.m23 * this.m33,
+        other.m30 * this.m00 + other.m31 * this.m10 + other.m32 * this.m20 + other.m33 * this.m30,
+        other.m30 * this.m01 + other.m31 * this.m11 + other.m32 * this.m21 + other.m33 * this.m31,
+        other.m30 * this.m02 + other.m31 * this.m12 + other.m32 * this.m22 + other.m33 * this.m32,
+        other.m30 * this.m03 + other.m31 * this.m13 + other.m32 * this.m23 + other.m33 * this.m33
+    )
 
     operator fun times (other: Float4) = Float4(
-        this[0, 0] * other.x + this[0, 1] * other.y + this[0, 2] * other.z + this[0, 3] * other.w,
-        this[1, 0] * other.x + this[1, 1] * other.y + this[1, 2] * other.z + this[1, 3] * other.w,
-        this[2, 0] * other.x + this[2, 1] * other.y + this[2, 2] * other.z + this[2, 3] * other.w,
-        this[3, 0] * other.x + this[3, 1] * other.y + this[3, 2] * other.z + this[3, 3] * other.w
+        this.m00 * other.x + this.m01 * other.y + this.m02 * other.z + this.m03 * other.w,
+        this.m10 * other.x + this.m11 * other.y + this.m12 * other.z + this.m13 * other.w,
+        this.m20 * other.x + this.m21 * other.y + this.m22 * other.z + this.m23 * other.w,
+        this.m30 * other.x + this.m31 * other.y + this.m32 * other.z + this.m33 * other.w
     )
 
 }

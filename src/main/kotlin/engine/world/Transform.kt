@@ -80,7 +80,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
             return field
         }
         private set(value) {
-            buffer.setSubData(0, value.matrix.data)
+            buffer.setSubData(0, value.matrix.toFloatArray())
             field = value
         }
 
@@ -108,7 +108,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
             return field
         }
         private set(value) {
-            buffer.setSubData(Int.SIZE_BYTES.toLong() * 16, value.matrix.data)
+            buffer.setSubData(Int.SIZE_BYTES.toLong() * 16, value.matrix.toFloatArray())
             field = value
         }
 

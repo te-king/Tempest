@@ -17,10 +17,11 @@ inline class ProjectionMatrix(val matrix: Float4x4) {
             val d = -(2.0f * zFar * zNear) / (zFar - zNear)
 
             return ProjectionMatrix(Float4x4(
-                    Float4(x, 0f, 0f, 0f),
-                    Float4(0f, y, 0f, 0f),
-                    Float4(a, b, c, -1f),
-                    Float4(0f, 0f, d, 0f)))
+                    x, 0f, 0f, 0f,
+                    0f, y, 0f, 0f,
+                    a, b, c, -1f,
+                    0f, 0f, d, 0f
+            ))
         }
 
         fun perspectiveFieldOfView(fovy: Float, aspect: Float, zNear: Float, zFar: Float): ProjectionMatrix {

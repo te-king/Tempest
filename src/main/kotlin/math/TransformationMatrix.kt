@@ -9,10 +9,10 @@ inline class TransformationMatrix(val matrix: Float4x4) {
         val identity = TransformationMatrix(Float4x4.identity)
 
         fun translation(x: Float, y: Float, z: Float) = TransformationMatrix(Float4x4(
-            Float4(1f, 0f, 0f, 0f),
-            Float4(0f, 1f, 0f, 0f),
-            Float4(0f, 0f, 1f, 0f),
-            Float4(x, y, z, 1f)
+            1f, 0f, 0f, 0f,
+            0f, 1f, 0f, 0f,
+            0f, 0f, 1f, 0f,
+            x, y, z, 1f
         ))
 
         fun translation(v: Float3) = translation(v.x, v.y, v.z)
@@ -26,10 +26,10 @@ inline class TransformationMatrix(val matrix: Float4x4) {
             val axis = axis.normalized
 
             return TransformationMatrix(Float4x4(
-                Float4(t * axis.x * axis.x + cos, t * axis.x * axis.y - sin * axis.z, t * axis.x * axis.z + sin * axis.y, 0.0f),
-                Float4(t * axis.x * axis.y + sin * axis.z, t * axis.y * axis.y + cos, t * axis.y * axis.z - sin * axis.x, 0.0f),
-                Float4(t * axis.x * axis.z - sin * axis.y, t * axis.y * axis.z + sin * axis.x, t * axis.z * axis.z + cos, 0.0f),
-                Float4(0f, 0f, 0f, 1f)
+                t * axis.x * axis.x + cos, t * axis.x * axis.y - sin * axis.z, t * axis.x * axis.z + sin * axis.y, 0.0f,
+                t * axis.x * axis.y + sin * axis.z, t * axis.y * axis.y + cos, t * axis.y * axis.z - sin * axis.x, 0.0f,
+                t * axis.x * axis.z - sin * axis.y, t * axis.y * axis.z + sin * axis.x, t * axis.z * axis.z + cos, 0.0f,
+                0f, 0f, 0f, 1f
             ))
         }
 
@@ -40,10 +40,10 @@ inline class TransformationMatrix(val matrix: Float4x4) {
 
 
         fun scaling(x: Float, y: Float, z: Float) = TransformationMatrix(Float4x4(
-            Float4(x, 0f, 0f, 0f),
-            Float4(0f, y, 0f, 0f),
-            Float4(0f, 0f, z, 0f),
-            Float4(0f, 0f, 0f, 1f)
+            x, 0f, 0f, 0f,
+            0f, y, 0f, 0f,
+            0f, 0f, z, 0f,
+            0f, 0f, 0f, 1f
         ))
 
         fun scaling(v: Float3) = scaling(v.x, v.y, v.z)

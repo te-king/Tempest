@@ -15,9 +15,7 @@ class WorldController(node: Node) : Component(node), Updatable {
 
     override fun update(delta: Float) {
 
-        val rigidBodies = node findAll PhysicsBody::class
-
-        for (it in rigidBodies) {
+        for (it in node findAll PhysicsBody::class) {
             it.addForce(gravity * delta)
             it.translationDelta = lerp(it.translationDelta, Float3.zero, dampening * delta)
             it.rotationDelta = slerp(it.rotationDelta, Quaternion.identity, dampening * delta)

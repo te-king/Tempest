@@ -4,7 +4,7 @@ import math.Float3
 import math.Quaternion
 import math.slerp
 
-class RigidBody(node: Node) : Component(node), Updatable {
+class PhysicsBody(node: Node) : Component(node), Updatable {
 
     val transform = node add Transform::class
 
@@ -12,6 +12,11 @@ class RigidBody(node: Node) : Component(node), Updatable {
     var translationDelta = Float3.zero
 
     var rotationDelta = Quaternion.identity
+
+
+    fun addForce(force: Float3) {
+        translationDelta += force
+    }
 
 
     override fun update(delta: Float) {

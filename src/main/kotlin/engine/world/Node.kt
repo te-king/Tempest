@@ -5,13 +5,13 @@ import kotlin.reflect.KClass
 class Node (val scene: Scene, var name: String = "New Node") : Iterable<Component> {
 
     init {
-        scene.nodes.add(this)
+        scene.nodeSet.add(this)
     }
 
 
     val device get() = scene.device
 
-    private val componentMap = hashMapOf<KClass<out Component>, Component>()
+    internal val componentMap = hashMapOf<KClass<out Component>, Component>()
 
 
     infix fun<T: Component> add(type: KClass<T>) = componentMap.getOrPut(type) { type.constructors.first().call(this) } as T

@@ -3,19 +3,18 @@ package engine.world
 // TODO: Find Memory Leak
 
 import math.*
-import org.lwjgl.opengl.GL45.*
 import wrappers.opengl.BufferUsage
 
 class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
 
     var parent: Transform? = null
         set(value) {
-            field?.children?.remove(this)
+            field?.childrenSet?.remove(this)
             field = value
-            field?.children?.add(this)
+            field?.childrenSet?.add(this)
         }
 
-    private val children = mutableSetOf<Transform>()
+    internal val childrenSet = mutableSetOf<Transform>()
 
 
     // Buffer
@@ -114,7 +113,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
 
     private fun invalidateWorld() {
         worldInvalid = true
-        children.forEach { it.invalidateWorld() }
+        childrenSet.forEach { it.invalidateWorld() }
     }
 
     private fun validateWorld() {
@@ -124,7 +123,7 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
 
 
     // Iterable<Transform> Implementation
-    override fun iterator() = children.iterator()
+    override fun iterator() = childrenSet.iterator()
 
 
     // TODO("Temporary workaround, wont be needed with mvp generation on CPU")

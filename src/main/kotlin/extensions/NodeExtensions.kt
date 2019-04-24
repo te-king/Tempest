@@ -13,6 +13,6 @@ val Node.nestedNodes get() = (this get Transform::class)?.children?.map(Transfor
 val Node.nestedComponents get() = nestedNodes.flatMap(Node::components)
 
 
-infix fun<T: Component> Node.findAll(type: KClass<T>) = nestedComponents.filterIsInstance(type.java)
+infix fun<T: Any> Node.findAll(type: KClass<T>) = nestedComponents.filterIsInstance(type.java)
 
-infix fun<T: Component> Node.find(type: KClass<T>) = (this findAll type).firstOrNull()
+infix fun<T: Any> Node.find(type: KClass<T>) = (this findAll type).firstOrNull()

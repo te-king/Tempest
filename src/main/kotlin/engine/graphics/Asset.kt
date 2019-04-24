@@ -122,7 +122,7 @@ class Asset (val file: File) {
 
         val materials = Array<AIMaterial>(aiScene.mNumMaterials()) { AIMaterial.create(aiScene.mMaterials()!!.get(it)) }.map { aiMaterial ->
 
-            val result = Client.standardObjectShader.Material()
+            val result = StandardShader.Material()
 
             // Resolve colors
             val aiDiffuseColor = AIColor4D.create()

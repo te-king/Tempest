@@ -1,5 +1,6 @@
 package engine.graphics
 
+import engine.runtime.Client
 import math.Float4
 import org.lwjgl.opengl.GL11C.GL_FLOAT
 import wrappers.opengl.BufferUsage
@@ -7,7 +8,9 @@ import wrappers.opengl.Device
 import wrappers.opengl.ProgramType
 import wrappers.opengl.Texture2d
 
-class StandardShader(val device: Device) {
+object StandardShader {
+
+    private val device get() = Client.device
 
     private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, ProgramType.VERTEX)
     private val fragmentProgram = resourceAt("""shaders/StandardFragmentShader.glsl""").loadShaderSource(device, ProgramType.FRAGMENT)
@@ -31,13 +34,13 @@ class StandardShader(val device: Device) {
         bindAttribute(3, 3)
     }
 
-    inner class Material: engine.graphics.Material {
+    class Material: engine.graphics.Material {
 
         override val buffer = device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, BufferUsage.DYNAMIC)
 
-        override val pipeline get() = this@StandardShader.pipeline
+        override val pipeline get() = StandardShader.pipeline
 
-        override val layout get() = this@StandardShader.layout
+        override val layout get() = StandardShader.layout
 
 
         var diffuseColor = Float4(0f, 0f, 0f, 0f)

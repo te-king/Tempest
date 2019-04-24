@@ -1,10 +1,13 @@
 package engine.graphics
 
+import engine.runtime.Client
 import extensions.SIZE_BYTES
 import org.lwjgl.opengl.GL11C
 import wrappers.opengl.*
 
-class RaymarchShader(val device: Device) {
+object RaymarchShader {
+
+    private val device get() = Client.device
 
     private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, ProgramType.VERTEX)
     private val fragmentProgram = resourceAt("""shaders/RaymarchFragmentShader.glsl""").loadShaderSource(device, ProgramType.FRAGMENT)
@@ -35,13 +38,13 @@ class RaymarchShader(val device: Device) {
     }
 
 
-    inner class Material: engine.graphics.Material {
+    class Material: engine.graphics.Material {
 
         override val buffer = device.buffer(Float.SIZE_BYTES.toLong(), BufferUsage.DYNAMIC)
 
-        override val pipeline get() = this@RaymarchShader.pipeline
+        override val pipeline get() = RaymarchShader.pipeline
 
-        override val layout get() = this@RaymarchShader.layout
+        override val layout get() = RaymarchShader.layout
 
 
         var radius = 0f

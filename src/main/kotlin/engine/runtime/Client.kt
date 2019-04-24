@@ -25,9 +25,6 @@ object Client {
         Device(GL.createCapabilities())
     }
 
-    val standardObjectShader = StandardShader(device)
-    val raymarchShader = RaymarchShader(device)
-
     init {
         window.onKeyPress { window, key, action, mods ->
             Input.keys[key] = action != GLFW_RELEASE

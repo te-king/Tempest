@@ -1,5 +1,6 @@
 package engine.world
 
+import extensions.findAll
 import math.Int4
 import wrappers.glfw.Window
 import math.ProjectionMatrix
@@ -104,7 +105,7 @@ class Camera (node: Node) : Component(node), Updatable {
             clearFramebuffer()
 
             // Draw each renderer
-            for (renderer in scene.flatMap { it.filterIsInstance<Renderable>() })
+            for (renderer in scene findAll Renderable::class)
                 renderer.draw(this)
 
             copyFramebuffer(

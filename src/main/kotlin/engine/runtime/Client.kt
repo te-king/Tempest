@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL45.*
 import engine.world.*
+import extensions.findAll
 
 object Client {
 
@@ -50,9 +51,8 @@ object Client {
             val delta = (newTime - oldTime).toFloat() / 1_000_000_000f
 
             // Update all nodes in the scene
-            for (node in scene)
-                for (component in node)
-                    (component as? Updatable)?.update(delta)
+            for (updatable in scene findAll Updatable::class)
+                updatable.update(delta)
 
             // Complete all tasks of the device
             device.executeCommandQueue()

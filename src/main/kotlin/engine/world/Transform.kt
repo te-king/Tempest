@@ -5,7 +5,7 @@ package engine.world
 import math.*
 import wrappers.opengl.BufferUsage
 
-class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
+class Transform (node: Node) : Component(node), Updatable {
 
     var parent: Transform? = null
         set(value) {
@@ -120,10 +120,6 @@ class Transform (node: Node) : Component(node), Updatable, Iterable<Transform> {
         worldMatrix = (parent?.worldMatrix ?: TransformationMatrix.identity) * localMatrix
         worldInvalid = false
     }
-
-
-    // Iterable<Transform> Implementation
-    override fun iterator() = childrenSet.iterator()
 
 
     // TODO("Temporary workaround, wont be needed with mvp generation on CPU")

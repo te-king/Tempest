@@ -1,14 +1,15 @@
 package extensions
 
-import engine.world.Component
+import engine.world.Node
 import engine.world.Scene
 import kotlin.reflect.KClass
 
-val Scene.nestedNodes get() = nodeSet.asSequence()
 
-val Scene.nestedComponents get() = nestedNodes.flatMap { it.components }
+inline val Scene.nestedNodes get() = nodes
+
+inline val Scene.nestedComponents get() = nestedNodes.flatMap(Node::components)
 
 
-infix fun<T: Any> Scene.findAll(type: KClass<T>) = nestedComponents.filterIsInstance(type.java)
+inline infix fun<reified T: Any> Scene.findAll(type: KClass<T>) = nestedComponents.filterIsInstance<T>()
 
-infix fun<T: Any> Scene.find(type: KClass<T>) = (this findAll type).firstOrNull()
+inline infix fun<reified T: Any> Scene.find(type: KClass<T>) = (this findAll type).firstOrNull()

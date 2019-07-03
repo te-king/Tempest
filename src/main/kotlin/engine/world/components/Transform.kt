@@ -1,7 +1,9 @@
-package engine.world
+package engine.world.components
 
 // TODO: Find Memory Leak
 
+import engine.world.Node
+import engine.world.Updatable
 import math.*
 import wrappers.opengl.BufferUsage
 
@@ -14,7 +16,7 @@ class Transform (node: Node) : Component(node), Updatable {
             field?.childrenSet?.add(this)
         }
 
-    internal val childrenSet = mutableSetOf<Transform>()
+    private val childrenSet = mutableSetOf<Transform>()
 
     val children get() = childrenSet.asSequence()
 

@@ -1,10 +1,9 @@
 package engine.graphics
 
-import engine.runtime.Client
-import engine.world.MeshRenderer
+import engine.world.components.MeshRenderer
 import engine.world.Node
 import engine.world.Scene
-import engine.world.Transform
+import engine.world.components.Transform
 import math.Float3
 import math.Float4
 import math.Quaternion

@@ -1,12 +1,15 @@
-package engine.world
+package engine.world.controllers
 
+import engine.world.Node
+import engine.world.components.PhysicsBody
+import engine.world.Updatable
 import extensions.findAll
 import math.Float3
 import math.Quaternion
 import math.lerp
 import math.slerp
 
-class WorldController(node: Node) : Component(node), Updatable {
+class PhysicsController(node: Node) : Controller(node), Updatable {
 
     var gravity = Float3(0f, -9.81f, 0f)
 

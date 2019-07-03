@@ -1,10 +1,12 @@
-package engine.world
+package engine.world.components
 
+import engine.world.Node
+import engine.world.Renderable
+import engine.world.Updatable
 import extensions.findAll
 import math.Int4
 import wrappers.glfw.Window
 import math.ProjectionMatrix
-import org.lwjgl.opengl.GL30C
 import org.lwjgl.opengl.GL45C.*
 import wrappers.opengl.*
 

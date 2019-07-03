@@ -1,17 +1,16 @@
 package engine.world
 
+import engine.world.components.Component
 import kotlin.reflect.KClass
 
 class Node (val scene: Scene, var name: String = "New Node") {
 
-    init {
-        scene.nodeSet.add(this)
-    }
-
+    init { scene.nodeSet.add(this) }
 
     val device get() = scene.device
 
-    internal val componentMap = hashMapOf<KClass<out Component>, Component>()
+
+    private val componentMap = hashMapOf<KClass<out Component>, Component>()
 
     val components get() = componentMap.values.asSequence()
 

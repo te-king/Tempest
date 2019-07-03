@@ -50,6 +50,8 @@ object Client {
             val newTime = System.nanoTime()
             val delta = (newTime - oldTime).toFloat() / 1_000_000_000f
 
+            //for (updatable in scene.nodes)
+
             // Update all nodes in the scene
             for (updatable in scene findAll Updatable::class)
                 updatable.update(delta)

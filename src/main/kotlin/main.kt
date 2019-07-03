@@ -1,18 +1,18 @@
 import engine.graphics.resourceAt
 import engine.runtime.Client
 import engine.world.*
-import extensions.findAll
+import engine.world.components.*
 import math.Float3
 import math.Quaternion
-import kotlin.system.measureNanoTime
+import kotlin.reflect.KClass
 
 fun main() {
 
     val scene = Client.scene
 
     val worldNode = Node(scene, "World")
-    val worldController = worldNode add WorldController::class
-    worldController.gravity = Float3.zero
+    //val worldController = worldNode add PhysicsController::class
+    //worldController.gravity = Float3.zero
 
     // Load object
     run {
@@ -28,7 +28,7 @@ fun main() {
     // Initialize camera
     val cameraNode = Node(scene)
     val cameraTransform = cameraNode add Transform::class
-    val cameraController = cameraNode add DebugCameraController::class
+    val cameraController = cameraNode add CameraInput::class
     val cameraCamera = cameraNode add Camera::class
     cameraCamera.window = Client.window
     cameraTransform.translation = Float3(0f, 0f, 5f)

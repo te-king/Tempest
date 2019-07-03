@@ -1,9 +1,11 @@
-package engine.world
+package engine.world.components
 
 import engine.runtime.Input
 import engine.runtime.Key
+import engine.world.Node
+import engine.world.Updatable
 
-class DebugCameraController(node: Node) : Component(node), Updatable {
+class CameraInput(node: Node) : Component(node), Updatable {
 
     private val transform = node add Transform::class
 

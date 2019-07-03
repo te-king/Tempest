@@ -1,15 +1,15 @@
 package extensions
 
 import engine.world.Node
-import engine.world.Transform
+import engine.world.components.Transform
 import kotlin.reflect.KClass
 
 
-val Node.nestedNodes get() = (this get Transform::class)?.children?.map(Transform::node) ?: sequenceOf()
+inline val Node.nestedNodes get() = (this get Transform::class)?.children?.map(Transform::node) ?: sequenceOf()
 
-val Node.nestedComponents get() = nestedNodes.flatMap(Node::components)
+inline val Node.nestedComponents get() = nestedNodes.flatMap(Node::components)
 
 
-infix fun<T: Any> Node.findAll(type: KClass<T>) = nestedComponents.filterIsInstance(type.java)
+inline infix fun<reified T: Any> Node.findAll(type: KClass<T>) = nestedComponents.filterIsInstance<T>()
 
-infix fun<T: Any> Node.find(type: KClass<T>) = (this findAll type).firstOrNull()
+inline infix fun<reified T: Any> Node.find(type: KClass<T>) = (this findAll type).firstOrNull()

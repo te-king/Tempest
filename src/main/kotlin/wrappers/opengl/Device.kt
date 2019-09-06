@@ -61,16 +61,14 @@ class Device (val capabilities: GLCapabilities) {
     // Framebuffers
     fun framebuffer(vararg textures: Pair<Int, Image2d>): Framebuffer {
         val id = glCreateFramebuffers()
-        for ((key, value) in textures) glNamedFramebufferTexture(id, key, value.texture.id, value.index)
-        return Framebuffer(this, id)
+        return Framebuffer(this, id, textures.toMap())
     }
 
 
     // Pipelines
     fun pipeline(vararg programs: Pair<ProgramType, Program>): Pipeline {
         val id = glCreateProgramPipelines()
-        programs.forEach { glUseProgramStages(id, it.first.bit, it.second.id) }
-        return Pipeline(this, id)
+        return Pipeline(this, id, programs.toMap())
     }
 
 

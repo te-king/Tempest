@@ -1,9 +1,13 @@
 package wrappers.opengl
 
 import org.lwjgl.opengl.GL45C.*
-import java.nio.IntBuffer
 
-class Framebuffer(device: Device, val id: Int): Device.DeviceResource(device) {
+class Framebuffer(device: Device, val id: Int, private val textures: Map<Int, Image2d>): Device.DeviceResource(device) {
+
+    init {
+        for (it in textures) glNamedFramebufferTexture(id, it.key, it.value.texture.id, it.value.index)
+    }
+
 
     /*
     // Native Functions

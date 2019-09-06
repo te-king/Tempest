@@ -1,14 +1,15 @@
 package engine.runtime
 
-import engine.graphics.RaymarchShader
-import engine.graphics.StandardShader
-import wrappers.opengl.Device
-import wrappers.glfw.Window
+import engine.world.Scene
+import engine.world.Updatable
+import extensions.findAll
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL45.*
-import engine.world.*
-import extensions.findAll
+import wrappers.glfw.Window
+import wrappers.opengl.Device
+import kotlin.time.ExperimentalTime
+import kotlin.time.MonoClock
 
 object Client {
 
@@ -27,7 +28,7 @@ object Client {
     }
 
     init {
-        window.onKeyPress { window, key, action, mods ->
+        window.onKeyPress { _, key, action, _ ->
             Input.keys[key] = action != GLFW_RELEASE
         }
     }
@@ -37,35 +38,25 @@ object Client {
     var scene = Scene(device)
 
 
+    @ExperimentalTime
     fun run() {
         glEnable(GL_DEPTH_TEST)
         glEnable(GL_CULL_FACE)
 
-        // Begin render loop
-        var oldTime = System.nanoTime()
-        var frames = 0L
+
+        var mark = MonoClock.markNow()
 
         window.loop {
 
-            val newTime = System.nanoTime()
-            val delta = (newTime - oldTime).toFloat() / 1_000_000_000f
-
-            //for (updatable in scene.nodes)
-
             // Update all nodes in the scene
             for (updatable in scene findAll Updatable::class)
-                updatable.update(delta)
+                updatable.update(mark.elapsedNow().inSeconds.toFloat())
 
             // Complete all tasks of the device
             device.executeCommandQueue()
 
-            oldTime = newTime
-            frames++
-
-            // Resolves AMD GPUs not limiting framerates
-            Thread.sleep(2)
-
-            if (frames % 20 == 0L) window.title = "FPS: %.2f FRAMES: %s".format(1.0 / delta, frames)
+            // Update Clock
+            mark = MonoClock.markNow()
 
         }
 

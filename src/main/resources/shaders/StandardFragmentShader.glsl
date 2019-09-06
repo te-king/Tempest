@@ -34,10 +34,4 @@ void main() {
         outNormal = vec4(tangentToWorldspace * normal, 1);
     else
         outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1.0f);
-
-    outAlbedo = outNormal;
 }
-
-/*
-    Note, reading from an empty sampler causes a crash on AMD devices.
-*/

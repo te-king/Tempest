@@ -78,6 +78,7 @@ class Device (val capabilities: GLCapabilities) {
         return Program(this, id)
     }
 
+
     // Textures
     fun texture1d(levels: Int, internalFormat: TextureFormat, width: Int): Texture1d {
         val id = glCreateTextures(GL_TEXTURE_1D)
@@ -90,6 +91,7 @@ class Device (val capabilities: GLCapabilities) {
         glTextureStorage2D(id, levels, internalFormat.native, width, height)
         return Texture2d(this, id)
     }
+
 
     // Images
     fun image1d(internalFormat: TextureFormat, width: Int): Image1d {
@@ -109,6 +111,8 @@ class Device (val capabilities: GLCapabilities) {
         return VertexArray(this, id)
     }
 
+
+    // Command Buffer
     fun commandBuffer() = object: CommandBuffer(this) {
         override fun submit() { commandQueue.addAll(commands) }
     }
@@ -117,11 +121,6 @@ class Device (val capabilities: GLCapabilities) {
     abstract class DeviceResource(val device: Device) {
         abstract fun delete()
         protected fun finalize() { device.commandQueue.add(::delete) }
-    }
-
-    abstract class CommandBuffer2(val device: Device) {
-        protected val queue = mutableListOf<() -> Unit>()
-        fun submit() { device.commandQueue.addAll(queue) }
     }
 
 }

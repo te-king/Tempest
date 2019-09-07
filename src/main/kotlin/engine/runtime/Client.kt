@@ -55,6 +55,9 @@ object Client {
             // Complete all tasks of the device
             device.executeCommandQueue()
 
+            // Display Back Buffer
+            window.swapBuffers()
+
             // Update Clock
             mark = MonoClock.markNow()
 

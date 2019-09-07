@@ -1,12 +1,26 @@
 package wrappers.opengl
 
+import engine.runtime.Client
 import org.lwjgl.opengl.GL45C.*
 
 class Framebuffer(device: Device, val id: Int, private val textures: Map<Int, Image2d>): Device.DeviceResource(device) {
 
+
+    companion object {
+        val default = Framebuffer(Client.device, 0, mapOf())
+    }
+
+
     init {
         for (it in textures) glNamedFramebufferTexture(id, it.key, it.value.texture.id, it.value.index)
     }
+
+
+    // TODO: Update
+    val width get() = if (id == 0) Client.window.width else textures.values.map(Image2d::width).max() ?: 0
+
+    // TODO: Update
+    val height get() = if (id == 0) Client.window.height else textures.values.map(Image2d::height).max() ?: 0
 
 
     /*

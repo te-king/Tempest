@@ -45,7 +45,7 @@ class Camera (node: Node) : Component(node), Updatable {
         }
 
 
-    var window: Window? = null
+    var outputFramebuffer = Framebuffer.default
 
 
     // Projection Matrix
@@ -112,15 +112,13 @@ class Camera (node: Node) : Component(node), Updatable {
 
             copyFramebuffer(
                 geometryFramebuffer, Int4(0, 0, 640, 480),
-                null, Int4(0, 0, window?.width ?: 0, window?.height ?: 0),
+                //outputFramebuffer, Int4(0, 0, window?.width ?: 0, window?.height ?: 0),
+                outputFramebuffer, Int4(0, 0, outputFramebuffer.width, outputFramebuffer.height),
                 CopyFramebufferMask.COLOR_BUFFER_BIT,
                 CopyFramebufferFilter.NEAREST
             )
 
         }.submit()
-
-        // Push the frame to the display
-        window?.swapBuffers()
 
     }
 

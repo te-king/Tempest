@@ -10,7 +10,7 @@ class CameraInput(node: Node) : Component(node), Updatable {
     private val transform = node add Transform::class
 
 
-    var speed = 24f
+    var speed = 64f
 
     override fun update(delta: Float) {
         if (Input.keys[Key.SPACE] == true) {

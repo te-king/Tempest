@@ -23,6 +23,7 @@ layout(location = 4) in vec3 bitangent;
 
 layout(location = 0) out vec4 outAlbedo;
 layout(location = 1) out vec4 outNormal;
+//layout(depth_greater) out float gl_FragDepth;
 
 
 const int MAX_STEPS = 64;
@@ -75,5 +76,6 @@ void main() {
     }
 
     outAlbedo = vec4(0.125, 0.125, 0.125, 1);
+
 
 }

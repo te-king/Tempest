@@ -1,5 +1,6 @@
 package engine.graphics
 
+import engine.gui.Font
 import engine.world.components.MeshRenderer
 import engine.world.Node
 import engine.world.Scene
@@ -9,13 +10,16 @@ import math.Float4
 import math.Quaternion
 import org.lwjgl.assimp.*
 import org.lwjgl.assimp.Assimp.*
+import org.lwjgl.nanovg.NanoVG.*
 import org.lwjgl.stb.STBImage
+import wrappers.nanovg.nvgContext
 import wrappers.opengl.*
 import java.io.File
 import java.io.FileNotFoundException
+import java.lang.Error
 
 
-class Asset (val file: File) {
+class Asset(val file: File) {
 
     init {
         if (!file.exists()) throw FileNotFoundException("External asset not found: $file")
@@ -182,7 +186,7 @@ class Asset (val file: File) {
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
-            val indices = aiMesh.mFaces().flatMap {  (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
+            val indices = aiMesh.mFaces().flatMap { (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
                 val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
                 Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.TRIANGLES)
             }
@@ -241,6 +245,10 @@ class Asset (val file: File) {
 
         return result
 
+    }
+
+    fun loadFont(name: String): Font? {
+        return nvgCreateFont(nvgContext, name, file.absolutePath).takeUnless { it == -1 }?.let(::Font)
     }
 
 }

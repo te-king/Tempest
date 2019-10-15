@@ -3,6 +3,7 @@ package engine.runtime
 import engine.world.Scene
 import engine.world.Updatable
 import extensions.findAll
+import math.Float2
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL45.*
@@ -30,6 +31,10 @@ object Client {
     init {
         window.onKeyPress { _, key, action, _ ->
             Input.keys[key] = action != GLFW_RELEASE
+        }
+
+        window.onMouseMove { _, x, y ->
+            Input.cursor = Float2(x.toFloat(), y.toFloat())
         }
     }
 
@@ -60,6 +65,8 @@ object Client {
 
             // Update Clock
             mark = MonoClock.markNow()
+
+            Thread.sleep(1)
 
         }
 

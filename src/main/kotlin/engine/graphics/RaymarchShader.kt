@@ -2,7 +2,7 @@ package engine.graphics
 
 import engine.runtime.Client
 import extensions.SIZE_BYTES
-import org.lwjgl.opengl.GL11C
+import org.lwjgl.opengl.GL45C.*
 import wrappers.opengl.*
 
 object RaymarchShader {
@@ -18,16 +18,16 @@ object RaymarchShader {
     )
 
     val layout = device.vertexArray().apply {
-        formatFloatAttribute(0, 3, GL11C.GL_FLOAT, false, 0)
+        formatFloatAttribute(0, 3, GL_FLOAT, false, 0)
         bindAttribute(0, 0)
 
-        formatFloatAttribute(1, 3, GL11C.GL_FLOAT, false, 0)
+        formatFloatAttribute(1, 3, GL_FLOAT, false, 0)
         bindAttribute(1, 1)
 
-        formatFloatAttribute(2, 3, GL11C.GL_FLOAT, false, 0)
+        formatFloatAttribute(2, 3, GL_FLOAT, false, 0)
         bindAttribute(2, 2)
 
-        formatFloatAttribute(3, 3, GL11C.GL_FLOAT, false, 0)
+        formatFloatAttribute(3, 3, GL_FLOAT, false, 0)
         bindAttribute(3, 3)
     }
 

@@ -1,11 +1,12 @@
 package wrappers.opengl
 
+import org.lwjgl.nanovg.NanoVG
 import org.lwjgl.opengl.GL45.*
 import org.lwjgl.opengl.GLCapabilities
 import org.lwjgl.system.CustomBuffer
 
 
-class Device (val capabilities: GLCapabilities) {
+class Device(val capabilities: GLCapabilities) {
 
     // Command List
     private val commandQueue = mutableListOf<() -> Unit>()
@@ -113,14 +114,31 @@ class Device (val capabilities: GLCapabilities) {
 
 
     // Command Buffer
-    fun commandBuffer() = object: CommandBuffer(this) {
-        override fun submit() { commandQueue.addAll(commands) }
+    fun commandBuffer() = object : CommandBuffer(this) {
+        override fun submit() {
+            commandQueue.addAll(commands)
+        }
+    }
+
+    fun enqueue(func: CommandBuffer.() -> Unit) {
+
+        val queue = object : CommandBuffer(this) {
+            override fun submit() {
+                commandQueue.addAll(commands)
+            }
+        }
+
+        queue.func()
+        queue.submit()
+
     }
 
 
     abstract class DeviceResource(val device: Device) {
         abstract fun delete()
-        protected fun finalize() { device.commandQueue.add(::delete) }
+        protected fun finalize() {
+            device.commandQueue.add(::delete)
+        }
     }
 
 }

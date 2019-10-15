@@ -1,7 +1,10 @@
 package engine.gui
 
-abstract class Container: Element() {
+import wrappers.nanovg.Surface
 
-    val children = listOf<Element>()
+abstract class Container : Element() {
+
+    val children = mutableListOf<Element>()
 
 }
+

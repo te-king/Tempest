@@ -6,7 +6,7 @@ import engine.graphics.Mesh
 import engine.world.Node
 import engine.world.Renderable
 
-class MeshRenderer (node: Node) : Component(node), Renderable {
+class MeshRenderer(node: Node) : Component(node), Renderable {
 
     private val transform = node add Transform::class
 
@@ -27,14 +27,18 @@ class MeshRenderer (node: Node) : Component(node), Renderable {
                 buffer.bindVertexArray(material.layout)
             }
 
-            mesh.vertexBuffers.forEach(buffer::bindVertexBuffer)
+            for ((index, vertexBuffer) in mesh.vertexBuffers) {
+                buffer.bindVertexBuffer(index, vertexBuffer)
+            }
 
             mesh.indexBuffers.forEach { indexBuffer ->
                 buffer.bindElementBuffer(indexBuffer)
                 buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
             }
 
-            mesh.vertexBuffers.mapValues { null }.forEach(buffer::bindVertexBuffer)
+            for ((index, _) in mesh.vertexBuffers) {
+                buffer.bindVertexBuffer(index, null)
+            }
 
 
         }

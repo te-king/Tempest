@@ -2,10 +2,12 @@ package wrappers.glfw
 
 import engine.runtime.Key
 import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.glfw.GLFWCursorPosCallback
+import org.lwjgl.glfw.GLFWCursorPosCallbackI
 
 class Window private constructor(val handle: GLFWwindow) {
 
-    constructor(width: Int, height: Int, title: String, monitor: Monitor? = null, share: Window? = null): this(glfwCreateWindow(width, height, "", monitor?.handle ?: 0, share?.handle ?: 0)) {
+    constructor(width: Int, height: Int, title: String, monitor: Monitor? = null, share: Window? = null) : this(glfwCreateWindow(width, height, "", monitor?.handle ?: 0, share?.handle ?: 0)) {
         this.title = title
     }
 
@@ -34,8 +36,14 @@ class Window private constructor(val handle: GLFWwindow) {
 
 
     fun onKeyPress(func: (window: Window, key: Key, action: Int, mods: Int) -> Unit) {
-        glfwSetKeyCallback(handle) { window: Long, key: Int, scanCode: Int, action: Int, mods: Int ->
+        glfwSetKeyCallback(handle) { _, key, _, action, mods ->
             func(this, Key.fromInt(key)!!, action, mods)
+        }
+    }
+
+    fun onMouseMove(func: (window: Window, x: Double, y: Double) -> Unit) {
+        glfwSetCursorPosCallback(handle) { _, x, y ->
+            func(this, x, y)
         }
     }
 

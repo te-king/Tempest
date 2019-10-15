@@ -1,20 +1,19 @@
-package engine.gui
+package engine.gui.components
 
-import math.Colors
-import wrappers.nanovg.Surface
+import engine.gui.*
 
-class Margin : Frame() {
+class Margin : Frame {
 
     var left = 4
     var right = 4
     var top = 4
     var bottom = 4
 
-    var background: Colors? = null
+
+    override var child: Element? = null
 
 
     override fun draw(surface: Surface) {
-        background?.rgba?.let(surface::fillRectangle)
         surface.push(left, top, surface.width - left - right, surface.height - top - bottom)
         child?.draw(surface)
         surface.pop()

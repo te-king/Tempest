@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class TriangleFillMode(val native: Int) {
     POINT(GL_POINT),

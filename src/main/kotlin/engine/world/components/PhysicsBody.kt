@@ -1,10 +1,7 @@
 package engine.world.components
 
-import engine.world.Node
-import engine.world.Updatable
-import math.Float3
-import math.Quaternion
-import math.slerp
+import engine.world.*
+import math.*
 
 class PhysicsBody(node: Node) : Component(node), Updatable {
 

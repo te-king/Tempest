@@ -1,7 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL31
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class TextureFormat(val native: Int) {
     R8(GL_R8),

@@ -1,13 +1,15 @@
-package engine.gui
+package engine.gui.components
 
-import wrappers.nanovg.Surface
+import engine.gui.*
 
-class Dock : Frame() {
+class Dock : Frame {
 
     var preferredWidth = 128
     var preferredHeight = 128
 
     var direction = DockDirection.Center
+
+    override var child: Element? = null
 
     override fun draw(surface: Surface) =
         when (direction) {
@@ -60,10 +62,3 @@ class Dock : Frame() {
 
 }
 
-enum class DockDirection {
-    Left,
-    Right,
-    Top,
-    Bottom,
-    Center
-}

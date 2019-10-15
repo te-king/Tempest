@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class TextureParameter(val native: Int) {
     DEPTH_STENCIL_TEXTURE_MODE(GL_DEPTH_STENCIL_TEXTURE_MODE),

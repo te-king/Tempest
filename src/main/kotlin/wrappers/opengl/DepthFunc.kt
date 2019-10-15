@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45C.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class DepthFunc(val native: Int) {
     NEVER(GL_NEVER),

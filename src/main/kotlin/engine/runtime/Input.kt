@@ -1,13 +1,14 @@
 package engine.runtime
 
-import math.Float2
+import math.*
 
 object Input {
 
-    val keys = mutableMapOf<Key, Boolean>()
+    val keyboard = mutableMapOf<Key, Boolean>()
+
+    val mouse = mutableMapOf<Int, Boolean>()
 
     var cursor = Float2.zero
-        internal set
 
 }
 

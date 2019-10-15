@@ -1,20 +1,16 @@
 package engine.world.components
 
-import engine.gui.Element
-import engine.world.Node
-import engine.world.Updatable
-import math.Int4
+import engine.gui.components.*
+import engine.world.*
+import math.*
 import org.lwjgl.opengl.GL45C.*
-import wrappers.opengl.CopyFramebufferFilter
-import wrappers.opengl.CopyFramebufferMask
-import wrappers.opengl.Framebuffer
-import wrappers.opengl.TextureFormat
+import wrappers.opengl.*
 
 class Gui(node: Node) : Component(node), Updatable {
 
     var root: Element? = null
 
-    var outputFramebuffer = Framebuffer.default
+    var output: Framebuffer? = null
 
 
     private val guiFramebuffer = device.framebuffer(
@@ -25,20 +21,23 @@ class Gui(node: Node) : Component(node), Updatable {
 
     override fun update(delta: Float) {
 
-        device.commandBuffer().apply {
+        val root = root ?: return
+        val output = output ?: return
+
+        device.enqueue {
 
             bindFramebuffer(guiFramebuffer)
             clearFramebuffer()
 
-            root?.let(this::paint)
+            root.let(this::paint)
 
             copyFramebuffer(
                 guiFramebuffer, Int4(0, 0, 640, 480),
-                //outputFramebuffer, Int4(0, 0, window?.width ?: 0, window?.height ?: 0),
-                outputFramebuffer, Int4(0, 0, outputFramebuffer.width, outputFramebuffer.height), CopyFramebufferMask.COLOR_BUFFER_BIT, CopyFramebufferFilter.NEAREST
+                output, Int4(0, 0, output.width, output.height),
+                CopyFramebufferMask.COLOR_BUFFER_BIT, CopyFramebufferFilter.NEAREST
             )
 
-        }.submit()
+        }
 
     }
 

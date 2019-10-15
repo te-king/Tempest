@@ -1,6 +1,6 @@
 package engine.world.components
 
-import engine.world.Node
+import engine.world.*
 
 abstract class Component(val node: Node) {
 

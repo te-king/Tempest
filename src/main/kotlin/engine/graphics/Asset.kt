@@ -1,6 +1,6 @@
 package engine.graphics
 
-import engine.gui.Font
+import wrappers.nanovg.Font
 import engine.world.components.MeshRenderer
 import engine.world.Node
 import engine.world.Scene
@@ -12,11 +12,10 @@ import org.lwjgl.assimp.*
 import org.lwjgl.assimp.Assimp.*
 import org.lwjgl.nanovg.NanoVG.*
 import org.lwjgl.stb.STBImage
-import wrappers.nanovg.nvgContext
+import engine.gui.nvgContext
 import wrappers.opengl.*
 import java.io.File
 import java.io.FileNotFoundException
-import java.lang.Error
 
 
 class Asset(val file: File) {

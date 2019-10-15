@@ -1,22 +1,18 @@
-package wrappers.nanovg
+package engine.gui
 
-import engine.graphics.resourceAt
-import engine.gui.Font
-import engine.runtime.Input
-import math.Float2
-import math.Int4
-import math.RGBA
-import org.lwjgl.nanovg.NVGColor
+import engine.graphics.*
+import engine.runtime.*
+import math.*
+import org.lwjgl.nanovg.*
 import org.lwjgl.nanovg.NanoVG.*
-import org.lwjgl.nanovg.NanoVGGL3.NVG_ANTIALIAS
-import org.lwjgl.nanovg.NanoVGGL3.nvgCreate
+import org.lwjgl.nanovg.NanoVGGL3.*
+import wrappers.nanovg.*
 import java.util.*
-import kotlin.math.min
+import kotlin.math.*
 
 
-internal val nvgContext = nvgCreate(NVG_ANTIALIAS)
-
-val defaultFont = resourceAt("""assets/default.ttf""").loadFont("default") ?: throw Error("Default font failed to load")
+internal val nvgContext = nvgCreate(0)
+internal val defaultFont = resourceAt("""assets/default.ttf""").loadFont("default") ?: throw Error("Default font failed to load")
 
 
 class Surface(windowWidth: Float, windowHeight: Float, devicePixelRatio: Float) {
@@ -34,6 +30,9 @@ class Surface(windowWidth: Float, windowHeight: Float, devicePixelRatio: Float) 
                     Input.cursor.y > y && Input.cursor.y < y + height
         }
 
+
+
+
     init {
         nvgBeginFrame(nvgContext, windowWidth, windowHeight, devicePixelRatio)
         stack += Int4(0, 0, windowWidth.toInt(), windowHeight.toInt())
@@ -49,18 +48,12 @@ class Surface(windowWidth: Float, windowHeight: Float, devicePixelRatio: Float) 
         nvgFill(nvgContext)
     }
 
-    fun text(str: String, color: RGBA, font: Font = defaultFont) {
+    fun text(str: String, color: RGBA, align: Int, font: Font = defaultFont) {
         nvgFontFaceId(nvgContext, font.id)
-        color.nvg {
-            nvgFillColor(nvgContext, it)
-        }
+        color.nvg { nvgFillColor(nvgContext, it) }
 
-        val bounds = floatArrayOf(0f, 0f, 0f, 0f)
-        nvgTextBounds(nvgContext, x.toFloat(), y.toFloat(), str, bounds);
-
-        //nvgText(nvgContext, x.toFloat(), y.toFloat(), str)
         nvgTextAlign(nvgContext, NVG_ALIGN_CENTER or NVG_ALIGN_MIDDLE)
-        nvgTextBox(nvgContext, x.toFloat(), y.toFloat(), width.toFloat(), str)
+        nvgText(nvgContext, x.toFloat() + (width.toFloat() / 2), y.toFloat() + (height.toFloat() / 2), str)
     }
 
 
@@ -83,16 +76,10 @@ class Surface(windowWidth: Float, windowHeight: Float, devicePixelRatio: Float) 
 
 
     private inline fun RGBA.nvg(func: (NVGColor) -> Unit) {
-
         val color = NVGColor.create()
         nvgRGBAf(red, green, blue, alpha, color)
-
-        try {
-            func(color)
-        } finally {
-            color.free()
-        }
-
+        func(color)
+        color.free()
     }
 
 }

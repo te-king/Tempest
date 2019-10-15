@@ -1,10 +1,8 @@
 package engine.world.components
 
-import wrappers.opengl.CommandBuffer
-import engine.graphics.Material
-import engine.graphics.Mesh
-import engine.world.Node
-import engine.world.Renderable
+import engine.graphics.*
+import engine.world.*
+import wrappers.opengl.*
 
 class MeshRenderer(node: Node) : Component(node), Renderable {
 

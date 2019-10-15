@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class ProgramType(val native: Int, val bit: Int) {
     VERTEX(GL_VERTEX_SHADER, GL_VERTEX_SHADER_BIT),

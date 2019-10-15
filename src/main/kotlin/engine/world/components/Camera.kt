@@ -1,51 +1,27 @@
 package engine.world.components
 
-import engine.world.Node
-import engine.world.Renderable
-import engine.world.Updatable
-import extensions.findAll
-import math.Int4
-import wrappers.glfw.Window
-import math.ProjectionMatrix
+import engine.world.*
+import extensions.*
+import math.*
 import org.lwjgl.opengl.GL45C.*
 import wrappers.opengl.*
+import kotlin.properties.*
 
-class Camera (node: Node) : Component(node), Updatable {
+class Camera(node: Node) : Component(node), Updatable {
 
     private val transform = node add Transform::class
 
 
-    //
     val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, BufferUsage.DYNAMIC)
 
 
-    // Parameters
-    var fieldOfView: Float = Math.toRadians(45.0).toFloat()
-        set(value) {
-            invalidateProjection()
-            field = value
-        }
-
-    var aspectRatio: Float = 640f / 480f
-        set(value) {
-            invalidateProjection()
-            field = value
-        }
-
-    var nearPlaneClipping: Float = 0.05f
-        set(value) {
-            invalidateProjection()
-            field = value
-        }
-
-    var farPlaneClipping: Float = 500f
-        set(value) {
-            invalidateProjection()
-            field = value
-        }
+    var fieldOfView by Delegates.observable(0.7854f) { _, _, _ -> invalidateProjection() }
+    var aspectRatio by Delegates.observable(640f / 480f) { _, _, _ -> invalidateProjection() }
+    var nearPlaneClipping by Delegates.observable(0.05f) { _, _, _ -> invalidateProjection() }
+    var farPlaneClipping by Delegates.observable(500f) { _, _, _ -> invalidateProjection() }
 
 
-    var outputFramebuffer = Framebuffer.default
+    var output: Framebuffer? = null
 
 
     // Projection Matrix
@@ -77,48 +53,35 @@ class Camera (node: Node) : Component(node), Updatable {
         GL_DEPTH_ATTACHMENT to device.image2d(TextureFormat.DEPTH24, 640, 480)
     )
 
-    private val illuminationFramebuffer = device.framebuffer(
-        GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGB8, 640, 480)
-    )
-
 
     override fun update(delta: Float) {
 
+        val output = output ?: return
+
         if (projectionInvalid) validateProjection()
 
-        // Render scene into geometryFramebuffer
-        device.commandBuffer().apply {
 
-            // Bind camera transform
+        device.enqueue {
+
             bindBuffer(0, transform.buffer)
-
-            // Bind camera data
             bindBuffer(1, buffer)
 
-
             // -- GEOMETRY PASS
-
-            // Set up render configuration
             setCullMode(CullMode.BACK)
             setFrontFace(FaceWinding.CCW)
 
-            // Set render target
             bindFramebuffer(geometryFramebuffer)
             clearFramebuffer()
 
-            // Draw each renderer
-            for (renderer in scene findAll Renderable::class)
-                renderer.draw(this)
+            for (renderer in scene findAll Renderable::class) renderer.draw(this)
 
             copyFramebuffer(
                 geometryFramebuffer, Int4(0, 0, 640, 480),
-                //outputFramebuffer, Int4(0, 0, window?.width ?: 0, window?.height ?: 0),
-                outputFramebuffer, Int4(0, 0, outputFramebuffer.width, outputFramebuffer.height),
-                CopyFramebufferMask.COLOR_BUFFER_BIT,
-                CopyFramebufferFilter.NEAREST
+                output, Int4(0, 0, output.width, output.height),
+                CopyFramebufferMask.COLOR_BUFFER_BIT, CopyFramebufferFilter.NEAREST
             )
 
-        }.submit()
+        }
 
     }
 

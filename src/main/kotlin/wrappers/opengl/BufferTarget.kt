@@ -1,7 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45.*
-import java.util.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class BufferTarget(val native: Int) {
     ARRAY(GL_ARRAY_BUFFER),

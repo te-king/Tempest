@@ -1,8 +1,10 @@
-package engine.gui
+package engine.gui.components
 
-import wrappers.nanovg.Surface
+import engine.gui.*
 
-class VerticalSplit : Container() {
+class VerticalSplit : Container {
+
+    override val children = mutableListOf<Element>()
 
     override fun draw(surface: Surface) {
 

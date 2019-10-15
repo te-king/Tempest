@@ -2,14 +2,14 @@
 
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL46C.*
 
-open class VertexArray(device: Device, val id: Int): Device.DeviceResource(device) {
+open class VertexArray(device: Device, val id: Int) : Device.DeviceResource(device) {
 
-    fun bindAttribute(attribindex: GLuint, bindingindex: GLuint) = glVertexArrayAttribBinding(id, attribindex, bindingindex)
-    fun formatFloatAttribute(attribindex: GLuint, size: GLint, type: GLenum, normalized: GLboolean, relativeoffset: GLuint) = glVertexArrayAttribFormat(id, attribindex, size, type, normalized, relativeoffset)
-    fun formatIntAttribute(attribindex: GLuint, size: GLint, type: GLenum, relativeoffset: GLuint) = glVertexArrayAttribIFormat(id, attribindex, size, type, relativeoffset)
-    fun formatLongAttribute(attribindex: GLuint, size: GLint, type: GLenum, relativeoffset: GLuint) = glVertexArrayAttribLFormat(id, attribindex, size, type, relativeoffset)
+    fun bindAttribute(attribindex: Int, bindingindex: Int) = glVertexArrayAttribBinding(id, attribindex, bindingindex)
+    fun formatFloatAttribute(attribindex: Int, size: Int, type: Int, normalized: Boolean, relativeoffset: Int) = glVertexArrayAttribFormat(id, attribindex, size, type, normalized, relativeoffset)
+    fun formatIntAttribute(attribindex: Int, size: Int, type: Int, relativeoffset: Int) = glVertexArrayAttribIFormat(id, attribindex, size, type, relativeoffset)
+    fun formatLongAttribute(attribindex: Int, size: Int, type: Int, relativeoffset: Int) = glVertexArrayAttribLFormat(id, attribindex, size, type, relativeoffset)
 
     override fun delete() = glDeleteVertexArrays(id)
 

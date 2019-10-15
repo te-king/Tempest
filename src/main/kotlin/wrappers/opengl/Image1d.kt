@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45C.*
+import org.lwjgl.opengl.GL46C.*
 
 class Image1d(override val texture: Texture1d, val index: Int): Image() {
 

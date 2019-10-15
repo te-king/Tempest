@@ -20,4 +20,7 @@ class Node (val scene: Scene, var name: String = "New Node") {
     infix fun<T: Component> contains(type: KClass<T>) = componentMap.contains(type)
     infix fun<T: Component> delete(type: KClass<T>) = componentMap.remove(type) as T?
 
+
+    override fun toString() = "Node(name='$name')"
+
 }

@@ -1,15 +1,19 @@
 package wrappers.opengl
 
-import org.lwjgl.nanovg.NanoVG
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL
+import org.lwjgl.opengl.GL46C.*
 import org.lwjgl.opengl.GLCapabilities
 import org.lwjgl.system.CustomBuffer
+import wrappers.glfw.Window
 
 
 class Device(val capabilities: GLCapabilities) {
 
+    constructor(window: Window) : this(window.also { it.makeContextCurrent() }.let { GL.createCapabilities() })
+
+
     // Command List
-    private val commandQueue = mutableListOf<() -> Unit>()
+    val commandQueue = mutableListOf<() -> Unit>()
 
     fun executeCommandQueue() {
         val copy = commandQueue.toList()
@@ -114,23 +118,8 @@ class Device(val capabilities: GLCapabilities) {
 
 
     // Command Buffer
-    fun commandBuffer() = object : CommandBuffer(this) {
-        override fun submit() {
-            commandQueue.addAll(commands)
-        }
-    }
-
-    fun enqueue(func: CommandBuffer.() -> Unit) {
-
-        val queue = object : CommandBuffer(this) {
-            override fun submit() {
-                commandQueue.addAll(commands)
-            }
-        }
-
-        queue.func()
-        queue.submit()
-
+    inline fun enqueue(func: CommandBuffer.() -> Unit) {
+        commandQueue.addAll(CommandBuffer().also(func).commands)
     }
 
 

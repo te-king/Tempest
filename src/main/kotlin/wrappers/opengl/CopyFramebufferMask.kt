@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45C.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class CopyFramebufferMask(val native: Int) {
     COLOR_BUFFER_BIT(GL_COLOR_BUFFER_BIT),

@@ -1,9 +1,9 @@
 package wrappers.opengl
 
 import org.lwjgl.opengl.ARBBindlessTexture.*
-import org.lwjgl.opengl.GL45C.*
+import org.lwjgl.opengl.GL46C.glDeleteTextures
 
-abstract class Texture(device: Device, val id: Int): Device.DeviceResource(device) {
+abstract class Texture(device: Device, val id: Int) : Device.DeviceResource(device) {
 
     val handle get() = glGetTextureHandleARB(id)
 

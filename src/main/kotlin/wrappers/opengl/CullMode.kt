@@ -1,6 +1,6 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL45.*
+import org.lwjgl.opengl.GL46C.*
 
 enum class CullMode(val native: Int) {
     FRONT(GL_FRONT),

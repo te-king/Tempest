@@ -1,14 +1,15 @@
 package wrappers.opengl
 
 import engine.graphics.Mesh
-import engine.gui.Element
+import engine.gui.components.Element
 import math.Int4
-import org.lwjgl.opengl.GL45.*
-import wrappers.nanovg.Surface
+import org.lwjgl.opengl.GL46C.*
+import engine.gui.Surface
 
-abstract class CommandBuffer(val device: Device) {
 
-    protected val commands = mutableListOf<() -> Unit>()
+inline class CommandBuffer(val commands: MutableList<() -> Unit>) {
+
+    constructor() : this(mutableListOf())
 
 
     // Binding
@@ -97,14 +98,10 @@ abstract class CommandBuffer(val device: Device) {
     // Gui
     fun paint(element: Element) {
         commands += {
-            // TODO: bruh
             val surface = Surface(640f, 480f, 1.0f)
             element.draw(surface)
             surface.finalize()
         }
     }
-
-
-    abstract fun submit()
 
 }

@@ -1,13 +1,11 @@
 package engine.world.components
 
-// TODO: Find Memory Leak
-
-import engine.world.Node
-import engine.world.Updatable
+import engine.world.*
 import math.*
-import wrappers.opengl.BufferUsage
+import wrappers.opengl.*
+import kotlin.properties.*
 
-class Transform (node: Node) : Component(node), Updatable {
+class Transform(node: Node) : Component(node), Updatable {
 
     var parent: Transform? = null
         set(value) {
@@ -26,24 +24,9 @@ class Transform (node: Node) : Component(node), Updatable {
 
 
     // Transforms
-    var translation = Float3.zero
-        set(value) {
-            invalidateLocal()
-            field = value
-        }
-
-
-    var rotation = Quaternion.identity
-        set(value) {
-            invalidateLocal()
-            field = value
-        }
-
-    var scale = Float3.one
-        set(value) {
-            invalidateLocal()
-            field = value
-        }
+    var translation by Delegates.observable(Float3.zero) { _, _, _ -> invalidateLocal() }
+    var rotation by Delegates.observable(Quaternion.identity) { _, _, _ -> invalidateLocal() }
+    var scale by Delegates.observable(Float3.one) { _, _, _ -> invalidateLocal() }
 
 
     fun translate(v: Float3) {
@@ -72,7 +55,7 @@ class Transform (node: Node) : Component(node), Updatable {
 
     val up get() = worldMatrix.matrix.column(1).xyz.normalized
     val down get() = -up
-    
+
 
     // Local Matrix
     private var localInvalid = true
@@ -94,12 +77,11 @@ class Transform (node: Node) : Component(node), Updatable {
 
     private fun validateLocal() {
         localMatrix =
-                TransformationMatrix.translation(translation) *
-                TransformationMatrix.rotation(rotation) *
-                TransformationMatrix.scaling(scale)
+            TransformationMatrix.translation(translation) *
+                    TransformationMatrix.rotation(rotation) *
+                    TransformationMatrix.scaling(scale)
         localInvalid = false
     }
-
 
 
     // WorldConsumer Matrix

@@ -34,6 +34,3 @@ data class Float2(val x: Float, val y: Float) {
     operator fun unaryMinus () = Float2(-x, -y)
 
 }
-
-// Operations
-fun lerp(v0: Float2, v1: Float2, amount: Float) = v0 + (v1 - v0) * amount

@@ -43,9 +43,3 @@ data class Float3(val x: Float, val y: Float, val z: Float) {
     operator fun unaryMinus () = Float3(-x, -y, -z)
 
 }
-
-// Operations
-fun distance(v0: Float3, v1: Float3) = (v1 - v0).length
-fun lerp(v0: Float3, v1: Float3, amount: Float) = v0 + (v1 - v0) * amount
-fun dot(v0: Float3, v1: Float3) = v0.x * v1.x + v0.y * v1.y + v0.z * v1.z
-fun cross(v0: Float3, v1: Float3) = Float3(v0.y * v1.z - v0.z * v1.y, v0.z * v1.x - v0.x * v1.z, v0.x * v1.y - v0.y * v1.x)

@@ -64,27 +64,3 @@ inline class Quaternion(val vector: Float4) {
     }
 
 }
-
-fun slerp(first: Quaternion, second: Quaternion, amount: Float): Quaternion {
-    val d = first.x * second.x + first.y * second.y + first.z * second.z + first.w * second.w
-    val absDot = if (d < 0f) -d else d
-
-    var scale0 = 1f - amount
-    var scale1 = amount
-
-    if (1 - absDot > 0.1) {
-        val angle = acos(absDot)
-        val invSinTheta = 1f / sin(angle)
-        scale0 = sin((1f - amount) * angle) * invSinTheta
-        scale1 = sin(amount * angle) * invSinTheta
-    }
-
-    if (d < 0f) scale1 = -scale1
-
-    return Quaternion(
-        scale0 * first.x + scale1 * second.x,
-        scale0 * first.y + scale1 * second.y,
-        scale0 * first.z + scale1 * second.z,
-        scale0 * first.w + scale1 * second.w
-    )
-}

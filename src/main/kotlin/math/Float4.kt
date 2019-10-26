@@ -40,6 +40,3 @@ data class Float4(val x: Float, val y: Float, val z: Float, val w: Float) {
     operator fun unaryMinus() = Float4(-x, -y, -z, -w)
 
 }
-
-fun lerp(first: Float4, second: Float4, amount: Float) = first + (second - first) * amount
-fun dot(first: Float4, second: Float4) = first.x * second.x + first.y * second.y + first.z * second.z + first.w * second.w

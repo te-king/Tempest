@@ -2,6 +2,7 @@ package engine.runtime
 
 import engine.world.*
 import extensions.*
+import kotlinx.coroutines.*
 import math.*
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL45.*
@@ -12,12 +13,11 @@ import kotlin.time.*
 object Client {
 
     val window = run {
-        glfwInit()
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5)
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
-        Window(640, 480, "New Window", null, null)
+        Window(640, 480, "New Window")
     }
 
     val device = Device(window)
@@ -25,7 +25,6 @@ object Client {
     val framebuffer = object : Framebuffer(device, 0, mapOf()) {
         override val width get() = window.width
         override val height get() = window.height
-        override fun delete() {}
     }
 
     init {
@@ -41,8 +40,11 @@ object Client {
 
     @ExperimentalTime
     fun run() {
-        glEnable(GL_DEPTH_TEST)
-        glEnable(GL_CULL_FACE)
+
+        runBlocking(device.context) {
+            glEnable(GL_DEPTH_TEST)
+            glEnable(GL_CULL_FACE)
+        }
 
 
         var mark = MonoClock.markNow()

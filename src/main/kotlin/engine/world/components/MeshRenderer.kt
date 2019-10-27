@@ -14,13 +14,13 @@ class MeshRenderer(node: Node) : Component(node), Renderable {
     override fun draw(buffer: CommandBuffer) {
 
         // Bind transform
-        buffer.bindBuffer(2, transform.buffer)
+        buffer.bindUniformBuffer(2, transform.buffer)
 
         for ((mesh, material) in pairs) {
 
             // Bind material information
             if (material != null) {
-                buffer.bindBuffer(3, material.buffer)
+                buffer.bindUniformBuffer(3, material.buffer)
                 buffer.bindPipeline(material.pipeline)
                 buffer.bindVertexArray(material.layout)
             }

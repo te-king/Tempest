@@ -1,12 +1,20 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL46C.glDeleteProgram
-import org.lwjgl.opengl.GL46C.glGetProgramInfoLog
+import kotlinx.coroutines.*
+import org.lwjgl.opengl.GL46C.*
 
-class Program(device: Device, val id: Int) : Device.DeviceResource(device) {
+class Program(val device: Device, val id: Int) {
 
-    val infoLog get() = glGetProgramInfoLog(id)
+    protected fun finalize() {
+        GlobalScope.launch(device.context) {
+            glGetProgramInfoLog(id)
+        }
+    }
 
-    override fun delete() = glDeleteProgram(id)
+
+    val infoLog: String
+        get() = runBlocking(device.context) {
+            glGetProgramInfoLog(id)
+        }
 
 }

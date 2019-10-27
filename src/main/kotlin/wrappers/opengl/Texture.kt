@@ -1,18 +1,31 @@
 package wrappers.opengl
 
+import kotlinx.coroutines.*
 import org.lwjgl.opengl.ARBBindlessTexture.*
-import org.lwjgl.opengl.GL46C.glDeleteTextures
+import org.lwjgl.opengl.GL46C.*
 
-abstract class Texture(device: Device, val id: Int) : Device.DeviceResource(device) {
+abstract class Texture(val device: Device, val id: Int) {
 
-    val handle get() = glGetTextureHandleARB(id)
+    protected fun finalize() {
+        GlobalScope.launch(device.context) {
+            glDeleteTextures(id)
+        }
+    }
+
+
+    val handle
+        get() = runBlocking(device.context) {
+            glGetTextureHandleARB(id)
+        }
 
     var resident: Boolean
-        get() = glIsTextureHandleResidentARB(handle)
-        set(value) = if (value) glMakeTextureHandleResidentARB(handle) else glMakeTextureHandleNonResidentARB(handle)
-
-
-    override fun delete() = glDeleteTextures(id)
+        get() = runBlocking(device.context) {
+            glIsTextureHandleResidentARB(handle)
+        }
+        set(value) = runBlocking(device.context) {
+            if (value) glMakeTextureHandleResidentARB(handle)
+            else glMakeTextureHandleNonResidentARB(handle)
+        }
 
 }
 

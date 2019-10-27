@@ -1,27 +1,19 @@
 package wrappers.opengl
 
-import engine.runtime.Client
-import org.lwjgl.opengl.GL45C.glDeleteFramebuffers
-import org.lwjgl.opengl.GL45C.glNamedFramebufferTexture
+import kotlinx.coroutines.*
+import org.lwjgl.opengl.GL45C.*
 
-open class Framebuffer(device: Device, val id: Int, private val textures: Map<Int, Image2d>) : Device.DeviceResource(device) {
+open class Framebuffer(val device: Device, val id: Int, val textures: Map<Int, Image2d>) {
 
-
-    companion object {
-        val default = Framebuffer(Client.device, 0, mapOf())
-    }
-
-
-    init {
-        for (it in textures) glNamedFramebufferTexture(id, it.key, it.value.texture.id, it.value.index)
+    protected fun finalize() {
+        GlobalScope.launch(device.context) {
+            glDeleteFramebuffers(id)
+        }
     }
 
 
     open val width get() = textures.values.map(Image2d::width).max() ?: 0
 
     open val height get() = textures.values.map(Image2d::height).max() ?: 0
-
-
-    override fun delete() = glDeleteFramebuffers(id)
 
 }

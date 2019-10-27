@@ -63,8 +63,8 @@ class Camera(node: Node) : Component(node), Updatable {
 
         device.enqueue {
 
-            bindBuffer(0, transform.buffer)
-            bindBuffer(1, buffer)
+            bindUniformBuffer(0, transform.buffer)
+            bindUniformBuffer(1, buffer)
 
             // -- GEOMETRY PASS
             setCullMode(CullMode.BACK)

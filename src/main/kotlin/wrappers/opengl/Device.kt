@@ -1,15 +1,15 @@
 package wrappers.opengl
 
-import org.lwjgl.opengl.GL
+import kotlinx.coroutines.*
+import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL46C.*
-import org.lwjgl.opengl.GLCapabilities
-import org.lwjgl.system.CustomBuffer
-import wrappers.glfw.Window
+import org.lwjgl.system.*
+import wrappers.glfw.*
 
 
-class Device(val capabilities: GLCapabilities) {
+class Device(val context: ExecutorCoroutineDispatcher) {
 
-    constructor(window: Window) : this(window.also { it.makeContextCurrent() }.let { GL.createCapabilities() })
+    constructor(window: Window) : this(window.context)
 
 
     // Command List
@@ -18,84 +18,106 @@ class Device(val capabilities: GLCapabilities) {
     fun executeCommandQueue() {
         val copy = commandQueue.toList()
         commandQueue.clear()
-        copy.forEach { it() }
-        glFinish()
+        runBlocking(context) {
+            copy.forEach { it() }
+            glFinish()
+        }
     }
 
 
     // Buffers
-    fun buffer(size: Long, usage: BufferUsage): Buffer {
-        val id = glCreateBuffers()
-        glNamedBufferStorage(id, size, usage.native)
-        // Resolves AMD GPUs not limiting clearing allocated memory
-        glNamedBufferSubData(id, 0, ShortArray(size.toInt() / 2))
-        return Buffer(this, id)
-    }
+    fun buffer(size: Long, usage: BufferUsage) =
+        runBlocking(context) {
+            val id = glCreateBuffers()
+            glNamedBufferStorage(id, size, usage.native)
+            glNamedBufferSubData(id, 0, ShortArray(size.toInt() / 2))
+            Buffer(this@Device, id)
+        }
 
-    fun buffer(data: CustomBuffer<*>, usage: BufferUsage): Buffer {
-        val id = glCreateBuffers()
-        nglNamedBufferStorage(id, data.sizeof() * data.limit().toLong(), data.address(), usage.native)
-        return Buffer(this, id)
-    }
+    fun buffer(data: CustomBuffer<*>, usage: BufferUsage) =
+        runBlocking(context) {
+            val id = glCreateBuffers()
+            nglNamedBufferStorage(id, data.sizeof() * data.limit().toLong(), data.address(), usage.native)
+            Buffer(this@Device, id)
+        }
 
-    fun buffer(data: ShortArray, usage: BufferUsage): Buffer {
-        val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, usage.native)
-        return Buffer(this, id)
-    }
+    fun buffer(data: ShortArray, usage: BufferUsage) =
+        runBlocking(context) {
+            val id = glCreateBuffers()
+            glNamedBufferStorage(id, data, usage.native)
+            Buffer(this@Device, id)
+        }
 
-    fun buffer(data: IntArray, usage: BufferUsage): Buffer {
-        val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, usage.native)
-        return Buffer(this, id)
-    }
+    fun buffer(data: IntArray, usage: BufferUsage) =
+        runBlocking(context) {
+            val id = glCreateBuffers()
+            glNamedBufferStorage(id, data, usage.native)
+            Buffer(this@Device, id)
+        }
 
-    fun buffer(data: FloatArray, usage: BufferUsage): Buffer {
-        val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, usage.native)
-        return Buffer(this, id)
-    }
+    fun buffer(data: FloatArray, usage: BufferUsage) =
+        runBlocking(context) {
+            val id = glCreateBuffers()
+            glNamedBufferStorage(id, data, usage.native)
+            Buffer(this@Device, id)
+        }
 
-    fun buffer(data: DoubleArray, usage: BufferUsage): Buffer {
-        val id = glCreateBuffers()
-        glNamedBufferStorage(id, data, usage.native)
-        return Buffer(this, id)
-    }
+    fun buffer(data: DoubleArray, usage: BufferUsage) =
+        runBlocking(context) {
+            val id = glCreateBuffers()
+            glNamedBufferStorage(id, data, usage.native)
+            Buffer(this@Device, id)
+        }
 
 
     // Framebuffers
-    fun framebuffer(vararg textures: Pair<Int, Image2d>): Framebuffer {
-        val id = glCreateFramebuffers()
-        return Framebuffer(this, id, textures.toMap())
-    }
+    fun framebuffer(vararg textures: Pair<Int, Image2d>) =
+        runBlocking(context) {
+            val id = glCreateFramebuffers()
+            for (it in textures) glNamedFramebufferTexture(id, it.first, it.second.texture.id, it.second.index)
+            Framebuffer(this@Device, id, textures.toMap())
+        }
 
 
     // Pipelines
-    fun pipeline(vararg programs: Pair<ProgramType, Program>): Pipeline {
-        val id = glCreateProgramPipelines()
-        return Pipeline(this, id, programs.toMap())
-    }
+    fun pipeline(vararg programs: Pair<ProgramType, Program>) =
+        runBlocking(context) {
+            val id = glCreateProgramPipelines()
+            for (it in programs) glUseProgramStages(id, it.first.bit, it.second.id)
+            Pipeline(this@Device, id, programs.toMap())
+        }
 
 
     // Programs
-    fun program(type: ProgramType, source: String): Program {
-        val id = glCreateShaderProgramv(type.native, source)
-        return Program(this, id)
-    }
+    fun program(type: ProgramType, source: String) =
+        runBlocking(context) {
+            val id = glCreateShaderProgramv(type.native, source)
+            Program(this@Device, id)
+        }
 
 
     // Textures
-    fun texture1d(levels: Int, internalFormat: TextureFormat, width: Int): Texture1d {
-        val id = glCreateTextures(GL_TEXTURE_1D)
-        glTextureStorage1D(id, levels, internalFormat.native, width)
-        return Texture1d(this, id)
-    }
+    fun texture1d(levels: Int, internalFormat: TextureFormat, width: Int) =
+        runBlocking(context) {
+            val id = glCreateTextures(GL_TEXTURE_1D)
+            glTextureStorage1D(id, levels, internalFormat.native, width)
+            Texture1d(this@Device, id)
+        }
 
-    fun texture2d(levels: Int, internalFormat: TextureFormat, width: Int, height: Int): Texture2d {
-        val id = glCreateTextures(GL_TEXTURE_2D)
-        glTextureStorage2D(id, levels, internalFormat.native, width, height)
-        return Texture2d(this, id)
-    }
+    fun texture2d(levels: Int, internalFormat: TextureFormat, width: Int, height: Int) =
+        runBlocking(context) {
+            val id = glCreateTextures(GL_TEXTURE_2D)
+            glTextureStorage2D(id, levels, internalFormat.native, width, height)
+            Texture2d(this@Device, id)
+        }
+
+
+    // Vertex Array
+    fun vertexArray() =
+        runBlocking(context) {
+            val id = glCreateVertexArrays()
+            VertexArray(this@Device, id)
+        }
 
 
     // Images
@@ -110,25 +132,11 @@ class Device(val capabilities: GLCapabilities) {
     }
 
 
-    // Vertex Array
-    fun vertexArray(): VertexArray {
-        val id = glCreateVertexArrays()
-        return VertexArray(this, id)
-    }
-
-
     // Command Buffer
-    inline fun enqueue(func: CommandBuffer.() -> Unit) {
-        commandQueue.addAll(CommandBuffer().also(func).commands)
-    }
-
-
-    abstract class DeviceResource(val device: Device) {
-        abstract fun delete()
-        protected fun finalize() {
-            device.commandQueue.add(::delete)
+    inline fun enqueue(crossinline func: CommandBuffer.() -> Unit) =
+        runBlocking(context) {
+            commandQueue.addAll(CommandBuffer().also(func).commands)
         }
-    }
 
 }
 

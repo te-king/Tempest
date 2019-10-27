@@ -1,26 +1,81 @@
 package wrappers.opengl
 
+import kotlinx.coroutines.*
 import org.lwjgl.opengl.GL46C.*
 
-class Buffer(device: Device, val id: Int) : Device.DeviceResource(device) {
+class Buffer(val device: Device, val id: Int) {
 
-    val size get() = glGetNamedBufferParameteri(id, GL_BUFFER_SIZE)
-    val immutable get() = glGetNamedBufferParameteri(id, GL_BUFFER_IMMUTABLE_STORAGE) == GL_TRUE
+    protected fun finalize() {
+        GlobalScope.launch(device.context) {
+            glDeleteBuffers(id)
+        }
+    }
 
-    fun getSubData(offset: Long, data: ShortArray) = glGetNamedBufferSubData(id, offset, data)
-    fun getSubData(offset: Long, data: IntArray) = glGetNamedBufferSubData(id, offset, data)
-    fun getSubData(offset: Long, data: LongArray) = glGetNamedBufferSubData(id, offset, data)
-    fun getSubData(offset: Long, data: FloatArray) = glGetNamedBufferSubData(id, offset, data)
-    fun getSubData(offset: Long, data: DoubleArray) = glGetNamedBufferSubData(id, offset, data)
 
-    fun setSubData(offset: Long, data: ShortArray) = glNamedBufferSubData(id, offset, data)
-    fun setSubData(offset: Long, data: IntArray) = glNamedBufferSubData(id, offset, data)
-    fun setSubData(offset: Long, data: LongArray) = glNamedBufferSubData(id, offset, data)
-    fun setSubData(offset: Long, data: FloatArray) = glNamedBufferSubData(id, offset, data)
-    fun setSubData(offset: Long, data: DoubleArray) = glNamedBufferSubData(id, offset, data)
+    val size
+        get() = runBlocking(device.context) {
+            glGetNamedBufferParameteri(id, GL_BUFFER_SIZE)
+        }
 
-    fun invalidate() = glInvalidateBufferData(id)
+    val immutable
+        get() = runBlocking(device.context) {
+            glGetNamedBufferParameteri(id, GL_BUFFER_IMMUTABLE_STORAGE) == GL_TRUE
+        }
 
-    override fun delete() = glDeleteBuffers(id)
+    fun getSubData(offset: Long, data: ShortArray) =
+        runBlocking(device.context) {
+            glGetNamedBufferSubData(id, offset, data)
+        }
+
+    fun getSubData(offset: Long, data: IntArray) =
+        runBlocking(device.context) {
+            glGetNamedBufferSubData(id, offset, data)
+        }
+
+    fun getSubData(offset: Long, data: LongArray) =
+        runBlocking(device.context) {
+            glGetNamedBufferSubData(id, offset, data)
+        }
+
+    fun getSubData(offset: Long, data: FloatArray) =
+        runBlocking(device.context) {
+            glGetNamedBufferSubData(id, offset, data)
+        }
+
+    fun getSubData(offset: Long, data: DoubleArray) =
+        runBlocking(device.context) {
+            glGetNamedBufferSubData(id, offset, data)
+        }
+
+
+    fun setSubData(offset: Long, data: ShortArray) =
+        GlobalScope.launch(device.context) {
+            glNamedBufferSubData(id, offset, data)
+        }
+
+    fun setSubData(offset: Long, data: IntArray) =
+        GlobalScope.launch(device.context) {
+            glNamedBufferSubData(id, offset, data)
+        }
+
+    fun setSubData(offset: Long, data: LongArray) =
+        GlobalScope.launch(device.context) {
+            glNamedBufferSubData(id, offset, data)
+        }
+
+    fun setSubData(offset: Long, data: FloatArray) =
+        GlobalScope.launch(device.context) {
+            glNamedBufferSubData(id, offset, data)
+        }
+
+    fun setSubData(offset: Long, data: DoubleArray) =
+        GlobalScope.launch(device.context) {
+            glNamedBufferSubData(id, offset, data)
+        }
+
+    fun invalidate() =
+        GlobalScope.launch(device.context) {
+            glInvalidateBufferData(id)
+        }
 
 }

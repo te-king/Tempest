@@ -1,16 +1,20 @@
 package wrappers.opengl
 
+import kotlinx.coroutines.*
 import org.lwjgl.opengl.GL46C.*
 
-class Pipeline(device: Device, val id: Int, private val programs: Map<ProgramType, Program>) : Device.DeviceResource(device) {
+class Pipeline(val device: Device, val id: Int, val programs: Map<ProgramType, Program>) {
 
-    init {
-        for (it in programs) glUseProgramStages(id, it.key.bit, it.value.id)
+    protected fun finalize() {
+        GlobalScope.launch(device.context) {
+            glDeleteProgramPipelines(id)
+        }
     }
 
 
-    val infoLog: String get() = glGetProgramPipelineInfoLog(id)
-
-    override fun delete() = glDeleteProgramPipelines(id)
+    val infoLog: String
+        get() = runBlocking(device.context) {
+            glGetProgramPipelineInfoLog(id)
+        }
 
 }

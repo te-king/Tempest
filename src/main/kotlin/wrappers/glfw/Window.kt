@@ -1,11 +1,22 @@
 package wrappers.glfw
 
 import engine.runtime.*
+import kotlinx.coroutines.*
 import org.lwjgl.glfw.GLFW.*
+import org.lwjgl.opengl.*
 
-class Window private constructor(val handle: GLFWwindow) {
+class Window(width: Int, height: Int, title: String) {
 
-    constructor(width: Int, height: Int, title: String, monitor: Monitor? = null, share: Window? = null) : this(glfwCreateWindow(width, height, title, monitor?.handle ?: 0, share?.handle ?: 0))
+    val handle = glfwCreateWindow(width, height, title, 0, 0)
+
+    val context = newSingleThreadContext("OpenGL.Context")
+
+    init {
+        runBlocking(context) {
+            glfwMakeContextCurrent(handle)
+            GL.createCapabilities()
+        }
+    }
 
 
     val x get() = intArrayOf(0).apply { glfwGetWindowPos(handle, this, null) }[0]
@@ -45,5 +56,12 @@ class Window private constructor(val handle: GLFWwindow) {
     fun swapBuffers() = glfwSwapBuffers(handle)
 
     fun delete() = glfwDestroyWindow(handle)
+
+
+    companion object {
+
+        val initialized = glfwInit()
+
+    }
 
 }

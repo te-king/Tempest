@@ -12,21 +12,12 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect"))
 
-    implementation("org.lwjgl:lwjgl:+")
-    implementation("org.lwjgl:lwjgl-glfw:+")
-    implementation("org.lwjgl:lwjgl-opengl:+")
-    implementation("org.lwjgl:lwjgl-assimp:+")
-    implementation("org.lwjgl:lwjgl-stb:+")
-    implementation("org.lwjgl:lwjgl-nanovg:+")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2")
 
-    runtimeOnly("org.lwjgl:lwjgl:+:natives-windows")
-    runtimeOnly("org.lwjgl:lwjgl-glfw:+:natives-windows")
-    runtimeOnly("org.lwjgl:lwjgl-opengl:+:natives-windows")
-    runtimeOnly("org.lwjgl:lwjgl-assimp:+:natives-windows")
-    runtimeOnly("org.lwjgl:lwjgl-stb:+:natives-windows")
-    runtimeOnly("org.lwjgl:lwjgl-nanovg:+:natives-windows")
+    implementation("org.lwjgl.osgi", "org.lwjgl.lwjgl", "+")
+    implementation("org.lwjgl.osgi", "org.lwjgl.assimp", "+")
+    implementation("org.lwjgl.osgi", "org.lwjgl.glfw", "+")
+    implementation("org.lwjgl.osgi", "org.lwjgl.nanovg", "+")
+    implementation("org.lwjgl.osgi", "org.lwjgl.opengl", "+")
+    implementation("org.lwjgl.osgi", "org.lwjgl.stb", "+")
 }
-
-//implementation "org.lwjgl:lwjgl-nanovg"
-//runtimeOnly "org.lwjgl:lwjgl::natives-windows"
-//runtimeOnly "org.lwjgl:lwjgl-nanovg::natives-windows"

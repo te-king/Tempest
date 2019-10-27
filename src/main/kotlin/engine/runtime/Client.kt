@@ -51,9 +51,9 @@ object Client {
 
         window.loop {
 
-            for (updatable in scene findAll Updatable::class) updatable.update(mark.elapsedNow().inSeconds.toFloat())
+            for (updatable in scene findAll Updatable::class)
+                updatable.update(mark.elapsedNow().inSeconds.toFloat())
 
-            device.executeCommandQueue()
             window.swapBuffers()
 
             mark = MonoClock.markNow()

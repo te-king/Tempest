@@ -7,22 +7,9 @@ import org.lwjgl.system.*
 import wrappers.glfw.*
 
 
-class Device(val context: ExecutorCoroutineDispatcher) {
+inline class Device(val context: CoroutineDispatcher) {
 
     constructor(window: Window) : this(window.context)
-
-
-    // Command List
-    val commandQueue = mutableListOf<() -> Unit>()
-
-    fun executeCommandQueue() {
-        val copy = commandQueue.toList()
-        commandQueue.clear()
-        runBlocking(context) {
-            copy.forEach { it() }
-            glFinish()
-        }
-    }
 
 
     // Buffers
@@ -135,7 +122,7 @@ class Device(val context: ExecutorCoroutineDispatcher) {
     // Command Buffer
     inline fun enqueue(crossinline func: CommandBuffer.() -> Unit) =
         runBlocking(context) {
-            commandQueue.addAll(CommandBuffer().also(func).commands)
+            CommandBuffer().also(func).commands.forEach { it.invoke() }
         }
 
 }

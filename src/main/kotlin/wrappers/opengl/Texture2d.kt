@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import org.lwjgl.opengl.GL46C.*
 import java.nio.*
 
-class Texture2d(device: Device, id: Int) : Texture(device, id) {
+class Texture2d(device: Device, id: Int, levels: Int, internalFormat: TextureFormat, val width: Int, val height: Int) : Texture(device, id, levels, internalFormat) {
 
     fun setSubImage(level: Int, xoffset: Int, yoffset: Int, width: Int, height: Int, format: PixelLayout, type: PixelType, pixels: ByteBuffer) =
         GlobalScope.launch(device.context) {

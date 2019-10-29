@@ -1,7 +1,6 @@
 package wrappers.opengl
 
 import kotlinx.coroutines.*
-import org.lwjgl.opengl.*
 import org.lwjgl.opengl.GL46C.*
 import org.lwjgl.system.*
 import wrappers.glfw.*
@@ -88,14 +87,14 @@ inline class Device(val context: CoroutineDispatcher) {
         runBlocking(context) {
             val id = glCreateTextures(GL_TEXTURE_1D)
             glTextureStorage1D(id, levels, internalFormat.native, width)
-            Texture1d(this@Device, id)
+            Texture1d(this@Device, id, levels, internalFormat, width)
         }
 
     fun texture2d(levels: Int, internalFormat: TextureFormat, width: Int, height: Int) =
         runBlocking(context) {
             val id = glCreateTextures(GL_TEXTURE_2D)
             glTextureStorage2D(id, levels, internalFormat.native, width, height)
-            Texture2d(this@Device, id)
+            Texture2d(this@Device, id, levels, internalFormat, width, height)
         }
 
 
@@ -120,10 +119,34 @@ inline class Device(val context: CoroutineDispatcher) {
 
 
     // Command Buffer
-    inline fun enqueue(crossinline func: CommandBuffer.() -> Unit) =
+    inline fun enqueue(state: DeviceState, crossinline func: CommandBuffer.() -> Unit) {
+
+        val cb = CommandBuffer().also(func).commands
+
         runBlocking(context) {
-            CommandBuffer().also(func).commands.forEach { it.invoke() }
+            glBindFramebuffer(GL_FRAMEBUFFER, state.target.id)
+
+            if (state.cull) glEnable(GL_CULL_FACE) else glDisable(GL_CULL_FACE)
+            glCullFace(state.cullFunc.native)
+            glFrontFace(state.winding.native)
+
+            if (state.blend) glEnable(GL_BLEND) else glDisable(GL_BLEND)
+            //
+
+            if (state.depth) glEnable(GL_DEPTH_TEST) else glDisable(GL_DEPTH_TEST)
+            glDepthFunc(state.depthFunction.native)
+
+            if (state.stencil) glEnable(GL_STENCIL_TEST) else glDisable(GL_STENCIL_TEST)
+            glStencilMask(state.stencilMask.toInt())
+            //
+            //
+
+            cb.forEach { it.invoke() }
+
+            glFinish()
         }
+
+    }
 
 }
 

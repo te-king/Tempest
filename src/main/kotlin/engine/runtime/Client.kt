@@ -2,10 +2,8 @@ package engine.runtime
 
 import engine.world.*
 import extensions.*
-import kotlinx.coroutines.*
 import math.*
 import org.lwjgl.glfw.GLFW.*
-import org.lwjgl.opengl.GL45.*
 import wrappers.glfw.*
 import wrappers.opengl.*
 import kotlin.time.*
@@ -40,12 +38,6 @@ object Client {
 
     @ExperimentalTime
     fun run() {
-
-        runBlocking(device.context) {
-            glEnable(GL_DEPTH_TEST)
-            glEnable(GL_CULL_FACE)
-        }
-
 
         var mark = MonoClock.markNow()
 

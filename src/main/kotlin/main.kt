@@ -4,6 +4,7 @@ import engine.runtime.*
 import engine.world.*
 import engine.world.components.*
 import math.*
+import wrappers.opengl.*
 import kotlin.time.*
 
 @ExperimentalTime
@@ -14,7 +15,7 @@ fun main() {
 
     // Load object
     run {
-        val node = resourceAt("""assets/bunny.obj""").loadNode(scene)!!
+        val node = resourceAt("""assets/bunny.obj""").loadNode(scene) ?: return@run
     }
 
     // Initialize camera
@@ -22,10 +23,10 @@ fun main() {
         val cameraNode = Node(scene, "Camera")
         val cameraTransform = cameraNode add Transform::class
         val cameraInput = cameraNode add CameraInput::class
-        //val cameraCam = cameraNode add Camera::class
+        val cameraCam = cameraNode add Camera::class
 
-        cameraTransform.translation = Float3(0f, 0f, 5f)
-        //cameraCam.output = Client.framebuffer
+        //cameraTransform.translation = Float3(0f, 0f, 5f)
+        cameraCam.output = Client.framebuffer
     }
 
     //    run {
@@ -43,13 +44,13 @@ fun main() {
 
 
     // Initialize GUI
-    run {
-        val node = Node(scene, "Gooi")
-        val guiRenderer = node add Gui::class
-        guiRenderer.output = Client.framebuffer
-
-        guiRenderer.root = List(scene.nodeSet)
-    }
+//    run {
+//        val node = Node(scene, "Gooi")
+//        val guiRenderer = node add Gui::class
+//        guiRenderer.output = Client.framebuffer
+//
+//        guiRenderer.root = List(scene.nodeSet)
+//    }
 
     // Run the client program
     Client.run()

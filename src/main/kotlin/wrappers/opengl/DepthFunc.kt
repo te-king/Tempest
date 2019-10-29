@@ -3,12 +3,12 @@ package wrappers.opengl
 import org.lwjgl.opengl.GL46C.*
 
 enum class DepthFunc(val native: Int) {
-    NEVER(GL_NEVER),
-    LESS(GL_LESS),
-    GREATER(GL_GREATER),
-    EQUAL(GL_EQUAL),
-    ALWAYS(GL_ALWAYS),
-    LEQUAL(GL_LEQUAL),
-    GEQUAL(GL_GEQUAL),
-    NOTEQUAL(GL_NOTEQUAL)
+    Never(GL_NEVER),
+    Less(GL_LESS),
+    Greater(GL_GREATER),
+    Equal(GL_EQUAL),
+    Always(GL_ALWAYS),
+    LEqual(GL_LEQUAL),
+    GEqual(GL_GEQUAL),
+    NotEqual(GL_NOTEQUAL)
 }

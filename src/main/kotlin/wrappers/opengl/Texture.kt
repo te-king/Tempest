@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 import org.lwjgl.opengl.ARBBindlessTexture.*
 import org.lwjgl.opengl.GL46C.*
 
-abstract class Texture(val device: Device, val id: Int) {
+abstract class Texture(val device: Device, val id: Int, val levels: Int, val internalFormat: TextureFormat) {
 
     protected fun finalize() {
         GlobalScope.launch(device.context) {

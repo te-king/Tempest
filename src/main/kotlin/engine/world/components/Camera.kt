@@ -53,6 +53,14 @@ class Camera(node: Node) : Component(node), Updatable {
         GL_DEPTH_ATTACHMENT to device.image2d(TextureFormat.DEPTH24, 640, 480)
     )
 
+    private val state = DeviceState(
+        geometryFramebuffer,
+        cull = true,
+        blend = false,
+        depth = true,
+        stencil = false
+    )
+
 
     override fun update(delta: Float) {
 
@@ -61,7 +69,7 @@ class Camera(node: Node) : Component(node), Updatable {
         if (projectionInvalid) validateProjection()
 
 
-        device.enqueue {
+        device.enqueue(state) {
 
             bindUniformBuffer(0, transform.buffer)
             bindUniformBuffer(1, buffer)
@@ -70,15 +78,17 @@ class Camera(node: Node) : Component(node), Updatable {
             setCullMode(CullMode.BACK)
             setFrontFace(FaceWinding.CCW)
 
-            bindFramebuffer(geometryFramebuffer)
             clearFramebuffer()
 
             for (renderer in scene findAll Renderable::class) renderer.draw(this)
 
             copyFramebuffer(
-                geometryFramebuffer, Int4(0, 0, 640, 480),
-                output, Int4(0, 0, output.width, output.height),
-                CopyFramebufferMask.COLOR_BUFFER_BIT, CopyFramebufferFilter.NEAREST
+                src = geometryFramebuffer,
+                srcRect = Int4(0, 0, geometryFramebuffer.width, geometryFramebuffer.height),
+                dst = output,
+                dstRect = Int4(0, 0, 640, 480),
+                mask = CopyFramebufferMask.ColorBuffer,
+                filter = CopyFramebufferFilter.NEAREST
             )
 
         }

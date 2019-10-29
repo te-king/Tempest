@@ -46,16 +46,16 @@ inline class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf
             glBindVertexArray(vertexArray?.id ?: 0)
         }
 
-    fun bindFramebuffer(framebuffer: Framebuffer?) =
-        commands.add {
-            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer?.id ?: 0)
-        }
+//    fun bindFramebuffer(framebuffer: Framebuffer?) =
+//        commands.add {
+//            glBindFramebuffer(GL_FRAMEBUFFER, framebuffer?.id ?: 0)
+//        }
 
 
     // Context management
     fun setDepthFunc(func: DepthFunc) =
         commands.add {
-            commands += { glDepthFunc(func.native) }
+            glDepthFunc(func.native)
         }
 
     fun setCullMode(mode: CullMode) =
@@ -91,11 +91,11 @@ inline class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf
         }
 
     // Blitting
-    fun copyFramebuffer(src: Framebuffer, srcRect: Int4 = Int4(0, 0, src.width, src.height), dst: Framebuffer, dstRect: Int4 = Int4(0, 0, dst.width, dst.height), mask: CopyFramebufferMask, filter: CopyFramebufferFilter) =
+    fun copyFramebuffer(src: Framebuffer, srcRect: Int4, dst: Framebuffer, dstRect: Int4, mask: CopyFramebufferMask, filter: CopyFramebufferFilter) =
         commands.add {
             glBlitNamedFramebuffer(
-                src?.id ?: 0,
-                dst?.id ?: 0,
+                src.id,
+                dst.id,
                 srcRect.x, srcRect.y, srcRect.x + srcRect.z, srcRect.y + srcRect.w,
                 dstRect.x, dstRect.y, dstRect.x + dstRect.z, dstRect.y + dstRect.w,
                 mask.native,

@@ -13,8 +13,8 @@ object RaymarchShader {
     private val fragmentProgram = resourceAt("""shaders/RaymarchFragmentShader.glsl""").loadShaderSource(device, ProgramType.FRAGMENT)
 
     val pipeline = device.pipeline(
-        ProgramType.VERTEX to vertexProgram,
-        ProgramType.FRAGMENT to fragmentProgram
+            ProgramType.VERTEX to vertexProgram,
+            ProgramType.FRAGMENT to fragmentProgram
     )
 
     val layout = device.vertexArray().apply {
@@ -38,9 +38,9 @@ object RaymarchShader {
     }
 
 
-    class Material: engine.graphics.Material {
+    class Material : engine.graphics.Material {
 
-        override val buffer = device.buffer(Float.SIZE_BYTES.toLong(), BufferUsage.DYNAMIC)
+        override val buffer = device.buffer(Float.SIZE_BYTES.toLong(), UniformBuffer, DynamicStorage)
 
         override val pipeline get() = RaymarchShader.pipeline
 

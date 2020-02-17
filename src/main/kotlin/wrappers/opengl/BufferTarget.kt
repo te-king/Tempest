@@ -2,19 +2,19 @@ package wrappers.opengl
 
 import org.lwjgl.opengl.GL46C.*
 
-enum class BufferTarget(val native: Int) {
-    ARRAY(GL_ARRAY_BUFFER),
-    ATOMIC_COUNTER(GL_ATOMIC_COUNTER_BUFFER),
-    COPY_READ(GL_COPY_READ_BUFFER),
-    COPY_WRITE(GL_COPY_WRITE_BUFFER),
-    DISPATCH_INDIRECT(GL_DISPATCH_INDIRECT_BUFFER),
-    DRAW_INDIRECT(GL_DRAW_INDIRECT_BUFFER),
-    ELEMENT_ARRAY(GL_ELEMENT_ARRAY_BUFFER),
-    PIXEL_PACK(GL_PIXEL_PACK_BUFFER),
-    PIXEL_UNPACK(GL_PIXEL_UNPACK_BUFFER),
-    QUERY(GL_QUERY_BUFFER),
-    SHADER_STORAGE(GL_SHADER_STORAGE_BUFFER),
-    TEXTURE(GL_TEXTURE_BUFFER),
-    TRANSFORM_FEEDBACK(GL_TRANSFORM_FEEDBACK_BUFFER),
-    UNIFORM(GL_UNIFORM_BUFFER),
-}
+
+sealed class BufferTarget(val native: Int)
+object ArrayBuffer : BufferTarget(GL_ARRAY_BUFFER)
+object AtomicCounterBuffer : BufferTarget(GL_ATOMIC_COUNTER_BUFFER)
+object CopyReadBuffer : BufferTarget(GL_COPY_READ_BUFFER)
+object CopyWriteBuffer : BufferTarget(GL_COPY_WRITE_BUFFER)
+object DispatchIndirectBuffer : BufferTarget(GL_DISPATCH_INDIRECT_BUFFER)
+object DrawIndirectBuffer : BufferTarget(GL_DRAW_INDIRECT_BUFFER)
+object ElementArrayBuffer : BufferTarget(GL_ELEMENT_ARRAY_BUFFER)
+object PixelPackBuffer : BufferTarget(GL_PIXEL_PACK_BUFFER)
+object PixelUnpackBuffer : BufferTarget(GL_PIXEL_UNPACK_BUFFER)
+object QueryBuffer : BufferTarget(GL_QUERY_BUFFER)
+object ShaderStorageBuffer : BufferTarget(GL_SHADER_STORAGE_BUFFER)
+object TextureBuffer : BufferTarget(GL_TEXTURE_BUFFER)
+object TransformFeedbackBuffer : BufferTarget(GL_TRANSFORM_FEEDBACK_BUFFER)
+object UniformBuffer : BufferTarget(GL_UNIFORM_BUFFER)

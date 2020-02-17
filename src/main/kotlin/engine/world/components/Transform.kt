@@ -20,7 +20,7 @@ class Transform(node: Node) : Component(node), Updatable {
 
 
     // Buffer
-    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, BufferUsage.DYNAMIC)
+    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, UniformBuffer, DynamicStorage)
 
 
     // Transforms
@@ -77,9 +77,9 @@ class Transform(node: Node) : Component(node), Updatable {
 
     private fun validateLocal() {
         localMatrix =
-            TransformationMatrix.translation(translation) *
-                    TransformationMatrix.rotation(rotation) *
-                    TransformationMatrix.scaling(scale)
+                TransformationMatrix.translation(translation) *
+                        TransformationMatrix.rotation(rotation) *
+                        TransformationMatrix.scaling(scale)
         localInvalid = false
     }
 

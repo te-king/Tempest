@@ -1,7 +1,8 @@
 package wrappers.opengl
 
 class DeviceState(
-    val target: Framebuffer,
+    val readFramebuffer: Framebuffer? = null,
+    val writeFramebuffer: Framebuffer? = null,
 
     val cull: Boolean,
     val cullFunc: CullMode = CullMode.BACK,

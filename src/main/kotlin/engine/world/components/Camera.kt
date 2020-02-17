@@ -12,7 +12,7 @@ class Camera(node: Node) : Component(node), Updatable {
     private val transform = node add Transform::class
 
 
-    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, BufferUsage.DYNAMIC)
+    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, UniformBuffer, DynamicStorage)
 
 
     var fieldOfView by Delegates.observable(0.7854f) { _, _, _ -> invalidateProjection() }
@@ -48,17 +48,17 @@ class Camera(node: Node) : Component(node), Updatable {
 
 
     private val geometryFramebuffer = device.framebuffer(
-        GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGB8, 640, 480),
-        GL_COLOR_ATTACHMENT1 to device.image2d(TextureFormat.RGB8, 640, 480),
-        GL_DEPTH_ATTACHMENT to device.image2d(TextureFormat.DEPTH24, 640, 480)
+            GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGB8, 640, 480),
+            GL_COLOR_ATTACHMENT1 to device.image2d(TextureFormat.RGB8, 640, 480),
+            GL_DEPTH_ATTACHMENT to device.image2d(TextureFormat.DEPTH24, 640, 480)
     )
 
     private val state = DeviceState(
-        geometryFramebuffer,
-        cull = true,
-        blend = false,
-        depth = true,
-        stencil = false
+            geometryFramebuffer,
+            cull = true,
+            blend = false,
+            depth = true,
+            stencil = false
     )
 
 
@@ -75,21 +75,18 @@ class Camera(node: Node) : Component(node), Updatable {
             bindUniformBuffer(1, buffer)
 
             // -- GEOMETRY PASS
-            setCullMode(CullMode.BACK)
-            setFrontFace(FaceWinding.CCW)
-
-            clearFramebuffer()
 
             for (renderer in scene findAll Renderable::class) renderer.draw(this)
 
             copyFramebuffer(
-                src = geometryFramebuffer,
-                srcRect = Int4(0, 0, geometryFramebuffer.width, geometryFramebuffer.height),
-                dst = output,
-                dstRect = Int4(0, 0, 640, 480),
-                mask = CopyFramebufferMask.ColorBuffer,
-                filter = CopyFramebufferFilter.NEAREST
+                    src = geometryFramebuffer,
+                    srcRect = Int4(0, 0, geometryFramebuffer.width, geometryFramebuffer.height),
+                    dst = output,
+                    dstRect = Int4(0, 0, 640, 480),
+                    mask = CopyFramebufferMask.ColorBuffer,
+                    filter = CopyFramebufferFilter.NEAREST
             )
+            clearFramebuffer()
 
         }
 

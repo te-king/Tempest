@@ -12,47 +12,47 @@ inline class Device(val context: CoroutineDispatcher) {
 
 
     // Buffers
-    fun buffer(size: Long, usage: BufferUsage) =
+    fun <T : BufferTarget, S : StorageKind> buffer(size: Long, target: T, storage: S) =
         runBlocking(context) {
             val id = glCreateBuffers()
-            glNamedBufferStorage(id, size, usage.native)
+            glNamedBufferStorage(id, size, storage.bufferBits)
             glNamedBufferSubData(id, 0, ShortArray(size.toInt() / 2))
-            Buffer(this@Device, id)
+            Buffer(this@Device, id, size, target, storage)
         }
 
-    fun buffer(data: CustomBuffer<*>, usage: BufferUsage) =
+    fun <T : BufferTarget, S : StorageKind> buffer(data: ShortArray, target: T, storage: S) =
         runBlocking(context) {
             val id = glCreateBuffers()
-            nglNamedBufferStorage(id, data.sizeof() * data.limit().toLong(), data.address(), usage.native)
-            Buffer(this@Device, id)
+            glNamedBufferStorage(id, data, storage.bufferBits)
+            Buffer(this@Device, id, Short.SIZE_BYTES * data.size.toLong(), target, storage)
         }
 
-    fun buffer(data: ShortArray, usage: BufferUsage) =
+    fun <T : BufferTarget, S : StorageKind> buffer(data: IntArray, target: T, storage: S) =
         runBlocking(context) {
             val id = glCreateBuffers()
-            glNamedBufferStorage(id, data, usage.native)
-            Buffer(this@Device, id)
+            glNamedBufferStorage(id, data, storage.bufferBits)
+            Buffer(this@Device, id, Int.SIZE_BYTES * data.size.toLong(), target, storage)
         }
 
-    fun buffer(data: IntArray, usage: BufferUsage) =
+    fun <T : BufferTarget, S : StorageKind> buffer(data: FloatArray, target: T, storage: S) =
         runBlocking(context) {
             val id = glCreateBuffers()
-            glNamedBufferStorage(id, data, usage.native)
-            Buffer(this@Device, id)
+            glNamedBufferStorage(id, data, storage.bufferBits)
+            Buffer(this@Device, id, Int.SIZE_BYTES * data.size.toLong(), target, storage)
         }
 
-    fun buffer(data: FloatArray, usage: BufferUsage) =
+    fun <T : BufferTarget, S : StorageKind> buffer(data: DoubleArray, target: T, storage: S) =
         runBlocking(context) {
             val id = glCreateBuffers()
-            glNamedBufferStorage(id, data, usage.native)
-            Buffer(this@Device, id)
+            glNamedBufferStorage(id, data, storage.bufferBits)
+            Buffer(this@Device, id, Long.SIZE_BYTES * data.size.toLong(), target, storage)
         }
 
-    fun buffer(data: DoubleArray, usage: BufferUsage) =
+    fun <T : BufferTarget, S : StorageKind> buffer(data: CustomBuffer<*>, target: T, storage: S) =
         runBlocking(context) {
             val id = glCreateBuffers()
-            glNamedBufferStorage(id, data, usage.native)
-            Buffer(this@Device, id)
+            nglNamedBufferStorage(id, data.sizeof() * data.limit().toLong(), data.address(), storage.bufferBits)
+            Buffer(this@Device, id, data.sizeof() * data.limit().toLong(), target, storage)
         }
 
 
@@ -124,7 +124,7 @@ inline class Device(val context: CoroutineDispatcher) {
         val cb = CommandBuffer().also(func).commands
 
         runBlocking(context) {
-            glBindFramebuffer(GL_FRAMEBUFFER, state.target.id)
+            glBindFramebuffer(GL_FRAMEBUFFER, state.readFramebuffer?.id ?: 0)
 
             if (state.cull) glEnable(GL_CULL_FACE) else glDisable(GL_CULL_FACE)
             glCullFace(state.cullFunc.native)

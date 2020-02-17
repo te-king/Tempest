@@ -166,27 +166,27 @@ class Asset(val file: File) {
             val mesh = Mesh(scene.device)
 
             val vertices = aiMesh.mVertices().run {
-                val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
+                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
                 Mesh.VertexBuffer(buffer, 0, sizeof())
             }
 
             val normals = aiMesh.mNormals()?.run {
-                val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
+                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val uvs = aiMesh.mTextureCoords(0)?.run {
-                val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
+                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val tangents = aiMesh.mTangents()?.run {
-                val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
+                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
                 Mesh.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val indices = aiMesh.mFaces().flatMap { (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
-                val buffer = scene.device.buffer(this, BufferUsage.SERVER_SIDE)
+                val buffer = scene.device.buffer(this, ElementArrayBuffer, ServerStorage)
                 Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.TRIANGLES)
             }
 

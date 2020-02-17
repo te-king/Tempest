@@ -24,15 +24,15 @@ class Asset(val file: File) {
         if (!file.exists()) throw FileNotFoundException("External asset not found: $file")
     }
 
-    fun loadShaderSource(device: Device, type: ProgramType) = device.program(type, file.readText())
+    fun<P: ProgramKind> loadShaderSource(device: Device, type: P) = device.program(type, file.readText())
 
-    fun loadI8(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
+    fun loadI8(device: Device, layers: Int = 1, channels: Int = 0): Texture<RGB8, Texture2d>? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d(layers, TextureFormat.RGB8, w[0], h[0])
+            val result = device.texture2d(layers, w[0], h[0], RGB8)
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.BYTE, it)
@@ -48,13 +48,13 @@ class Asset(val file: File) {
         return null
     }
 
-    fun loadI16(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
+    fun loadI16(device: Device, layers: Int = 1, channels: Int = 0): Texture<RGB16, Texture2d>? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load_16(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d(layers, TextureFormat.RGB16, w[0], h[0])
+            val result = device.texture2d(layers, w[0], h[0], RGB16)
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.SHORT, it)
@@ -70,13 +70,13 @@ class Asset(val file: File) {
         return null
     }
 
-    fun loadU8(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
+    fun loadU8(device: Device, layers: Int = 1, channels: Int = 0): Texture<RGB8, Texture2d>? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d(layers, TextureFormat.RGB8, w[0], h[0])
+            val result = device.texture2d(layers, w[0], h[0], RGB8)
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_BYTE, it)
@@ -92,13 +92,13 @@ class Asset(val file: File) {
         return null
     }
 
-    fun loadU16(device: Device, layers: Int = 1, channels: Int = 0): Texture2d? {
+    fun loadU16(device: Device, layers: Int = 1, channels: Int = 0): Texture<RGB16, Texture2d>? {
         val w = intArrayOf(0)
         val h = intArrayOf(0)
         val c = intArrayOf(0)
 
         STBImage.stbi_load_16(file.absolutePath, w, h, c, channels)?.let {
-            val result = device.texture2d(layers, TextureFormat.RGB16, w[0], h[0])
+            val result = device.texture2d(layers, w[0], h[0], RGB16)
 
             when (c[0]) {
                 1 -> result.setSubImage(0, 0, 0, w[0], h[0], PixelLayout.RED, PixelType.UNSIGNED_SHORT, it)

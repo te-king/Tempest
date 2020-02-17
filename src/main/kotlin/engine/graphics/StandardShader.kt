@@ -9,13 +9,13 @@ object StandardShader {
 
     private val device get() = Client.device
 
-    private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, ProgramType.VERTEX)
-    private val fragmentProgram = resourceAt("""shaders/StandardFragmentShader.glsl""").loadShaderSource(device, ProgramType.FRAGMENT)
+    private val vertexProgram =
+        resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, VertexProgram)
 
-    val pipeline = device.pipeline(
-        ProgramType.VERTEX to vertexProgram,
-        ProgramType.FRAGMENT to fragmentProgram
-    )
+    private val fragmentProgram =
+        resourceAt("""shaders/StandardFragmentShader.glsl""").loadShaderSource(device, FragmentProgram)
+
+    val pipeline = device.pipeline(vertexProgram, fragmentProgram)
 
     val layout = device.vertexArray().apply {
         formatFloatAttribute(0, 3, GL_FLOAT, false, 0)
@@ -31,9 +31,10 @@ object StandardShader {
         bindAttribute(3, 3)
     }
 
-    class Material: engine.graphics.Material {
+    class Material : engine.graphics.Material {
 
-        override val buffer = device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, UniformBuffer, DynamicStorage)
+        override val buffer =
+            device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, UniformBuffer, DynamicStorage)
 
         override val pipeline get() = StandardShader.pipeline
 
@@ -46,15 +47,18 @@ object StandardShader {
                 field = value
             }
 
-        var diffuseMap: Texture2d? = null
+        var diffuseMap: Texture<*, Texture2d>? = null
             set(value) {
                 buffer.setSubData(Float4.SIZE_BYTES.toLong(), longArrayOf(value?.handle ?: 0))
                 field = value
             }
 
-        var normalMap: Texture2d? = null
+        var normalMap: Texture<*, Texture2d>? = null
             set(value) {
-                buffer.setSubData(Float4.SIZE_BYTES.toLong() + Long.SIZE_BYTES.toLong(), longArrayOf(value?.handle ?: 0))
+                buffer.setSubData(
+                    Float4.SIZE_BYTES.toLong() + Long.SIZE_BYTES.toLong(),
+                    longArrayOf(value?.handle ?: 0)
+                )
                 field = value
             }
 

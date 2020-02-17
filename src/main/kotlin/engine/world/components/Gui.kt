@@ -13,8 +13,8 @@ class Gui(node: Node) : Component(node), Updatable {
 
 
     private val guiFramebuffer = device.framebuffer(
-        GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGBA8, 640, 480),
-        GL_STENCIL_ATTACHMENT to device.image2d(TextureFormat.STENCIL8, 640, 480)
+        GL_COLOR_ATTACHMENT0 to device.image2d(640, 480, RGBA8),
+        GL_STENCIL_ATTACHMENT to device.image2d(640, 480, STENCIL8)
     )
 
     private val state = DeviceState(

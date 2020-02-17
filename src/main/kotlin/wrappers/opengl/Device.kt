@@ -1,6 +1,7 @@
 package wrappers.opengl
 
 import kotlinx.coroutines.*
+import org.lwjgl.opengl.GL41C
 import org.lwjgl.opengl.GL46C.*
 import org.lwjgl.system.*
 import wrappers.glfw.*
@@ -57,7 +58,7 @@ inline class Device(val context: CoroutineDispatcher) {
 
 
     // Framebuffers
-    fun framebuffer(vararg textures: Pair<Int, Image2d>) =
+    fun framebuffer(vararg textures: Pair<Int, Image<*, Texture2d>>) =
         runBlocking(context) {
             val id = glCreateFramebuffers()
             for (it in textures) glNamedFramebufferTexture(id, it.first, it.second.texture.id, it.second.index)
@@ -66,36 +67,32 @@ inline class Device(val context: CoroutineDispatcher) {
 
 
     // Pipelines
-    fun pipeline(vararg programs: Pair<ProgramType, Program>) =
+    fun pipeline(vertexProgram: Program<VertexProgram>, fragmentProgram: Program<FragmentProgram>) =
         runBlocking(context) {
             val id = glCreateProgramPipelines()
-            for (it in programs) glUseProgramStages(id, it.first.bit, it.second.id)
-            Pipeline(this@Device, id, programs.toMap())
+            GL41C.glUseProgramStages(id, VertexProgram.bit, vertexProgram.id)
+            GL41C.glUseProgramStages(id, FragmentProgram.bit, fragmentProgram.id)
+            Pipeline(this@Device, id, listOf(vertexProgram, fragmentProgram))
         }
 
 
     // Programs
-    fun program(type: ProgramType, source: String) =
+    fun <P : ProgramKind> program(type: P, source: String) =
         runBlocking(context) {
             val id = glCreateShaderProgramv(type.native, source)
-            Program(this@Device, id)
+            Program(this@Device, id, type)
         }
 
 
     // Textures
-    fun texture1d(levels: Int, internalFormat: TextureFormat, width: Int) =
-        runBlocking(context) {
-            val id = glCreateTextures(GL_TEXTURE_1D)
-            glTextureStorage1D(id, levels, internalFormat.native, width)
-            Texture1d(this@Device, id, levels, internalFormat, width)
-        }
-
-    fun texture2d(levels: Int, internalFormat: TextureFormat, width: Int, height: Int) =
+    fun <F : TextureFormat> texture2d(levels: Int, width: Int, height: Int, internalFormat: F) =
         runBlocking(context) {
             val id = glCreateTextures(GL_TEXTURE_2D)
             glTextureStorage2D(id, levels, internalFormat.native, width, height)
-            Texture2d(this@Device, id, levels, internalFormat, width, height)
+            Texture(this@Device, id, levels, width, height, 1, internalFormat, Texture2d)
         }
+
+    fun <F : TextureFormat> image2d(width: Int, height: Int, internalFormat: F) = texture2d(1, width, height, internalFormat)[0]
 
 
     // Vertex Array
@@ -104,18 +101,6 @@ inline class Device(val context: CoroutineDispatcher) {
             val id = glCreateVertexArrays()
             VertexArray(this@Device, id)
         }
-
-
-    // Images
-    fun image1d(internalFormat: TextureFormat, width: Int): Image1d {
-        val texture = texture1d(1, internalFormat, width)
-        return Image1d(texture, 0)
-    }
-
-    fun image2d(internalFormat: TextureFormat, width: Int, height: Int): Image2d {
-        val texture = texture2d(1, internalFormat, width, height)
-        return Image2d(texture, 0)
-    }
 
 
     // Command Buffer

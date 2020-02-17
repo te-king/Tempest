@@ -6,7 +6,7 @@ class DeviceState(
 
     val cull: Boolean,
     val cullFunc: CullMode = CullMode.BACK,
-    val winding: FaceWinding = FaceWinding.CCW,
+    val winding: FaceWinding = FaceWinding.CounterClockWise,
 
     val blend: Boolean,
     val blendFunction: BlendFunc = BlendFunc.Zero,

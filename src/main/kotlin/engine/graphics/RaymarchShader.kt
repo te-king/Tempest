@@ -9,13 +9,13 @@ object RaymarchShader {
 
     private val device get() = Client.device
 
-    private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, ProgramType.VERTEX)
-    private val fragmentProgram = resourceAt("""shaders/RaymarchFragmentShader.glsl""").loadShaderSource(device, ProgramType.FRAGMENT)
+    private val vertexProgram =
+        resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, VertexProgram)
 
-    val pipeline = device.pipeline(
-            ProgramType.VERTEX to vertexProgram,
-            ProgramType.FRAGMENT to fragmentProgram
-    )
+    private val fragmentProgram =
+        resourceAt("""shaders/RaymarchFragmentShader.glsl""").loadShaderSource(device, FragmentProgram)
+
+    val pipeline = device.pipeline(vertexProgram, fragmentProgram)
 
     val layout = device.vertexArray().apply {
         formatFloatAttribute(0, 3, GL_FLOAT, false, 0)

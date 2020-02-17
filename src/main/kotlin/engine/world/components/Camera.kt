@@ -48,17 +48,17 @@ class Camera(node: Node) : Component(node), Updatable {
 
 
     private val geometryFramebuffer = device.framebuffer(
-            GL_COLOR_ATTACHMENT0 to device.image2d(TextureFormat.RGB8, 640, 480),
-            GL_COLOR_ATTACHMENT1 to device.image2d(TextureFormat.RGB8, 640, 480),
-            GL_DEPTH_ATTACHMENT to device.image2d(TextureFormat.DEPTH24, 640, 480)
+        GL_COLOR_ATTACHMENT0 to device.image2d(640, 480, RGB8),
+        GL_COLOR_ATTACHMENT1 to device.image2d(640, 480, RGB8),
+        GL_DEPTH_ATTACHMENT to device.image2d(640, 480, DEPTH24)
     )
 
     private val state = DeviceState(
-            geometryFramebuffer,
-            cull = true,
-            blend = false,
-            depth = true,
-            stencil = false
+        geometryFramebuffer,
+        cull = true,
+        blend = false,
+        depth = true,
+        stencil = false
     )
 
 
@@ -79,12 +79,12 @@ class Camera(node: Node) : Component(node), Updatable {
             for (renderer in scene findAll Renderable::class) renderer.draw(this)
 
             copyFramebuffer(
-                    src = geometryFramebuffer,
-                    srcRect = Int4(0, 0, geometryFramebuffer.width, geometryFramebuffer.height),
-                    dst = output,
-                    dstRect = Int4(0, 0, 640, 480),
-                    mask = CopyFramebufferMask.ColorBuffer,
-                    filter = CopyFramebufferFilter.NEAREST
+                src = geometryFramebuffer,
+                srcRect = Int4(0, 0, geometryFramebuffer.width, geometryFramebuffer.height),
+                dst = output,
+                dstRect = Int4(0, 0, 640, 480),
+                mask = CopyFramebufferMask.ColorBuffer,
+                filter = CopyFramebufferFilter.Nearest
             )
             clearFramebuffer()
 

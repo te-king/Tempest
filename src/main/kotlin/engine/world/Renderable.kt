@@ -1,6 +1,6 @@
 package engine.world
 
-import wrappers.opengl.CommandBuffer
+import opengl.CommandBuffer
 
 interface Renderable {
     fun draw(buffer: CommandBuffer)

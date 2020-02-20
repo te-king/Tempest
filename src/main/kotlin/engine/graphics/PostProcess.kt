@@ -1,6 +1,6 @@
 package engine.graphics
 
-import wrappers.opengl.Framebuffer
+import opengl.Framebuffer
 
 interface PostProcess {
 

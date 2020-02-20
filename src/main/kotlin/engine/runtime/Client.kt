@@ -4,8 +4,8 @@ import engine.world.*
 import extensions.*
 import math.*
 import org.lwjgl.glfw.GLFW.*
-import wrappers.glfw.*
-import wrappers.opengl.*
+import glfw.*
+import opengl.*
 import kotlin.time.*
 
 object Client {

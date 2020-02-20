@@ -1,10 +1,7 @@
 import engine.graphics.*
-import engine.gui.components.List
 import engine.runtime.*
 import engine.world.*
 import engine.world.components.*
-import math.*
-import wrappers.opengl.*
 import kotlin.time.*
 
 @ExperimentalTime

@@ -1,8 +1,7 @@
 package engine.world
 
-import engine.world.components.Component
 import engine.world.controllers.Controller
-import wrappers.opengl.Device
+import opengl.Device
 import kotlin.reflect.KClass
 
 class Scene (val device: Device) {

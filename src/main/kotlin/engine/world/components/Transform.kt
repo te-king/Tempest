@@ -2,7 +2,7 @@ package engine.world.components
 
 import engine.world.*
 import math.*
-import wrappers.opengl.*
+import opengl.*
 import kotlin.properties.*
 
 class Transform(node: Node) : Component(node), Updatable {

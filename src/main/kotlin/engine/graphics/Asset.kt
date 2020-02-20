@@ -1,6 +1,6 @@
 package engine.graphics
 
-import wrappers.nanovg.Font
+import nanovg.Font
 import engine.world.components.MeshRenderer
 import engine.world.Node
 import engine.world.Scene
@@ -13,7 +13,7 @@ import org.lwjgl.assimp.Assimp.*
 import org.lwjgl.nanovg.NanoVG.*
 import org.lwjgl.stb.STBImage
 import engine.gui.nvgContext
-import wrappers.opengl.*
+import opengl.*
 import java.io.File
 import java.io.FileNotFoundException
 

@@ -6,7 +6,7 @@ import math.*
 import org.lwjgl.nanovg.*
 import org.lwjgl.nanovg.NanoVG.*
 import org.lwjgl.nanovg.NanoVGGL3.*
-import wrappers.nanovg.*
+import nanovg.*
 import java.util.*
 import kotlin.math.*
 

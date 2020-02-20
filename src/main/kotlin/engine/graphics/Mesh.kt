@@ -1,6 +1,6 @@
 package engine.graphics
 
-import wrappers.opengl.*
+import opengl.*
 
 class Mesh(val device: Device) {
 

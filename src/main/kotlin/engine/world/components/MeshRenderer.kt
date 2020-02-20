@@ -2,7 +2,7 @@ package engine.world.components
 
 import engine.graphics.*
 import engine.world.*
-import wrappers.opengl.*
+import opengl.*
 
 class MeshRenderer(node: Node) : Component(node), Renderable {
 

@@ -3,8 +3,7 @@ package engine.graphics
 import engine.runtime.Client
 import extensions.SIZE_BYTES
 import math.Float3
-import org.lwjgl.opengl.GL45C.*
-import wrappers.opengl.*
+import opengl.*
 
 object RaymarchShader {
 

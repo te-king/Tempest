@@ -3,8 +3,7 @@ package engine.graphics
 import engine.runtime.Client
 import math.Float3
 import math.Float4
-import org.lwjgl.opengl.GL11C.GL_FLOAT
-import wrappers.opengl.*
+import opengl.*
 
 object StandardShader {
 

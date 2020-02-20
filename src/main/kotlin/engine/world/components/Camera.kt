@@ -4,7 +4,7 @@ import engine.world.*
 import extensions.*
 import math.*
 import org.lwjgl.opengl.GL45C.*
-import wrappers.opengl.*
+import opengl.*
 import kotlin.properties.*
 
 class Camera(node: Node) : Component(node), Updatable {

@@ -3,7 +3,7 @@ package engine.world.components
 import engine.gui.components.*
 import engine.world.*
 import org.lwjgl.opengl.GL45C.*
-import wrappers.opengl.*
+import opengl.*
 
 class Gui(node: Node) : Component(node), Updatable {
 

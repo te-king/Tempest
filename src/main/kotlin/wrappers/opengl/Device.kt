@@ -1,15 +1,20 @@
 package wrappers.opengl
 
-import kotlinx.coroutines.*
-import org.lwjgl.opengl.GL41C
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.runBlocking
 import org.lwjgl.opengl.GL46C.*
-import org.lwjgl.system.*
-import wrappers.glfw.*
+import org.lwjgl.system.CustomBuffer
+import wrappers.glfw.Window
 
 
-inline class Device(val context: CoroutineDispatcher) {
+class Device(val context: CoroutineDispatcher) {
 
     constructor(window: Window) : this(window.context)
+
+    // Constants
+    val defaultFramebuffer = Framebuffer(this, 0, mapOf())
+
+    val defaultVertexArray = VertexArray(this, 0)
 
 
     // Buffers
@@ -70,14 +75,14 @@ inline class Device(val context: CoroutineDispatcher) {
     fun pipeline(vertexProgram: Program<VertexProgram>, fragmentProgram: Program<FragmentProgram>) =
         runBlocking(context) {
             val id = glCreateProgramPipelines()
-            GL41C.glUseProgramStages(id, VertexProgram.bit, vertexProgram.id)
-            GL41C.glUseProgramStages(id, FragmentProgram.bit, fragmentProgram.id)
-            Pipeline(this@Device, id, listOf(vertexProgram, fragmentProgram))
+            glUseProgramStages(id, VertexProgram.bit, vertexProgram.id)
+            glUseProgramStages(id, FragmentProgram.bit, fragmentProgram.id)
+            Pipeline(this@Device, id, vertexProgram, fragmentProgram)
         }
 
 
     // Programs
-    fun <P : ProgramKind> program(type: P, source: String) =
+    fun <P : ProgramKind> program(source: String, type: P) =
         runBlocking(context) {
             val id = glCreateShaderProgramv(type.native, source)
             Program(this@Device, id, type)
@@ -109,26 +114,34 @@ inline class Device(val context: CoroutineDispatcher) {
         val cb = CommandBuffer().also(func).commands
 
         runBlocking(context) {
-            glBindFramebuffer(GL_FRAMEBUFFER, state.readFramebuffer?.id ?: 0)
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, state.readFramebuffer?.id ?: 0)
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, state.writeFramebuffer?.id ?: 0)
 
-            if (state.cull) glEnable(GL_CULL_FACE) else glDisable(GL_CULL_FACE)
-            glCullFace(state.cullFunc.native)
             glFrontFace(state.winding.native)
 
-            if (state.blend) glEnable(GL_BLEND) else glDisable(GL_BLEND)
-            //
+            if (state.cullFunc != null) {
+                glEnable(GL_CULL_FACE)
+                glCullFace(state.cullFunc.native)
+            } else glDisable(GL_CULL_FACE)
 
-            if (state.depth) glEnable(GL_DEPTH_TEST) else glDisable(GL_DEPTH_TEST)
-            glDepthFunc(state.depthFunction.native)
+            if (state.blendFunction != null) {
+                glEnable(GL_BLEND)
+                //
+            } else glDisable(GL_BLEND)
 
-            if (state.stencil) glEnable(GL_STENCIL_TEST) else glDisable(GL_STENCIL_TEST)
-            glStencilMask(state.stencilMask.toInt())
-            //
-            //
+            if (state.depthFunction != null) {
+                glEnable(GL_DEPTH_TEST)
+                glDepthFunc(state.depthFunction.native)
+            } else glDisable(GL_DEPTH_TEST)
+
+            if (state.stencilFunc != null) {
+                glEnable(GL_STENCIL_TEST)
+                glStencilMask(state.stencilMask.toInt())
+                //
+                //
+            } else glDisable(GL_STENCIL_TEST)
 
             cb.forEach { it.invoke() }
-
-            glFinish()
         }
 
     }

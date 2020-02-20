@@ -4,18 +4,18 @@ class DeviceState(
     val readFramebuffer: Framebuffer? = null,
     val writeFramebuffer: Framebuffer? = null,
 
-    val cull: Boolean,
-    val cullFunc: CullMode = CullMode.BACK,
     val winding: FaceWinding = FaceWinding.CounterClockWise,
 
-    val blend: Boolean,
-    val blendFunction: BlendFunc = BlendFunc.Zero,
+//    val cull: Boolean,
+    val cullFunc: CullMode? = CullMode.Back,
 
-    val depth: Boolean,
-    val depthFunction: DepthFunc = DepthFunc.Less,
+//    val blend: Boolean,
+    val blendFunction: BlendFunc? = BlendFunc.Zero,
 
-    val stencil: Boolean,
+//    val depth: Boolean,
+    val depthFunction: DepthFunc? = DepthFunc.Less,
+
+    val stencilFunc: Unit? = null,
     val stencilMask: UInt = 0xFFFFFFFFU,
-    val stencilOp: Unit = Unit,
-    val stencilFunc: Unit = Unit
+    val stencilOp: Unit = Unit
 )

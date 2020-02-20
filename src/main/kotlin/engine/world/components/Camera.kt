@@ -21,7 +21,7 @@ class Camera(node: Node) : Component(node), Updatable {
     var farPlaneClipping by Delegates.observable(500f) { _, _, _ -> invalidateProjection() }
 
 
-    var output: Framebuffer? = null
+    var output: Framebuffer = device.defaultFramebuffer
 
 
     // Projection Matrix
@@ -53,13 +53,7 @@ class Camera(node: Node) : Component(node), Updatable {
         GL_DEPTH_ATTACHMENT to device.image2d(640, 480, DEPTH24)
     )
 
-    private val state = DeviceState(
-        geometryFramebuffer,
-        cull = true,
-        blend = false,
-        depth = true,
-        stencil = false
-    )
+    private val state = DeviceState(writeFramebuffer = geometryFramebuffer)
 
 
     override fun update(delta: Float) {

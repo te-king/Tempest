@@ -24,7 +24,7 @@ class Asset(val file: File) {
         if (!file.exists()) throw FileNotFoundException("External asset not found: $file")
     }
 
-    fun<P: ProgramKind> loadShaderSource(device: Device, type: P) = device.program(type, file.readText())
+    fun<P: ProgramKind> loadShaderSource(device: Device, type: P) = device.program(file.readText(), type)
 
     fun loadI8(device: Device, layers: Int = 1, channels: Int = 0): Texture<RGB8, Texture2d>? {
         val w = intArrayOf(0)
@@ -187,7 +187,7 @@ class Asset(val file: File) {
 
             val indices = aiMesh.mFaces().flatMap { (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
                 val buffer = scene.device.buffer(this, ElementArrayBuffer, ServerStorage)
-                Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.TRIANGLES)
+                Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.Triangles)
             }
 
             vertices.let { mesh.vertexBuffers[0] = it }

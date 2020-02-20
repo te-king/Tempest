@@ -7,7 +7,7 @@ import math.*
 import org.lwjgl.opengl.GL46C.*
 
 
-inline class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
+class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
 
     // Binding
     fun bindUniformBuffer(index: Int, buffer: Buffer<UniformBuffer, *>?) =

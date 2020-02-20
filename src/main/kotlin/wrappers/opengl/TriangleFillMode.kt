@@ -3,7 +3,7 @@ package wrappers.opengl
 import org.lwjgl.opengl.GL46C.*
 
 enum class TriangleFillMode(val native: Int) {
-    POINT(GL_POINT),
-    LINE(GL_LINE),
-    FILL(GL_FILL),
+    Point(GL_POINT),
+    Line(GL_LINE),
+    Fill(GL_FILL),
 }

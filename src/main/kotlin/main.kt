@@ -26,7 +26,6 @@ fun main() {
         val cameraCam = cameraNode add Camera::class
 
         //cameraTransform.translation = Float3(0f, 0f, 5f)
-        cameraCam.output = Client.framebuffer
     }
 
     //    run {

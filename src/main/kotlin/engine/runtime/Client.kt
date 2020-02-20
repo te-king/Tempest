@@ -20,11 +20,6 @@ object Client {
 
     val device = Device(window)
 
-    val framebuffer = object : Framebuffer(device, 0, mapOf()) {
-        override val width get() = window.width
-        override val height get() = window.height
-    }
-
     init {
         window.onKeyPress { _, key, action, _ -> Input.keyboard[key] = action != GLFW_RELEASE }
         window.onMouseMove { _, x, y -> Input.cursor = Float2(x.toFloat(), y.toFloat()) }

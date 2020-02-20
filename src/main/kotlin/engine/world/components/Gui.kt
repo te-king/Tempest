@@ -17,13 +17,7 @@ class Gui(node: Node) : Component(node), Updatable {
         GL_STENCIL_ATTACHMENT to device.image2d(640, 480, STENCIL8)
     )
 
-    private val state = DeviceState(
-        guiFramebuffer,
-        cull = false,
-        blend = true,
-        depth = false,
-        stencil = true
-    )
+    private val state = DeviceState(writeFramebuffer = guiFramebuffer, stencilFunc = Unit)
 
 
     override fun update(delta: Float) {

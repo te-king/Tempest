@@ -2,6 +2,7 @@ package engine.graphics
 
 import engine.runtime.Client
 import extensions.SIZE_BYTES
+import math.Float3
 import org.lwjgl.opengl.GL45C.*
 import wrappers.opengl.*
 
@@ -9,27 +10,11 @@ object RaymarchShader {
 
     private val device get() = Client.device
 
-    private val vertexProgram =
-        resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, VertexProgram)
-
-    private val fragmentProgram =
-        resourceAt("""shaders/RaymarchFragmentShader.glsl""").loadShaderSource(device, FragmentProgram)
+    private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, VertexProgram)
+    private val fragmentProgram = resourceAt("""shaders/RaymarchFragmentShader.glsl""").loadShaderSource(device, FragmentProgram)
 
     val pipeline = device.pipeline(vertexProgram, fragmentProgram)
-
-    val layout = device.vertexArray().apply {
-        formatFloatAttribute(0, 3, GL_FLOAT, false, 0)
-        bindAttribute(0, 0)
-
-        formatFloatAttribute(1, 3, GL_FLOAT, false, 0)
-        bindAttribute(1, 1)
-
-        formatFloatAttribute(2, 3, GL_FLOAT, false, 0)
-        bindAttribute(2, 2)
-
-        formatFloatAttribute(3, 3, GL_FLOAT, false, 0)
-        bindAttribute(3, 3)
-    }
+    val layout = device.vertexArray(0 to Float3::class, 1 to Float3::class, 2 to Float3::class, 3 to Float3::class)
 
     init {
         println(vertexProgram.infoLog)

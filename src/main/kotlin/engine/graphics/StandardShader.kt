@@ -10,14 +10,10 @@ object StandardShader {
 
     private val device get() = Client.device
 
-    private val vertexProgram =
-        resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, VertexProgram)
-
-    private val fragmentProgram =
-        resourceAt("""shaders/StandardFragmentShader.glsl""").loadShaderSource(device, FragmentProgram)
+    private val vertexProgram = resourceAt("""shaders/StandardVertexShader.glsl""").loadShaderSource(device, VertexProgram)
+    private val fragmentProgram = resourceAt("""shaders/StandardFragmentShader.glsl""").loadShaderSource(device, FragmentProgram)
 
     val pipeline = device.pipeline(vertexProgram, fragmentProgram)
-
     val layout = device.vertexArray(0 to Float3::class, 1 to Float3::class, 2 to Float3::class, 3 to Float3::class)
 
     class Material : engine.graphics.Material {

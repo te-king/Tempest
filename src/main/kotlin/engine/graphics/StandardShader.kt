@@ -1,6 +1,7 @@
 package engine.graphics
 
 import engine.runtime.Client
+import math.Float3
 import math.Float4
 import org.lwjgl.opengl.GL11C.GL_FLOAT
 import wrappers.opengl.*
@@ -17,27 +18,12 @@ object StandardShader {
 
     val pipeline = device.pipeline(vertexProgram, fragmentProgram)
 
-    val layout = device.vertexArray().apply {
-        formatFloatAttribute(0, 3, GL_FLOAT, false, 0)
-        bindAttribute(0, 0)
-
-        formatFloatAttribute(1, 3, GL_FLOAT, false, 0)
-        bindAttribute(1, 1)
-
-        formatFloatAttribute(2, 3, GL_FLOAT, false, 0)
-        bindAttribute(2, 2)
-
-        formatFloatAttribute(3, 3, GL_FLOAT, false, 0)
-        bindAttribute(3, 3)
-    }
+    val layout = device.vertexArray(0 to Float3::class, 1 to Float3::class, 2 to Float3::class, 3 to Float3::class)
 
     class Material : engine.graphics.Material {
 
-        override val buffer =
-            device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, UniformBuffer, DynamicStorage)
-
+        override val buffer = device.buffer(Float4.SIZE_BYTES * Long.SIZE_BYTES.toLong() * 2, UniformBuffer, DynamicStorage)
         override val pipeline get() = StandardShader.pipeline
-
         override val layout get() = StandardShader.layout
 
 

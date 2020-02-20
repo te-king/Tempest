@@ -1,10 +1,14 @@
 package wrappers.opengl
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import math.*
 import org.lwjgl.opengl.GL46C.*
 import org.lwjgl.system.CustomBuffer
 import wrappers.glfw.Window
+import kotlin.reflect.KClass
 
 
 class Device(val context: CoroutineDispatcher) {
@@ -101,9 +105,22 @@ class Device(val context: CoroutineDispatcher) {
 
 
     // Vertex Array
-    fun vertexArray() =
+    fun vertexArray(vararg pairs: Pair<Int, KClass<*>>) =
         runBlocking(context) {
             val id = glCreateVertexArrays()
+            for (pair in pairs) {
+                glVertexArrayAttribBinding(id, pair.first, pair.first)
+                when (pair.second) {
+                    Float::class -> glVertexArrayAttribFormat(id, pair.first, 1, GL_FLOAT, false, 0)
+                    Float2::class -> glVertexArrayAttribFormat(id, pair.first, 2, GL_FLOAT, false, 0)
+                    Float3::class -> glVertexArrayAttribFormat(id, pair.first, 3, GL_FLOAT, false, 0)
+                    Float4::class -> glVertexArrayAttribFormat(id, pair.first, 4, GL_FLOAT, false, 0)
+                    Int::class -> glVertexArrayAttribIFormat(id, pair.first, 1, GL_INT, 0)
+                    Int2::class -> glVertexArrayAttribIFormat(id, pair.first, 2, GL_INT, 0)
+                    Int3::class -> glVertexArrayAttribIFormat(id, pair.first, 3, GL_INT, 0)
+                    Int4::class -> glVertexArrayAttribIFormat(id, pair.first, 4, GL_INT, 0)
+                }
+            }
             VertexArray(this@Device, id)
         }
 

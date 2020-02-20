@@ -2,10 +2,11 @@
 
 package wrappers.opengl
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.lwjgl.opengl.GL46C.*
 
-open class VertexArray(val device: Device, val id: Int) {
+class VertexArray(val device: Device, val id: Int) {
 
     protected fun finalize() {
         GlobalScope.launch(device.context) {

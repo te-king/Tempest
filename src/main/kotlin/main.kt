@@ -2,12 +2,14 @@ import engine.graphics.*
 import engine.runtime.*
 import engine.world.*
 import engine.world.components.*
+import engine.world.controllers.RenderPipeline
 import kotlin.time.*
 
 @ExperimentalTime
 fun main() {
 
     val scene = Client.scene
+    val scenePipeline = scene.add(RenderPipeline::class)
 
 
     // Load object
@@ -20,9 +22,9 @@ fun main() {
         val cameraNode = Node(scene, "Camera")
         val cameraTransform = cameraNode add Transform::class
         val cameraInput = cameraNode add CameraInput::class
-        val cameraCam = cameraNode add Camera::class
+        val cameraCam = cameraNode add Rasterizer::class
 
-        //cameraTransform.translation = Float3(0f, 0f, 5f)
+        scenePipeline.primaryRasterizer = cameraCam
     }
 
     //    run {

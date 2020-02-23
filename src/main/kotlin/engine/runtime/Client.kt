@@ -38,7 +38,7 @@ object Client {
 
         window.loop {
 
-            for (updatable in scene findAll Updatable::class)
+            for (updatable in scene.findAll(Updatable::class))
                 updatable.update(mark.elapsedNow().inSeconds.toFloat())
 
             window.swapBuffers()

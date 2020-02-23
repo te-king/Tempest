@@ -1,11 +1,9 @@
 package engine.world.controllers
 
-import engine.world.Node
+import engine.world.Scene
 
-abstract class Controller(val node: Node) {
+abstract class Controller(val scene: Scene) {
 
-    val device get() = node.device
-
-    val scene get() = node.scene
+    val device get() = scene.device
 
 }

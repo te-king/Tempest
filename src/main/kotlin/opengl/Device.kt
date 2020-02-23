@@ -65,10 +65,10 @@ class Device(val context: CoroutineDispatcher) {
 
 
     // Framebuffers
-    fun framebuffer(vararg textures: Pair<Int, Image<*, Texture2d>>) =
+    fun framebuffer(vararg textures: Pair<FramebufferAttachment, Image<*, Texture2d>>) =
         runBlocking(context) {
             val id = glCreateFramebuffers()
-            for (it in textures) glNamedFramebufferTexture(id, it.first, it.second.texture.id, it.second.index)
+            for (it in textures) glNamedFramebufferTexture(id, it.first.native, it.second.texture.id, it.second.index)
             Framebuffer(this@Device, id, textures.toMap())
         }
 

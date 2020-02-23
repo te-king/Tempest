@@ -21,9 +21,6 @@ class Rasterizer(node: Node) : Component(node) {
     var farPlaneClipping by Delegates.observable(500f) { _, _, _ -> projectionInvalid = true }
 
 
-    var output: Framebuffer = device.defaultFramebuffer
-
-
     // Projection Matrix
     private var projectionInvalid = true
 

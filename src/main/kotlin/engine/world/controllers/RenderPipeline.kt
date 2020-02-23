@@ -14,6 +14,8 @@ class RenderPipeline(scene: Scene) : Controller(scene), Updatable {
 
     var primaryRasterizer: Rasterizer? = null
 
+    var primaryShadowCaster: Rasterizer? = null
+
 
     private val rasterPassFramebuffer = device.framebuffer(
         FramebufferAttachment.Color0 to device.image2d(640, 480, RGB8),
@@ -24,12 +26,32 @@ class RenderPipeline(scene: Scene) : Controller(scene), Updatable {
     private val rasterPassState = DeviceState(writeFramebuffer = rasterPassFramebuffer)
 
 
+    private val shadowPassFramebuffer = device.framebuffer(
+        FramebufferAttachment.Depth to device.image2d(1024, 1024, DEPTH24)
+    )
+
+    private val shadowPassState = DeviceState(writeFramebuffer = shadowPassFramebuffer)
+
+
     override fun update(delta: Float) {
 
+        // Rasterize scene into initial raster framebuffer
+        primaryRasterizer?.apply {
+            device.enqueue(rasterPassState) {
+                clearFramebuffer()
+                rasterize()
+            }
+        }
+
+        primaryShadowCaster?.apply {
+            device.enqueue(shadowPassState) {
+                clearFramebuffer()
+                rasterize()
+            }
+        }
+
+
         device.enqueue(rasterPassState) {
-
-            primaryRasterizer?.apply { this@enqueue.rasterize() }
-
             copyFramebuffer(
                 src = rasterPassFramebuffer,
                 srcRect = Int4(0, 0, rasterPassFramebuffer.width, rasterPassFramebuffer.height),
@@ -38,10 +60,8 @@ class RenderPipeline(scene: Scene) : Controller(scene), Updatable {
                 mask = CopyFramebufferMask.ColorBuffer,
                 filter = CopyFramebufferFilter.Nearest
             )
-
-            clearFramebuffer()
-
         }
+
 
     }
 

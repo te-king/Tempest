@@ -3,6 +3,8 @@ import engine.runtime.*
 import engine.world.*
 import engine.world.components.*
 import engine.world.controllers.RenderPipeline
+import math.Float3
+import math.Quaternion
 import kotlin.time.*
 
 @ExperimentalTime
@@ -20,35 +22,22 @@ fun main() {
     // Initialize camera
     run {
         val cameraNode = Node(scene, "Camera")
-        val cameraTransform = cameraNode add Transform::class
         val cameraInput = cameraNode add CameraInput::class
-        val cameraCam = cameraNode add Rasterizer::class
+        val cameraRasterizer = cameraNode add Rasterizer::class
 
-        scenePipeline.primaryRasterizer = cameraCam
+        scenePipeline.primaryRasterizer = cameraRasterizer
     }
 
-    //    run {
-    //        val node = Node(scene)
-    //        val guiRenderer = node add Gui::class
-    //        guiRenderer.output = Client.framebuffer
-    //
-    //        val container = Dock()
-    //        container.preferredWidth = 86
-    //        container.preferredHeight = 24
-    //        container.child = Button()
-    //
-    //        guiRenderer.root = container
-    //    }
+    // Initialize primary light source
+    run {
+        val lightNode = Node(scene, "Light")
+        val lightTransform = lightNode add Transform::class
+        val lightRasterizer = lightNode add Rasterizer::class
 
-
-    // Initialize GUI
-//    run {
-//        val node = Node(scene, "Gooi")
-//        val guiRenderer = node add Gui::class
-//        guiRenderer.output = Client.framebuffer
-//
-//        guiRenderer.root = List(scene.nodeSet)
-//    }
+        lightTransform.translation = Float3(0f, 2f, 0f)
+        lightTransform.rotation = Quaternion.fromAxisAngle(Float3.left, 90f * 0.0174533f)
+        scenePipeline.primaryShadowCaster = lightRasterizer
+    }
 
     // Run the client program
     Client.run()

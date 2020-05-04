@@ -1,8 +1,8 @@
 package engine.graphics
 
 import engine.runtime.Client
-import math.Float3
-import math.Float4
+import extensions.SIZE_BYTES
+import math.*
 import opengl.*
 
 object StandardShader {
@@ -22,9 +22,9 @@ object StandardShader {
         override val layout get() = StandardShader.layout
 
 
-        var diffuseColor = Float4(0f, 0f, 0f, 0f)
+        var diffuseColor = Color.transparent
             set(value) {
-                buffer.setSubData(0, value.toFloatArray())
+                buffer.setSubData(0, value.vector.toFloatArray())
                 field = value
             }
 

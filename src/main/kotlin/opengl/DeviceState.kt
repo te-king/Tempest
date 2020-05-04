@@ -1,6 +1,6 @@
 package opengl
 
-class DeviceState(
+data class DeviceState(
     val readFramebuffer: Framebuffer? = null,
     val writeFramebuffer: Framebuffer? = null,
 

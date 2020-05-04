@@ -4,12 +4,12 @@ package math
 data class Int4(val x: Int, val y: Int, val z: Int, val w: Int) {
 
     companion object {
-        val SIZE_BITS = Int.SIZE_BITS * 4
-        val SIZE_BYTES = Int.SIZE_BYTES * 4
+        val zero = Int4(0, 0, 0, 0)
+        val one = Int4(1, 1, 1, 1)
     }
 
 
-    constructor(): this(0, 0, 0, 0)
+    constructor() : this(0, 0, 0, 0)
 
 
     fun toIntArray() = intArrayOf(x, y, z, w)

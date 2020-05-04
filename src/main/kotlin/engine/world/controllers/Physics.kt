@@ -1,20 +1,16 @@
 package engine.world.controllers
 
 import engine.physics.Collision
-import engine.physics.Sphere
-import engine.physics.Surface
 import engine.world.Scene
-import engine.world.components.PhysicsBody
 import engine.world.Updatable
-import extensions.findAll
-import extensions.pairedPermutations
-import math.*
+import engine.world.components.PhysicsBody
+import extensions.*
+import math.Float3
+import math.Quaternion
 
 class Physics(scene: Scene) : Controller(scene), Updatable {
 
     var gravity = Float3(0f, -9.81f, 0f)
-
-    var dampening = 0f
 
 
     override fun update(delta: Float) {
@@ -22,61 +18,39 @@ class Physics(scene: Scene) : Controller(scene), Updatable {
         val physicsBodies = scene.findAll(PhysicsBody::class).toList()
 
         for (physicsBody in physicsBodies) {
-            physicsBody.addForce(gravity * delta)
-            physicsBody.translationDelta = lerp(physicsBody.translationDelta, Float3.zero, dampening * delta)
-            physicsBody.rotationDelta = slerp(physicsBody.rotationDelta, Quaternion.identity, dampening * delta)
+            physicsBody.translationDelta += gravity * delta
+            physicsBody.translationDelta = lerp(physicsBody.translationDelta, Float3.zero, delta)
+            physicsBody.rotationDelta = slerp(physicsBody.rotationDelta, Quaternion.identity, delta)
         }
 
-        for (pair in physicsBodies.asSequence().pairedPermutations())
-            enumerateCollisions(pair.first, pair.second).forEach(this::resolveCollision)
+        for ((first, second) in physicsBodies.asSequence().pairedPermutations())
+            first.collider.enumerateCollisions(first, second).forEach(::resolveCollision)
 
-    }
-
-
-    @JvmName("enumerateAnyAny")
-    private fun enumerateCollisions(first: PhysicsBody, second: PhysicsBody) = sequence {
-        when (first.collider) {
-            is Sphere -> when (second.collider) {
-                is Sphere -> {
-                }
-                is Surface -> {
-                    yieldAll(enumerateCollisionsSphereSurface(first, second))
-                }
-            }
-            is Surface -> when (second.collider) {
-                is Sphere -> {
-                    yieldAll(enumerateCollisionsSphereSurface(second, first))
-                }
-                is Surface -> {
-                }
-            }
-        }
-    }
-
-    @JvmName("enumerateSphereSphere")
-    private fun enumerateCollisionsSphereSphere(first: PhysicsBody, second: PhysicsBody) = sequence {
-        yield(0)
-    }
-
-    @JvmName("enumerateSphereSurface")
-    private fun enumerateCollisionsSphereSurface(first: PhysicsBody, second: PhysicsBody) = sequence {
-        if (first.transform.translation.y <= 0)
-            yield(Collision(first, second, Float3(0f, first.transform.translation.y, 0f)))
     }
 
 
     private fun resolveCollision(collision: Collision) {
 
-        val combinedVelocity = collision.first.translationDelta - collision.second.translationDelta
-        val collisionDirection = collision.intersection.normalized
-        val collisionVelocity = dot(combinedVelocity, collisionDirection)
+        val relativeVelocity = collision.second.translationDelta - collision.first.translationDelta
+        val velocityAlongNormal = dot(relativeVelocity, collision.normal)
+
+        // Handle intersection
+        val displacementScalar = collision.seperation / (collision.first.massInverse + collision.second.massInverse)
+        val displacement = collision.normal * displacementScalar
+        collision.first.transform.translation += displacement * collision.first.massInverse
+        collision.second.transform.translation -= displacement * collision.second.massInverse
 
 
+        // If we're moving away, ignore
+        if (velocityAlongNormal < 0) {
 
-//        val firstDisplacement = collision.
-//
-//        collision.first.translationDelta = Float3.zero
-//        collision.second.translationDelta = Float3.zero
+            // Handle change in motion
+            val impulseScalar = -(1 + collision.restitution) * velocityAlongNormal / (collision.first.massInverse + collision.second.massInverse)
+            val impulse = collision.normal * impulseScalar
+            collision.first.translationDelta -= impulse * collision.first.massInverse
+            collision.second.translationDelta += impulse * collision.second.massInverse
+
+        }
 
     }
 

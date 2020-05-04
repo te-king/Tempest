@@ -16,3 +16,5 @@ inline class ARGB(val vector: Float4) {
     override fun toString() = "ARGB(a=$alpha, r=$red, g=$green, b=$blue)"
 
 }
+
+

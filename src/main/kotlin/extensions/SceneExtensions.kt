@@ -1,8 +1,7 @@
 package extensions
 
-import engine.world.Node
-import engine.world.Scene
-import kotlin.reflect.KClass
+import engine.world.*
+import kotlin.reflect.*
 
 
 inline val Scene.nestedNodes get() = nodes

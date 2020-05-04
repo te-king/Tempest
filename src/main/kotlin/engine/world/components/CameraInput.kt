@@ -5,7 +5,7 @@ import engine.world.*
 
 class CameraInput(node: Node) : Component(node), Updatable {
 
-    private val transform = node add Transform::class
+    private val transform = node.add(Transform::class)
 
 
     var speed = 8f

@@ -8,9 +8,6 @@ import kotlin.math.sqrt
 data class Float2(val x: Float, val y: Float) {
 
     companion object {
-        val SIZE_BITS = Float.SIZE_BITS * 2
-        val SIZE_BYTES = Float.SIZE_BYTES * 2
-
         val zero = Float2(0f, 0f)
         val one = Float2(1f, 1f)
     }

@@ -1,5 +1,6 @@
 package math
 
+import extensions.cross
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin

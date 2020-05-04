@@ -1,13 +1,11 @@
 package engine.world.controllers
 
-import engine.world.Scene
-import engine.world.Updatable
-import engine.world.components.Rasterizer
-import extensions.findAll
-import math.Int4
+import engine.world.*
+import engine.world.components.*
+import math.*
 import opengl.*
 
-class RenderPipeline(scene: Scene) : Controller(scene), Updatable {
+class Renderer(scene: Scene) : Controller(scene), Updatable {
 
 
     val target = device.defaultFramebuffer
@@ -56,7 +54,7 @@ class RenderPipeline(scene: Scene) : Controller(scene), Updatable {
                 src = rasterPassFramebuffer,
                 srcRect = Int4(0, 0, rasterPassFramebuffer.width, rasterPassFramebuffer.height),
                 dst = target,
-                dstRect = Int4(0, 0, 640, 480),
+                dstRect = Int4(0, 0, target.width, target.height),
                 mask = CopyFramebufferMask.ColorBuffer,
                 filter = CopyFramebufferFilter.Nearest
             )

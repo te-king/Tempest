@@ -6,9 +6,9 @@ import opengl.*
 
 class MeshRenderer(node: Node) : Component(node), Renderable {
 
-    private val transform = node add Transform::class
+    private val transform = node.add(Transform::class)
 
-    val pairs = mutableListOf<Pair<Mesh, Material?>>()
+    val pairs = mutableListOf<Pair<Geometry, Material?>>()
 
 
     override fun draw(buffer: CommandBuffer) {

@@ -22,7 +22,7 @@ class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
             glBindVertexBuffer(index, buffer?.id ?: 0, offset, stride)
         }
 
-    fun bindVertexBuffer(index: Int, vertexBuffer: Mesh.VertexBuffer?) =
+    fun bindVertexBuffer(index: Int, vertexBuffer: Geometry.VertexBuffer?) =
         bindVertexBuffer(index, vertexBuffer?.buffer, vertexBuffer?.offset ?: 0, vertexBuffer?.stride ?: 0)
 
     fun bindElementBuffer(buffer: Buffer<*, *>?) =
@@ -30,7 +30,7 @@ class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer?.id ?: 0)
         }
 
-    fun bindElementBuffer(indexBuffer: Mesh.IndexBuffer?): Boolean {
+    fun bindElementBuffer(indexBuffer: Geometry.IndexBuffer?): Boolean {
         return bindElementBuffer(indexBuffer?.buffer)
     }
 

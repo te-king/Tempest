@@ -9,7 +9,7 @@ import kotlin.properties.*
 
 class Rasterizer(node: Node) : Component(node) {
 
-    private val transform = node add Transform::class
+    private val transform = node.add(Transform::class)
 
 
     val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, UniformBuffer, DynamicStorage)

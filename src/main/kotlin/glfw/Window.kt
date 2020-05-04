@@ -25,6 +25,10 @@ class Window(width: Int, height: Int, title: String) {
     val height get() = intArrayOf(0).apply { glfwGetWindowSize(handle, null, this) }[0]
 
 
+    var title = title
+        set(value) = glfwSetWindowTitle(handle, value)
+
+
     fun onKeyPress(func: (window: Window, key: Key, action: Int, mods: Int) -> Unit) {
         glfwSetKeyCallback(handle) { _, key, _, action, mods ->
             func(this, Key.fromInt(key)!!, action, mods)

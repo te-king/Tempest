@@ -1,5 +1,10 @@
 package engine.physics
 
-abstract class Collider
+import engine.world.components.*
 
 
+abstract class Collider {
+
+    abstract fun enumerateCollisions(thisBody: PhysicsBody, otherBody: PhysicsBody): Sequence<Collision>
+
+}

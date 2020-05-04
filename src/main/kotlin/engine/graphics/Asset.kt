@@ -5,14 +5,12 @@ import engine.world.components.MeshRenderer
 import engine.world.Node
 import engine.world.Scene
 import engine.world.components.Transform
-import math.Float3
-import math.Float4
-import math.Quaternion
 import org.lwjgl.assimp.*
 import org.lwjgl.assimp.Assimp.*
 import org.lwjgl.nanovg.NanoVG.*
 import org.lwjgl.stb.STBImage
 import engine.gui.nvgContext
+import math.*
 import opengl.*
 import java.io.File
 import java.io.FileNotFoundException
@@ -129,7 +127,7 @@ class Asset(val file: File) {
             // Resolve colors
             val aiDiffuseColor = AIColor4D.create()
             aiGetMaterialColor(aiMaterial, AI_MATKEY_COLOR_DIFFUSE, 0, 0, aiDiffuseColor)
-            result.diffuseColor = aiDiffuseColor.let(::Float4)
+            result.diffuseColor = aiDiffuseColor.let { Color(it.r(), it.g(), it.b(), it.a()) }
 
 
             // Resolve textures
@@ -163,31 +161,31 @@ class Asset(val file: File) {
 
         val meshMaterialPairs = Array<AIMesh>(aiScene.mNumMeshes()) { AIMesh.create(aiScene.mMeshes()!!.get(it)) }.map { aiMesh ->
 
-            val mesh = Mesh(scene.device)
+            val mesh = Geometry(scene.device)
 
             val vertices = aiMesh.mVertices().run {
                 val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Mesh.VertexBuffer(buffer, 0, sizeof())
+                Geometry.VertexBuffer(buffer, 0, sizeof())
             }
 
             val normals = aiMesh.mNormals()?.run {
                 val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Mesh.VertexBuffer(buffer, 0, this.sizeof())
+                Geometry.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val uvs = aiMesh.mTextureCoords(0)?.run {
                 val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Mesh.VertexBuffer(buffer, 0, this.sizeof())
+                Geometry.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val tangents = aiMesh.mTangents()?.run {
                 val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Mesh.VertexBuffer(buffer, 0, this.sizeof())
+                Geometry.VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val indices = aiMesh.mFaces().flatMap { (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
                 val buffer = scene.device.buffer(this, ElementArrayBuffer, ServerStorage)
-                Mesh.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.Triangles)
+                Geometry.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.Triangles)
             }
 
             vertices.let { mesh.vertexBuffers[0] = it }
@@ -214,7 +212,7 @@ class Asset(val file: File) {
             name = node.mName().dataString() ?: "New Node"
 
             // Set transform
-            val transform = this add Transform::class
+            val transform = this.add(Transform::class)
 
             val scaling = AIVector3D.create()
             val rotation = AIQuaternion.create()
@@ -227,12 +225,12 @@ class Asset(val file: File) {
             transform.translation = Float3(position.x(), position.y(), position.z())
 
 
-            val meshRenderer = this add MeshRenderer::class
+            val meshRenderer = this.add(MeshRenderer::class)
             meshRenderer.pairs += Array(node.mNumMeshes()) { meshMaterialPairs[node.mMeshes()!!.get(it)] }
 
             Array(node.mNumChildren()) { AINode.create(node.mChildren()!!.get(it)) }.forEach { aiChild ->
                 val child = generateNode(aiChild)
-                (child add Transform::class).parent = transform
+                child.add(Transform::class).parent = transform
                 aiChild.free()
             }
 

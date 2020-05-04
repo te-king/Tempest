@@ -41,6 +41,7 @@ object Client {
             for (updatable in scene.findAll(Updatable::class))
                 updatable.update(mark.elapsedNow().inSeconds.toFloat())
 
+            window.title = mark.elapsedNow().inSeconds.toString()
             window.swapBuffers()
 
             mark = MonoClock.markNow()

@@ -9,8 +9,6 @@ class Node(val scene: Scene, var name: String = "New Node") {
         scene.nodeSet.add(this)
     }
 
-    val device get() = scene.device
-
 
     private val componentMap = hashMapOf<KClass<out Component>, Component>()
 

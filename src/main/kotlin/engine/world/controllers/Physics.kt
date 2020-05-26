@@ -1,6 +1,7 @@
 package engine.world.controllers
 
 import engine.physics.Collision
+import engine.physics.collide
 import engine.world.Scene
 import engine.world.Updatable
 import engine.world.components.PhysicsBody
@@ -9,6 +10,7 @@ import math.Float3
 import math.Quaternion
 
 class Physics(scene: Scene) : Controller(scene), Updatable {
+
 
     var gravity = Float3(0f, -9.81f, 0f)
 
@@ -24,7 +26,7 @@ class Physics(scene: Scene) : Controller(scene), Updatable {
         }
 
         for ((first, second) in physicsBodies.asSequence().pairedPermutations())
-            first.collider.enumerateCollisions(first, second).forEach(::resolveCollision)
+            collide(first, second).forEach(::resolveCollision)
 
     }
 

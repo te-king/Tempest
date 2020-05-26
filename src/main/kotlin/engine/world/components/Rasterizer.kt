@@ -1,15 +1,23 @@
 package engine.world.components
 
-import engine.world.*
-import extensions.*
-import math.*
-import org.lwjgl.opengl.GL45C.*
-import opengl.*
-import kotlin.properties.*
+import engine.world.Node
+import engine.world.Renderable
+import engine.world.controllers.Window
+import extensions.findAll
+import math.ProjectionMatrix
+import opengl.CommandBuffer
+import opengl.DynamicStorage
+import opengl.UniformBuffer
+import opengl.setSubData
+import kotlin.properties.Delegates
 
 class Rasterizer(node: Node) : Component(node) {
 
-    private val transform = node.add(Transform::class)
+    private val window = controller<Window>()
+    private val transform = component<Transform>()
+
+    // TODO: Remove
+    private val device = window.device
 
 
     val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, UniformBuffer, DynamicStorage)

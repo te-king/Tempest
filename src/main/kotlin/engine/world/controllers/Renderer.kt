@@ -7,6 +7,11 @@ import opengl.*
 
 class Renderer(scene: Scene) : Controller(scene), Updatable {
 
+    private val window = controller<Window>()
+
+    // TODO: Remove
+    private val device = window.device
+
 
     val target = device.defaultFramebuffer
 

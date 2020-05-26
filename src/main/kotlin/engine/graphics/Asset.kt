@@ -1,17 +1,20 @@
 package engine.graphics
 
-import nanovg.Font
-import engine.world.components.MeshRenderer
+import engine.gui.nvgContext
 import engine.world.Node
 import engine.world.Scene
+import engine.world.components.MeshRenderer
 import engine.world.components.Transform
+import engine.world.controllers.Window
+import math.Color
+import math.Float3
+import math.Quaternion
+import nanovg.Font
+import opengl.*
 import org.lwjgl.assimp.*
 import org.lwjgl.assimp.Assimp.*
-import org.lwjgl.nanovg.NanoVG.*
+import org.lwjgl.nanovg.NanoVG.nvgCreateFont
 import org.lwjgl.stb.STBImage
-import engine.gui.nvgContext
-import math.*
-import opengl.*
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -22,7 +25,7 @@ class Asset(val file: File) {
         if (!file.exists()) throw FileNotFoundException("External asset not found: $file")
     }
 
-    fun<P: ProgramKind> loadShaderSource(device: Device, type: P) = device.program(file.readText(), type)
+    fun <P : ProgramKind> loadShaderSource(device: Device, type: P) = device.program(file.readText(), type)
 
     fun loadI8(device: Device, layers: Int = 1, channels: Int = 0): Texture<RGB8, Texture2d>? {
         val w = intArrayOf(0)
@@ -114,6 +117,9 @@ class Asset(val file: File) {
 
     fun loadNode(scene: Scene): Node? {
 
+        val device = scene.add(Window::class).device
+
+
         // Load Scene
         val aiScene = aiImportFile(file.absolutePath, 0) ?: return null
 
@@ -136,7 +142,7 @@ class Asset(val file: File) {
                 val path = AIString.create()
                 aiGetMaterialTexture(aiMaterial, aiTextureType_DIFFUSE, 0, path, null as IntArray?, null, null, null, null, null)
 
-                Asset(File(file.parentFile, path.dataString())).loadI8(scene.device)?.let {
+                Asset(File(file.parentFile, path.dataString())).loadI8(device)?.let {
                     result.diffuseMap = it
                     it.resident = true
                 }
@@ -148,7 +154,7 @@ class Asset(val file: File) {
                 val path = AIString.create()
                 aiGetMaterialTexture(aiMaterial, aiTextureType_NORMALS, 0, path, null as IntArray?, null, null, null, null, null)
 
-                Asset(File(file.parentFile, path.dataString())).loadI8(scene.device)?.let {
+                Asset(File(file.parentFile, path.dataString())).loadI8(device)?.let {
                     result.normalMap = it
                     it.resident = true
                 }
@@ -161,40 +167,42 @@ class Asset(val file: File) {
 
         val meshMaterialPairs = Array<AIMesh>(aiScene.mNumMeshes()) { AIMesh.create(aiScene.mMeshes()!!.get(it)) }.map { aiMesh ->
 
-            val mesh = Geometry(scene.device)
+//            val mesh = Geometry(scene.device)
 
             val vertices = aiMesh.mVertices().run {
-                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Geometry.VertexBuffer(buffer, 0, sizeof())
+                val buffer = device.buffer(this, ArrayBuffer, ServerStorage)
+                VertexBuffer(buffer, 0, sizeof())
             }
 
             val normals = aiMesh.mNormals()?.run {
-                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Geometry.VertexBuffer(buffer, 0, this.sizeof())
+                val buffer = device.buffer(this, ArrayBuffer, ServerStorage)
+                VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val uvs = aiMesh.mTextureCoords(0)?.run {
-                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Geometry.VertexBuffer(buffer, 0, this.sizeof())
+                val buffer = device.buffer(this, ArrayBuffer, ServerStorage)
+                VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val tangents = aiMesh.mTangents()?.run {
-                val buffer = scene.device.buffer(this, ArrayBuffer, ServerStorage)
-                Geometry.VertexBuffer(buffer, 0, this.sizeof())
+                val buffer = device.buffer(this, ArrayBuffer, ServerStorage)
+                VertexBuffer(buffer, 0, this.sizeof())
             }
 
             val indices = aiMesh.mFaces().flatMap { (0 until it.mNumIndices()).map { i -> it.mIndices().get(i) } }.toIntArray().run {
-                val buffer = scene.device.buffer(this, ElementArrayBuffer, ServerStorage)
-                Geometry.IndexBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.Triangles)
+                val buffer = device.buffer(this, ElementArrayBuffer, ServerStorage)
+                ElementBuffer(buffer, size, IndexType.UNSIGNED_INT, PrimitiveType.Triangles)
             }
 
-            vertices.let { mesh.vertexBuffers[0] = it }
-            normals?.let { mesh.vertexBuffers[1] = it }
-            uvs?.let { mesh.vertexBuffers[2] = it }
-            tangents?.let { mesh.vertexBuffers[3] = it }
-            indices.let { mesh.indexBuffers += it }
 
-            mesh to materials[aiMesh.mMaterialIndex()] as Material
+            val vertexBufferMap = mutableMapOf<Int, VertexBuffer>()
+
+            vertices.let { vertexBufferMap[0] = it }
+            normals?.let { vertexBufferMap[1] = it }
+            uvs?.let { vertexBufferMap[2] = it }
+            tangents?.let { vertexBufferMap[3] = it }
+
+            MeshBuffer(vertexBufferMap, listOf(indices)) to materials[aiMesh.mMaterialIndex()] as Material
 
         }
 

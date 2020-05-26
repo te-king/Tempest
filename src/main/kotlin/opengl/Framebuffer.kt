@@ -14,9 +14,9 @@ class Framebuffer(val device: Device, val id: Int, val textures: Map<Framebuffer
     }
 
 
-    val width get() = if (id == 0) Client.window.width else textures.values.map(Image<*, Texture2d>::width).max() ?: 0
+    val width get() = if (id == 0) 640 else textures.values.map(Image<*, Texture2d>::width).max() ?: 0
 
-    val height get() = if (id == 0) Client.window.height else textures.values.map(Image<*, Texture2d>::height).max() ?: 0
+    val height get() = if (id == 0) 480 else textures.values.map(Image<*, Texture2d>::height).max() ?: 0
 
 }
 

@@ -1,34 +1,21 @@
 package engine.runtime
 
 import engine.world.*
+import engine.world.controllers.Window
 import extensions.*
-import math.*
-import org.lwjgl.glfw.GLFW.*
-import glfw.*
-import opengl.*
 import kotlin.time.*
 
 object Client {
 
-    val window = run {
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4)
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5)
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE)
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE)
-        Window(640, 480, "New Window")
-    }
-
-    val device = Device(window)
-
-    init {
-        window.onKeyPress { _, key, action, _ -> Input.keyboard[key] = action != GLFW_RELEASE }
-        window.onMouseMove { _, x, y -> Input.cursor = Float2(x.toFloat(), y.toFloat()) }
-        window.onMouseButton { _, button, action, _ -> Input.mouse[button] = action != GLFW_RELEASE }
-    }
-
-
     // Scene
-    var scene = Scene(device)
+    var scene = Scene()
+
+    var shouldClose = false
+
+
+    // TODO: Remove
+    @Deprecated("Use 'scene.add(Window::class)' to add a windowing system and opengl context")
+    val device = scene.add(Window::class).device
 
 
     @ExperimentalTime
@@ -36,13 +23,10 @@ object Client {
 
         var mark = MonoClock.markNow()
 
-        window.loop {
+        while (!shouldClose) {
 
             for (updatable in scene.findAll(Updatable::class))
                 updatable.update(mark.elapsedNow().inSeconds.toFloat())
-
-            window.title = mark.elapsedNow().inSeconds.toString()
-            window.swapBuffers()
 
             mark = MonoClock.markNow()
             Thread.sleep(1)

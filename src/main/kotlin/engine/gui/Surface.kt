@@ -17,6 +17,7 @@ internal val defaultFont = resourceAt("""assets/default.ttf""").loadFont("defaul
 
 class Surface(windowWidth: Float, windowHeight: Float, devicePixelRatio: Float) {
 
+
     private val stack = Stack<Int4>()
 
     val x get() = stack.peek()!!.x
@@ -26,8 +27,9 @@ class Surface(windowWidth: Float, windowHeight: Float, devicePixelRatio: Float) 
 
     val cursorOver: Boolean
         get() {
-            return Input.cursor.x > x && Input.cursor.x < x + width &&
-                    Input.cursor.y > y && Input.cursor.y < y + height
+            return false
+//            return Input.cursor.x > x && Input.cursor.x < x + width &&
+//                    Input.cursor.y > y && Input.cursor.y < y + height
         }
 
 

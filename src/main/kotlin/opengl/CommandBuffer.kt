@@ -1,6 +1,5 @@
 package opengl
 
-import engine.graphics.*
 import engine.gui.*
 import engine.gui.components.*
 import math.*
@@ -22,7 +21,7 @@ class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
             glBindVertexBuffer(index, buffer?.id ?: 0, offset, stride)
         }
 
-    fun bindVertexBuffer(index: Int, vertexBuffer: Geometry.VertexBuffer?) =
+    fun bindVertexBuffer(index: Int, vertexBuffer: VertexBuffer?) =
         bindVertexBuffer(index, vertexBuffer?.buffer, vertexBuffer?.offset ?: 0, vertexBuffer?.stride ?: 0)
 
     fun bindElementBuffer(buffer: Buffer<*, *>?) =
@@ -30,8 +29,8 @@ class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer?.id ?: 0)
         }
 
-    fun bindElementBuffer(indexBuffer: Geometry.IndexBuffer?): Boolean {
-        return bindElementBuffer(indexBuffer?.buffer)
+    fun bindElementBuffer(elementBuffer: ElementBuffer?): Boolean {
+        return bindElementBuffer(elementBuffer?.buffer)
     }
 
     fun bindPipeline(pipeline: Pipeline?) =

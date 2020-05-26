@@ -57,13 +57,3 @@ inline class Float4x4Array(val array: FloatArray) : Iterable<Float4x4> {
     }
 
 }
-
-
-fun main() {
-
-    val arr = Float4x4Array(10)
-    arr[0] = Float4x4.identity
-
-    arr.map(Float4x4::toPrettyString).forEach(::println)
-
-}

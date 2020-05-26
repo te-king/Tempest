@@ -33,13 +33,3 @@ inline class Float4Array(val array: FloatArray) : Iterable<Float4> {
     }
 
 }
-
-
-fun main() {
-
-    val arr = Float4Array(4)
-    arr[0] = Float4(1f, 2f, 3f, 4f)
-
-    arr.forEach(::println)
-
-}

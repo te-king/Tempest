@@ -1,11 +1,18 @@
 package engine.world.components
 
 import engine.world.*
+import engine.world.controllers.Window
 import math.*
 import opengl.*
 import kotlin.properties.*
 
 class Transform(node: Node) : Component(node), Updatable {
+
+    private val window = controller<Window>()
+
+    // TODO: Remove
+    private val device = window.device
+
 
     var parent: Transform? = null
         set(value) {
@@ -77,9 +84,9 @@ class Transform(node: Node) : Component(node), Updatable {
 
     private fun validateLocal() {
         localMatrix =
-                TransformationMatrix.translation(translation) *
-                        TransformationMatrix.rotation(rotation) *
-                        TransformationMatrix.scaling(scale)
+            TransformationMatrix.translation(translation) *
+                    TransformationMatrix.rotation(rotation) *
+                    TransformationMatrix.scaling(scale)
         localInvalid = false
     }
 

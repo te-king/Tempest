@@ -6,9 +6,9 @@ import opengl.*
 
 class MeshRenderer(node: Node) : Component(node), Renderable {
 
-    private val transform = node.add(Transform::class)
+    private val transform = component<Transform>()
 
-    val pairs = mutableListOf<Pair<Geometry, Material?>>()
+    val pairs = mutableListOf<Pair<MeshBuffer, Material?>>()
 
 
     override fun draw(buffer: CommandBuffer) {
@@ -29,7 +29,7 @@ class MeshRenderer(node: Node) : Component(node), Renderable {
                 buffer.bindVertexBuffer(index, vertexBuffer)
             }
 
-            mesh.indexBuffers.forEach { indexBuffer ->
+            mesh.elementBuffers.forEach { indexBuffer ->
                 buffer.bindElementBuffer(indexBuffer)
                 buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
             }

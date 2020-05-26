@@ -5,13 +5,10 @@ import kotlinx.coroutines.runBlocking
 import math.*
 import org.lwjgl.opengl.GL46C.*
 import org.lwjgl.system.CustomBuffer
-import glfw.Window
 import kotlin.reflect.KClass
 
 
 class Device(val context: CoroutineDispatcher) {
-
-    constructor(window: Window) : this(window.context)
 
     // Constants
     val defaultFramebuffer = Framebuffer(this, 0, mapOf())

@@ -1,10 +1,11 @@
 package engine.world
 
 import engine.world.controllers.Controller
+import engine.world.controllers.Window
 import opengl.Device
 import kotlin.reflect.KClass
 
-class Scene (val device: Device) {
+class Scene {
 
     //TODO: Make private
     internal val nodeSet = mutableListOf<Node>()

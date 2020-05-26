@@ -2,10 +2,13 @@ package engine.world.components
 
 import engine.gui.components.*
 import engine.world.*
-import org.lwjgl.opengl.GL45C.*
+import engine.world.controllers.Window
 import opengl.*
 
 class Gui(node: Node) : Component(node), Updatable {
+
+    private val window = controller<Window>()
+    private val device = window.device
 
     var root: Element? = null
 

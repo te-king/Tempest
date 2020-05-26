@@ -2,13 +2,16 @@ package engine.world.components
 
 import engine.physics.Collider
 import engine.physics.Sphere
-import engine.world.*
+import engine.world.Node
+import engine.world.Updatable
 import extensions.slerp
-import math.*
+import math.Float3
+import math.Quaternion
+
 
 class PhysicsBody(node: Node) : Component(node), Updatable {
 
-    val transform = node.add(Transform::class)
+    val transform = component<Transform>()
 
 
     var collider: Collider = Sphere(1f)
@@ -26,6 +29,7 @@ class PhysicsBody(node: Node) : Component(node), Updatable {
     var massInverse = 1f / mass
         get() = if (static) 0f else field
         private set
+
 
     var translationDelta = Float3.zero
         get() = if (static) Float3.zero else field

@@ -29,7 +29,7 @@ class Button(var text: String = "Button") : Element {
         surface.text(text, foreground, NanoVG.NVG_ALIGN_CENTER or NanoVG.NVG_ALIGN_MIDDLE)
 
         if (surface.cursorOver) surface.fillRectangle(hoverHighlight)
-        if (surface.cursorOver and (Input.mouse[0] == true)) surface.fillRectangle(clickHighlight)
+//        if (surface.cursorOver and (Input.mouse[0] == true)) surface.fillRectangle(clickHighlight)
 
     }
 

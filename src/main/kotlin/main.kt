@@ -1,13 +1,19 @@
-import engine.graphics.*
-import engine.physics.*
-import engine.runtime.*
-import engine.world.*
+import engine.graphics.StandardShader
+import engine.graphics.resourceAt
+import engine.physics.Container
+import engine.physics.Sphere
+import engine.runtime.Client
+import engine.world.Node
 import engine.world.components.*
-import engine.world.controllers.*
-import extensions.*
-import math.*
-import kotlin.random.*
-import kotlin.time.*
+import engine.world.controllers.Physics
+import engine.world.controllers.Renderer
+import engine.world.controllers.Window
+import extensions.find
+import math.Color
+import math.Float3
+import math.Quaternion
+import kotlin.random.Random
+import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
 fun main() {
@@ -16,14 +22,15 @@ fun main() {
     val scenePipeline = scene.add(Renderer::class)
     val scenePhysics = scene.add(Physics::class)
 
+    val sceneWindow = scene.add(Window::class)
+
 
     // Load object
-    repeat(100) {
+    repeat(10) {
 
         val node = resourceAt("""assets/bunny.obj""").loadNode(scene) ?: return
         val nodeTransform = node.add(Transform::class)
         val nodePhysicsBody = node.add(PhysicsBody::class)
-
         val nodeMeshRenderer = node.find(MeshRenderer::class) ?: return
 
         for (mat in nodeMeshRenderer.pairs.mapNotNull { it.second }.filterIsInstance<StandardShader.Material>()) {
@@ -40,7 +47,7 @@ fun main() {
         nodeTransform.translation = Float3(
             Random.nextDouble(-1.0, 1.0).toFloat(),
             Random.nextDouble(1.0, 2.0).toFloat(),
-            Random.nextDouble(-1.0, 1.0).toFloat(),
+            Random.nextDouble(-1.0, 1.0).toFloat()
         )
         nodePhysicsBody.collider = Sphere(0.1f)
 
@@ -63,17 +70,6 @@ fun main() {
         val cameraRasterizer = cameraNode.add(Rasterizer::class)
 
         scenePipeline.primaryRasterizer = cameraRasterizer
-    }
-
-    // Initialize primary light source
-    run {
-        val lightNode = Node(scene, "Light")
-        val lightTransform = lightNode.add(Transform::class)
-        val lightRasterizer = lightNode.add(Rasterizer::class)
-
-        lightTransform.translation = Float3(0f, 2f, 0f)
-        lightTransform.rotation = Quaternion.fromAxisAngle(Float3.left, 90f * 0.0174533f)
-        scenePipeline.primaryShadowCaster = lightRasterizer
     }
 
     // Run the client program

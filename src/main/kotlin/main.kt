@@ -19,14 +19,13 @@ import kotlin.time.ExperimentalTime
 fun main() {
 
     val scene = Client.scene
+    val sceneWindow = scene.add(Window::class)
     val scenePipeline = scene.add(Renderer::class)
     val scenePhysics = scene.add(Physics::class)
 
-    val sceneWindow = scene.add(Window::class)
-
 
     // Load object
-    repeat(10) {
+    repeat(100) {
 
         val node = resourceAt("""assets/bunny.obj""").loadNode(scene) ?: return
         val nodeTransform = node.add(Transform::class)

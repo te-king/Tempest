@@ -5,6 +5,7 @@ import engine.world.controllers.Window
 import extensions.*
 import kotlin.time.*
 
+
 object Client {
 
     // Scene
@@ -21,14 +22,14 @@ object Client {
     @ExperimentalTime
     fun run() {
 
-        var mark = MonoClock.markNow()
+        var mark = TimeSource.Monotonic.markNow()
 
         while (!shouldClose) {
 
             for (updatable in scene.findAll(Updatable::class))
                 updatable.update(mark.elapsedNow().inSeconds.toFloat())
 
-            mark = MonoClock.markNow()
+            mark = TimeSource.Monotonic.markNow()
             Thread.sleep(1)
 
         }

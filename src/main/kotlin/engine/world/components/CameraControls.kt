@@ -2,11 +2,11 @@ package engine.world.components
 
 import engine.runtime.*
 import engine.world.*
-import engine.world.controllers.Window
+import engine.world.controllers.GraphicsContext
 
-class CameraInput(node: Node) : Component(node), Updatable {
+class CameraControls(node: Node) : Component(node), Updatable {
 
-    private val window = controller<Window>()
+    private val window = controller<GraphicsContext>()
     private val transform = component<Transform>()
 
 

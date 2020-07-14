@@ -1,7 +1,5 @@
 package math
 
-import extensions.SIZE_BITS
-import extensions.SIZE_BYTES
 import kotlin.math.sqrt
 
 
@@ -13,7 +11,7 @@ data class Float2(val x: Float, val y: Float) {
     }
 
 
-    constructor(): this(0f, 0f)
+    constructor() : this(0f, 0f)
 
 
     val lengthSquared get() = x * x + y * y
@@ -24,10 +22,10 @@ data class Float2(val x: Float, val y: Float) {
     fun toFloatArray() = floatArrayOf(x, y)
 
 
-    operator fun plus (other: Float2) = Float2(x + other.x, y + other.y)
-    operator fun minus (other: Float2) = Float2(x - other.x, y - other.y)
-    operator fun times (scalar: Float) = Float2(x * scalar, y * scalar)
-    operator fun div (scalar: Float) = Float2(x / scalar, y / scalar)
-    operator fun unaryMinus () = Float2(-x, -y)
+    operator fun plus(other: Float2) = Float2(x + other.x, y + other.y)
+    operator fun minus(other: Float2) = Float2(x - other.x, y - other.y)
+    operator fun times(scalar: Float) = Float2(x * scalar, y * scalar)
+    operator fun div(scalar: Float) = Float2(x / scalar, y / scalar)
+    operator fun unaryMinus() = Float2(-x, -y)
 
 }

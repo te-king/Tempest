@@ -1,9 +1,7 @@
 package engine.world.components
 
 import engine.world.Node
-import engine.world.Renderable
-import engine.world.controllers.Window
-import extensions.findAll
+import engine.world.controllers.GraphicsContext
 import math.ProjectionMatrix
 import opengl.CommandBuffer
 import opengl.DynamicStorage
@@ -11,16 +9,13 @@ import opengl.UniformBuffer
 import opengl.setSubData
 import kotlin.properties.Delegates
 
-class Rasterizer(node: Node) : Component(node) {
+class Camera(node: Node) : Component(node) {
 
-    private val window = controller<Window>()
+    private val window = controller<GraphicsContext>()
     private val transform = component<Transform>()
 
-    // TODO: Remove
-    private val device = window.device
 
-
-    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16, UniformBuffer, DynamicStorage)
+    val buffer = window.device.buffer(Int.SIZE_BYTES.toLong() * 16, UniformBuffer, DynamicStorage)
 
 
     var fieldOfView by Delegates.observable(0.7854f) { _, _, _ -> projectionInvalid = true }
@@ -46,15 +41,12 @@ class Rasterizer(node: Node) : Component(node) {
         }
 
 
-    fun CommandBuffer.rasterize() {
+    fun attach(commandBuffer: CommandBuffer) {
 
         projectionMatrix
 
-        bindUniformBuffer(0, transform.buffer)
-        bindUniformBuffer(1, buffer)
-
-        for (renderer in scene.findAll(Renderable::class))
-            renderer.draw(this)
+        commandBuffer.bindUniformBuffer(0, transform.buffer)
+        commandBuffer.bindUniformBuffer(1, buffer)
 
     }
 

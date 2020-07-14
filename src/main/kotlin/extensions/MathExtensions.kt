@@ -1,38 +1,13 @@
 package extensions
 
 import math.*
+import org.lwjgl.assimp.AIColor3D
+import org.lwjgl.assimp.AIColor4D
+import org.lwjgl.assimp.AIVector2D
+import org.lwjgl.assimp.AIVector3D
 import kotlin.math.*
-
-
-// Sizeof Float
-inline val Float.Companion.SIZE_BITS get() = Int.SIZE_BITS
-inline val Float.Companion.SIZE_BYTES get() = Int.SIZE_BYTES
-
-inline val Float2.Companion.SIZE_BITS get() = Int.SIZE_BITS * 2
-inline val Float2.Companion.SIZE_BYTES get() = Int.SIZE_BITS * 2
-
-inline val Float3.Companion.SIZE_BITS get() = Int.SIZE_BITS * 3
-inline val Float3.Companion.SIZE_BYTES get() = Int.SIZE_BITS * 3
-
-inline val Float4.Companion.SIZE_BITS get() = Int.SIZE_BITS * 4
-inline val Float4.Companion.SIZE_BYTES get() = Int.SIZE_BITS * 4
-
-// Sizeof Int
-//inline val Int.Companion.SIZE_BITS get() = Int.SIZE_BITS
-//inline val Int.Companion.SIZE_BYTES get() = Int.SIZE_BYTES
-
-inline val Int2.Companion.SIZE_BITS get() = Int.SIZE_BITS * 2
-inline val Int2.Companion.SIZE_BYTES get() = Int.SIZE_BITS * 2
-
-inline val Int3.Companion.SIZE_BITS get() = Int.SIZE_BITS * 3
-inline val Int3.Companion.SIZE_BYTES get() = Int.SIZE_BITS * 3
-
-inline val Int4.Companion.SIZE_BITS get() = Int.SIZE_BITS * 4
-inline val Int4.Companion.SIZE_BYTES get() = Int.SIZE_BITS * 4
-
-
-//inline val Double.Companion.SIZE_BITS get() = Long.SIZE_BITS
-//inline val Double.Companion.SIZE_BYTES get() = Long.SIZE_BYTES
+import kotlin.reflect.KClass
+import kotlin.system.exitProcess
 
 
 // Vector Functions
@@ -75,3 +50,94 @@ fun slerp(first: Quaternion, second: Quaternion, amount: Float): Quaternion {
         scale0 * first.w + scale1 * second.w
     )
 }
+
+
+// sizeof integers
+@JvmName("byteSizeOf")
+inline fun sizeOf(type: KClass<Byte>) = Byte.SIZE_BYTES.toLong()
+
+@JvmName("shortSizeOf")
+inline fun sizeOf(type: KClass<Short>) = Short.SIZE_BYTES.toLong()
+
+@JvmName("intSizeOf")
+inline fun sizeOf(type: KClass<Int>) = Int.SIZE_BYTES.toLong()
+
+@JvmName("longSizeOf")
+inline fun sizeOf(type: KClass<Long>) = Long.SIZE_BYTES.toLong()
+
+
+@JvmName("int2SizeOf")
+inline fun sizeOf(type: KClass<Int2>) = sizeOf(Int::class) * 2
+
+@JvmName("int3SizeOf")
+inline fun sizeOf(type: KClass<Int3>) = sizeOf(Int::class) * 3
+
+@JvmName("int4SizeOf")
+inline fun sizeOf(type: KClass<Int4>) = sizeOf(Int::class) * 4
+
+
+// sizeof float
+@JvmName("floatSizeOf")
+inline fun sizeOf(type: KClass<Float>) = Int.SIZE_BYTES.toLong()
+
+@JvmName("doubleSizeOf")
+inline fun sizeOf(type: KClass<Double>) = Int.SIZE_BYTES.toLong()
+
+
+@JvmName("float2SizeOf")
+inline fun sizeOf(type: KClass<Float2>) = sizeOf(Float::class) * 2
+
+@JvmName("float3SizeOf")
+inline fun sizeOf(type: KClass<Float3>) = sizeOf(Float::class) * 3
+
+@JvmName("float4SizeOf")
+inline fun sizeOf(type: KClass<Float4>) = sizeOf(Float::class) * 4
+
+@JvmName("float4x4SizeOf")
+inline fun sizeOf(type: KClass<Float4x4>) = sizeOf(Float::class) * 4 * 4
+
+
+@JvmName("colorSizeOf")
+inline fun sizeOf(type: KClass<Color>) = sizeOf(Float4::class)
+
+@JvmName("quatSizeOf")
+inline fun sizeOf(type: KClass<Quaternion>) = sizeOf(Float4::class)
+
+@JvmName("projSizeOf")
+inline fun sizeOf(type: KClass<ProjectionMatrix>) = sizeOf(Float4x4::class)
+
+@JvmName("transSizeOf")
+inline fun sizeOf(type: KClass<TransformationMatrix>) = sizeOf(Float4x4::class)
+
+
+// sizeof others
+fun sizeOf(vararg types: KClass<*>) =
+    types.map {
+        when (it) {
+            Byte::class -> sizeOf(Byte::class)
+            Short::class -> sizeOf(Short::class)
+            Int::class -> sizeOf(Int::class)
+            Long::class -> sizeOf(Long::class)
+            Int2::class -> sizeOf(Int2::class)
+            Int3::class -> sizeOf(Int3::class)
+            Int4::class -> sizeOf(Int4::class)
+            Float::class -> sizeOf(Float::class)
+            Double::class -> sizeOf(Double::class)
+            Float2::class -> sizeOf(Float2::class)
+            Float3::class -> sizeOf(Float3::class)
+            Float4::class -> sizeOf(Float4::class)
+            Float4x4::class -> sizeOf(Float4x4::class)
+            Color::class -> sizeOf(Color::class)
+            Quaternion::class -> sizeOf(Quaternion::class)
+            ProjectionMatrix::class -> sizeOf(ProjectionMatrix::class)
+            TransformationMatrix::class -> sizeOf(TransformationMatrix::class)
+            else -> 0
+        }
+    }.sum()
+
+
+// conversions
+fun AIColor3D.toColor() = Color(r(), g(), b(), 1f)
+fun AIColor4D.toColor() = Color(r(), g(), b(), a())
+fun AIVector2D.toFloat2() = Float2(x(), y())
+fun AIVector3D.toFloat3() = Float3(x(), y(), z())

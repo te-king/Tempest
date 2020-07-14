@@ -2,62 +2,58 @@ package engine.world.controllers
 
 import engine.world.*
 import engine.world.components.*
+import extensions.sizeOf
 import math.*
 import opengl.*
 
 class Renderer(scene: Scene) : Controller(scene), Updatable {
 
-    private val window = controller<Window>()
-
-    // TODO: Remove
-    private val device = window.device
+    private val graphicsContext = controller<GraphicsContext>()
+    private val renderables = components<Renderable>()
 
 
-    val target = device.defaultFramebuffer
+    var camera: Camera? = null
 
-    var primaryRasterizer: Rasterizer? = null
-
-    var primaryShadowCaster: Rasterizer? = null
+    var target = graphicsContext.device.defaultFramebuffer
 
 
-    private val rasterPassFramebuffer = device.framebuffer(
-        FramebufferAttachment.Color0 to device.image2d(640, 480, RGB8),
-        FramebufferAttachment.Color1 to device.image2d(640, 480, RGB8),
-        FramebufferAttachment.Depth to device.image2d(640, 480, DEPTH24)
+    private val buffer = graphicsContext.device.buffer(
+        sizeOf(
+            Float::class,   // delta
+            Double::class,  // uptime,
+            Int4::class     // window position
+        ),
+        UniformBuffer, DynamicStorage
     )
 
-    private val rasterPassState = DeviceState(writeFramebuffer = rasterPassFramebuffer)
-
-
-    private val shadowPassFramebuffer = device.framebuffer(
-        FramebufferAttachment.Depth to device.image2d(1024, 1024, DEPTH24)
+    private val framebuffer = graphicsContext.device.framebuffer(
+        FramebufferAttachment.Color0 to graphicsContext.device.image2d(640, 480, RGB8),
+        FramebufferAttachment.Color1 to graphicsContext.device.image2d(640, 480, RGB8),
+        FramebufferAttachment.Depth to graphicsContext.device.image2d(640, 480, DEPTH24)
     )
 
-    private val shadowPassState = DeviceState(writeFramebuffer = shadowPassFramebuffer)
+    private val state = DeviceState(writeFramebuffer = framebuffer)
 
 
     override fun update(delta: Float) {
 
         // Rasterize scene into initial raster framebuffer
-        primaryRasterizer?.apply {
-            device.enqueue(rasterPassState) {
-                clearFramebuffer()
-                rasterize()
-            }
+        graphicsContext.device.enqueue(state) {
+
+            // Update and bind general info buffer
+            bindUniformBuffer(0, buffer)
+
+            clearFramebuffer()
+            camera?.attach(this)
+            renderables.forEach { it.draw(this) }
+
         }
 
-        primaryShadowCaster?.apply {
-            device.enqueue(shadowPassState) {
-                clearFramebuffer()
-                rasterize()
-            }
-        }
-
-
-        device.enqueue(rasterPassState) {
+        // Copy backbuffer to window
+        graphicsContext.device.enqueue(state) {
             copyFramebuffer(
-                src = rasterPassFramebuffer,
-                srcRect = Int4(0, 0, rasterPassFramebuffer.width, rasterPassFramebuffer.height),
+                src = framebuffer,
+                srcRect = Int4(0, 0, framebuffer.width, framebuffer.height),
                 dst = target,
                 dstRect = Int4(0, 0, target.width, target.height),
                 mask = CopyFramebufferMask.ColorBuffer,
@@ -65,7 +61,11 @@ class Renderer(scene: Scene) : Controller(scene), Updatable {
             )
         }
 
+    }
 
+
+    interface Renderable {
+        fun draw(buffer: CommandBuffer)
     }
 
 }

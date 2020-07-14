@@ -1,17 +1,14 @@
 package engine.world.components
 
 import engine.world.*
-import engine.world.controllers.Window
+import engine.world.controllers.GraphicsContext
 import math.*
 import opengl.*
 import kotlin.properties.*
 
 class Transform(node: Node) : Component(node), Updatable {
 
-    private val window = controller<Window>()
-
-    // TODO: Remove
-    private val device = window.device
+    private val window = controller<GraphicsContext>()
 
 
     var parent: Transform? = null
@@ -27,7 +24,7 @@ class Transform(node: Node) : Component(node), Updatable {
 
 
     // Buffer
-    val buffer = device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, UniformBuffer, DynamicStorage)
+    val buffer = window.device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, UniformBuffer, DynamicStorage)
 
 
     // Transforms

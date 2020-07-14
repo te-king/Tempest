@@ -1,7 +1,7 @@
 package engine.graphics
 
 import engine.runtime.Client
-import extensions.SIZE_BYTES
+import extensions.sizeOf
 import math.Float3
 import opengl.*
 
@@ -24,7 +24,7 @@ object RaymarchShader {
 
     class Material : engine.graphics.Material {
 
-        override val buffer = device.buffer(Float.SIZE_BYTES.toLong(), UniformBuffer, DynamicStorage)
+        override val buffer = device.buffer(sizeOf(Float::class), UniformBuffer, DynamicStorage)
 
         override val pipeline get() = RaymarchShader.pipeline
 

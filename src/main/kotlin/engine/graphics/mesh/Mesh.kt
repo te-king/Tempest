@@ -1,23 +1,23 @@
 package engine.graphics.mesh
 
-import math.Float3Array
+import math.Float4Array
+import math.Int3Array
+import opengl.Device
+import opengl.MeshBuffer
+
 
 abstract class Mesh : Iterable<SubMesh> {
 
-    abstract val vertexArrays: Map<Int, Float3Array>
-    abstract val elementArrays: List<IntArray>
+    abstract val vertexArrays: Map<Int, Float4Array>
 
-    val faces get() = flatten()
-
-    val size get() = elementArrays.sumBy { it.size }
+    abstract val elementArrays: List<Int3Array>
 
 
-    operator fun get(index: Int) =
-        SubMesh(vertexArrays, elementArrays[index])
-
-
-    override fun iterator() =
-        elementArrays.map { SubMesh(vertexArrays, it) }.iterator()
+    override fun iterator() = elementArrays
+        .map {
+            SubMesh(vertexArrays, it)
+        }
+        .iterator()
 
 }
 

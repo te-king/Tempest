@@ -11,13 +11,12 @@ import math.Quaternion
 
 class Physics(scene: Scene) : Controller(scene), Updatable {
 
+    private val physicsBodies = components<PhysicsBody>()
 
     var gravity = Float3(0f, -9.81f, 0f)
 
 
     override fun update(delta: Float) {
-
-        val physicsBodies = scene.findAll(PhysicsBody::class).toList()
 
         for (physicsBody in physicsBodies) {
             physicsBody.translationDelta += gravity * delta
@@ -25,7 +24,7 @@ class Physics(scene: Scene) : Controller(scene), Updatable {
             physicsBody.rotationDelta = slerp(physicsBody.rotationDelta, Quaternion.identity, delta)
         }
 
-        for ((first, second) in physicsBodies.asSequence().pairedPermutations())
+        for ((first, second) in physicsBodies.pairedPermutations())
             collide(first, second).forEach(::resolveCollision)
 
     }

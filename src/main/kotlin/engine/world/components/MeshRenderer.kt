@@ -2,9 +2,11 @@ package engine.world.components
 
 import engine.graphics.*
 import engine.world.*
+import engine.world.controllers.Renderer
 import opengl.*
 
-class MeshRenderer(node: Node) : Component(node), Renderable {
+
+class MeshRenderer(node: Node) : Component(node), Renderer.Renderable {
 
     private val transform = component<Transform>()
 

@@ -1,6 +1,12 @@
 #version 450
 
 // Uniform Buffers
+layout(std140, binding = 4) uniform programState {
+    float delta;
+    double uptime;
+    ivec4 rect;
+};
+
 layout(std140, binding = 0) uniform cameraTransform {
     mat4 cameraLocalMatrix;
     mat4 cameraWorldMatrix;

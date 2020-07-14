@@ -1,7 +1,5 @@
 package math
 
-import extensions.SIZE_BITS
-import extensions.SIZE_BYTES
 import org.lwjgl.assimp.AIVector3D
 import kotlin.math.sqrt
 
@@ -21,8 +19,7 @@ data class Float3(val x: Float, val y: Float, val z: Float) {
     }
 
 
-    constructor(): this(0f, 0f, 0f)
-    internal constructor(other: AIVector3D): this(other.x(), other.y(), other.z())
+    constructor() : this(0f, 0f, 0f)
 
 
     val lengthSquared get() = x * x + y * y + z * z
@@ -33,10 +30,10 @@ data class Float3(val x: Float, val y: Float, val z: Float) {
     fun toFloatArray() = floatArrayOf(x, y, z)
 
 
-    operator fun plus (other: Float3) = Float3(x + other.x, y + other.y, z + other.z)
-    operator fun minus (other: Float3) = Float3(x - other.x, y - other.y, z - other.z)
-    operator fun times (scalar: Float) = Float3(x * scalar, y * scalar, z * scalar)
-    operator fun div (scalar: Float) = Float3(x / scalar, y / scalar, z / scalar)
-    operator fun unaryMinus () = Float3(-x, -y, -z)
+    operator fun plus(other: Float3) = Float3(x + other.x, y + other.y, z + other.z)
+    operator fun minus(other: Float3) = Float3(x - other.x, y - other.y, z - other.z)
+    operator fun times(scalar: Float) = Float3(x * scalar, y * scalar, z * scalar)
+    operator fun div(scalar: Float) = Float3(x / scalar, y / scalar, z / scalar)
+    operator fun unaryMinus() = Float3(-x, -y, -z)
 
 }

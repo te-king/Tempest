@@ -1,6 +1,7 @@
 package engine.world.controllers
 
 
+import engine.graphics.mesh.Mesh
 import engine.runtime.Client
 import engine.runtime.Key
 import engine.world.Scene
@@ -8,11 +9,12 @@ import engine.world.Updatable
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import opengl.Device
+import opengl.MeshBuffer
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 
 
-class Window(scene: Scene) : Controller(scene), Updatable {
+class GraphicsContext(scene: Scene) : Controller(scene), Updatable {
 
     init {
         if (!glfwInit()) throw error("Failed to initialize glfw.")
@@ -23,10 +25,12 @@ class Window(scene: Scene) : Controller(scene), Updatable {
     }
 
 
-    private val handle = glfwCreateWindow(640, 480, "New Window", 0, 0)
+    private var handle = glfwCreateWindow(640, 480, "New Window", 0, 0)
 
     private val context = newSingleThreadContext("Glfw.OpenGL.Context")
 
+
+    val device = Device(context)
 
     val keyboard = mutableMapOf<Key, Boolean>()
 
@@ -47,9 +51,6 @@ class Window(scene: Scene) : Controller(scene), Updatable {
             mouse[button] = action != GLFW_RELEASE
         }
     }
-
-
-    val device = Device(context)
 
 
     override fun update(delta: Float) {

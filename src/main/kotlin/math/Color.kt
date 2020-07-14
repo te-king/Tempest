@@ -1,5 +1,6 @@
 package math
 
+
 inline class Color(val vector: Float4) {
 
     constructor(r: Float, g: Float, b: Float, a: Float) : this(Float4(r, g, b, a))
@@ -9,6 +10,10 @@ inline class Color(val vector: Float4) {
     inline val g get() = vector.y
     inline val b get() = vector.z
     inline val a get() = vector.w
+
+    inline val rgba get() = Float4(r, g, b, a)
+    inline val argb get() = Float4(a, r, g, b)
+    inline val rgb get() = Float3(r, g, b)
 
 
     companion object {

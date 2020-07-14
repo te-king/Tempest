@@ -1,7 +1,5 @@
 package math
 
-import extensions.SIZE_BITS
-import extensions.SIZE_BYTES
 import org.lwjgl.assimp.AIColor4D
 import kotlin.math.sqrt
 
@@ -17,7 +15,6 @@ data class Float4(val x: Float, val y: Float, val z: Float, val w: Float) {
     constructor(v0: Float2, v1: Float2) : this(v0.x, v0.y, v1.x, v1.y)
     constructor(v: Float3, w: Float) : this(v.x, v.y, v.z, w)
     constructor() : this(0f, 0f, 0f, 0f)
-    internal constructor(other: AIColor4D) : this(other.r(), other.g(), other.b(), other.a())
 
 
     val lengthSquared get() = x * x + y * y + z * z + w * w

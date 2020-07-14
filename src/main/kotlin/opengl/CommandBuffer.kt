@@ -1,7 +1,5 @@
 package opengl
 
-import engine.gui.*
-import engine.gui.components.*
 import math.*
 import org.lwjgl.opengl.GL46C.*
 
@@ -77,14 +75,5 @@ class CommandBuffer(val commands: MutableList<() -> Unit> = mutableListOf()) {
                 filter.native
             )
         }
-
-    // Gui
-    fun paint(element: Element) {
-        commands += {
-            val surface = Surface(640f, 480f, 1.0f)
-            element.draw(surface)
-            surface.finalize()
-        }
-    }
 
 }

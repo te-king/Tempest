@@ -1,6 +1,5 @@
 package math
 
-import extensions.*
 
 data class Float4x4(
     val m00: Float, val m01: Float, val m02: Float, val m03: Float,
@@ -10,9 +9,6 @@ data class Float4x4(
 ) {
 
     companion object {
-        val SIZE_BITS = Float.SIZE_BITS * 16
-        val SIZE_BYTES = Float.SIZE_BYTES * 16
-
         val identity
             get() = Float4x4(
                 1f, 0f, 0f, 0f,

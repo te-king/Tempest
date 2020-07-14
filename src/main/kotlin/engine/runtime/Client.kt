@@ -1,7 +1,7 @@
 package engine.runtime
 
 import engine.world.*
-import engine.world.controllers.Window
+import engine.world.controllers.GraphicsContext
 import extensions.*
 import kotlin.time.*
 
@@ -16,7 +16,7 @@ object Client {
 
     // TODO: Remove
     @Deprecated("Use 'scene.add(Window::class)' to add a windowing system and opengl context")
-    val device = scene.add(Window::class).device
+    val device = scene.add(GraphicsContext::class).device
 
 
     @ExperimentalTime
@@ -30,7 +30,7 @@ object Client {
                 updatable.update(mark.elapsedNow().inSeconds.toFloat())
 
             mark = TimeSource.Monotonic.markNow()
-            Thread.sleep(1)
+            Thread.sleep(5)
 
         }
 

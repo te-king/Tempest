@@ -1,11 +1,10 @@
 package engine.graphics
 
-import engine.gui.nvgContext
 import engine.world.Node
 import engine.world.Scene
 import engine.world.components.MeshRenderer
 import engine.world.components.Transform
-import engine.world.controllers.Window
+import engine.world.controllers.GraphicsContext
 import math.Color
 import math.Float3
 import math.Quaternion
@@ -117,7 +116,7 @@ class Asset(val file: File) {
 
     fun loadNode(scene: Scene): Node? {
 
-        val device = scene.add(Window::class).device
+        val device = scene.add(GraphicsContext::class).device
 
 
         // Load Scene
@@ -252,9 +251,9 @@ class Asset(val file: File) {
 
     }
 
-    fun loadFont(name: String): Font? {
-        return nvgCreateFont(nvgContext, name, file.absolutePath).takeUnless { it == -1 }?.let(::Font)
-    }
+//    fun loadFont(name: String): Font? {
+//        return nvgCreateFont(nvgContext, name, file.absolutePath).takeUnless { it == -1 }?.let(::Font)
+//    }
 
 }
 

@@ -38,9 +38,9 @@ class PhysicsBody(node: Node) : Component(node), Updatable {
         get() = if (static) Quaternion.identity else field
 
 
-    override fun update(delta: Float) {
-        transform.translate(translationDelta * delta)
-        transform.rotation = slerp(transform.rotation, transform.rotation * rotationDelta, delta)
+    override fun update(delta: Double) {
+        transform.translate(translationDelta * delta.toFloat())
+        transform.rotation = slerp(transform.rotation, transform.rotation * rotationDelta, delta.toFloat())
     }
 
 }

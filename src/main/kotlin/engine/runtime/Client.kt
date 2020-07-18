@@ -14,11 +14,6 @@ object Client {
     var shouldClose = false
 
 
-    // TODO: Remove
-    @Deprecated("Use 'scene.add(Window::class)' to add a windowing system and opengl context")
-    val device = scene.add(GraphicsContext::class).device
-
-
     @ExperimentalTime
     fun run() {
 
@@ -27,7 +22,7 @@ object Client {
         while (!shouldClose) {
 
             for (updatable in scene.findAll(Updatable::class))
-                updatable.update(mark.elapsedNow().inSeconds.toFloat())
+                updatable.update(mark.elapsedNow().inSeconds)
 
             mark = TimeSource.Monotonic.markNow()
             Thread.sleep(5)

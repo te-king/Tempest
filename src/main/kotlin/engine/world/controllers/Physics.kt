@@ -16,12 +16,12 @@ class Physics(scene: Scene) : Controller(scene), Updatable {
     var gravity = Float3(0f, -9.81f, 0f)
 
 
-    override fun update(delta: Float) {
+    override fun update(delta: Double) {
 
         for (physicsBody in physicsBodies) {
-            physicsBody.translationDelta += gravity * delta
-            physicsBody.translationDelta = lerp(physicsBody.translationDelta, Float3.zero, delta)
-            physicsBody.rotationDelta = slerp(physicsBody.rotationDelta, Quaternion.identity, delta)
+            physicsBody.translationDelta += gravity * delta.toFloat()
+            physicsBody.translationDelta = lerp(physicsBody.translationDelta, Float3.zero, delta.toFloat())
+            physicsBody.rotationDelta = slerp(physicsBody.rotationDelta, Quaternion.identity, delta.toFloat())
         }
 
         for ((first, second) in physicsBodies.pairedPermutations())

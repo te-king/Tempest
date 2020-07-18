@@ -1,7 +1,6 @@
 package engine.world.controllers
 
 
-import engine.graphics.mesh.Mesh
 import engine.runtime.Client
 import engine.runtime.Key
 import engine.world.Scene
@@ -9,7 +8,6 @@ import engine.world.Updatable
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import opengl.Device
-import opengl.MeshBuffer
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 
@@ -53,13 +51,14 @@ class GraphicsContext(scene: Scene) : Controller(scene), Updatable {
     }
 
 
-    override fun update(delta: Float) {
-
-        glfwPollEvents()
+    fun swapBuffers() {
         glfwSwapBuffers(handle)
+    }
 
+
+    override fun update(delta: Double) {
+        glfwPollEvents()
         Client.shouldClose = glfwWindowShouldClose(handle)
-
     }
 
 }

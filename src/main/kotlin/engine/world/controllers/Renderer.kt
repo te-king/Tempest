@@ -17,14 +17,7 @@ class Renderer(scene: Scene) : Controller(scene), Updatable {
     var target = graphicsContext.device.defaultFramebuffer
 
 
-    private val buffer = graphicsContext.device.buffer(
-        sizeOf(
-            Float::class,   // delta
-            Double::class,  // uptime,
-            Int4::class     // window position
-        ),
-        UniformBuffer, DynamicStorage
-    )
+    private val buffer = graphicsContext.device.buffer(sizeOf(Float::class, Double::class, Int4::class), UniformBuffer, DynamicStorage)
 
     private val framebuffer = graphicsContext.device.framebuffer(
         FramebufferAttachment.Color0 to graphicsContext.device.image2d(640, 480, RGB8),
@@ -35,7 +28,7 @@ class Renderer(scene: Scene) : Controller(scene), Updatable {
     private val state = DeviceState(writeFramebuffer = framebuffer)
 
 
-    override fun update(delta: Float) {
+    override fun update(delta: Double) {
 
         // Rasterize scene into initial raster framebuffer
         graphicsContext.device.enqueue(state) {
@@ -60,6 +53,8 @@ class Renderer(scene: Scene) : Controller(scene), Updatable {
                 filter = CopyFramebufferFilter.Nearest
             )
         }
+
+        graphicsContext.swapBuffers()
 
     }
 

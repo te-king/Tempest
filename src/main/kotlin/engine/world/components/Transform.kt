@@ -113,7 +113,7 @@ class Transform(node: Node) : Component(node), Updatable {
 
 
     // TODO("Temporary workaround, wont be needed with mvp generation on CPU")
-    override fun update(delta: Float) {
+    override fun update(delta: Double) {
         if (worldInvalid) validateWorld()
     }
 

@@ -5,6 +5,7 @@ import engine.world.Scene
 import engine.world.components.MeshRenderer
 import engine.world.components.Transform
 import engine.world.controllers.GraphicsContext
+import engine.world.controllers.StandardShader
 import math.Color
 import math.Float3
 import math.Quaternion
@@ -127,7 +128,7 @@ class Asset(val file: File) {
 
         val materials = Array<AIMaterial>(aiScene.mNumMaterials()) { AIMaterial.create(aiScene.mMaterials()!!.get(it)) }.map { aiMaterial ->
 
-            val result = StandardShader.Material()
+            val result = scene.add(StandardShader::class).Material()
 
             // Resolve colors
             val aiDiffuseColor = AIColor4D.create()
@@ -165,8 +166,6 @@ class Asset(val file: File) {
         }
 
         val meshMaterialPairs = Array<AIMesh>(aiScene.mNumMeshes()) { AIMesh.create(aiScene.mMeshes()!!.get(it)) }.map { aiMesh ->
-
-//            val mesh = Geometry(scene.device)
 
             val vertices = aiMesh.mVertices().run {
                 val buffer = device.buffer(this, ArrayBuffer, ServerStorage)

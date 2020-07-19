@@ -1,4 +1,4 @@
 package engine.physics
 
 
-object Container : Collider()
+object Container : Collider

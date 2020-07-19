@@ -1,4 +1,4 @@
 package engine.physics
 
 
-abstract class Collider
+interface Collider

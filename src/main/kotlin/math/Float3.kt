@@ -1,5 +1,6 @@
 package math
 
+import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 
@@ -24,6 +25,7 @@ data class Float3(val x: Float, val y: Float, val z: Float) {
     val lengthSquared get() = x * x + y * y + z * z
     val length get() = sqrt(lengthSquared)
     val normalized get() = this / length
+    val absoluteValue get() = Float3(x.absoluteValue, y.absoluteValue, z.absoluteValue)
 
 
     fun toFloatArray() = floatArrayOf(x, y, z)

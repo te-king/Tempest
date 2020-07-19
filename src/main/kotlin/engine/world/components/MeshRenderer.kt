@@ -16,32 +16,11 @@ class MeshRenderer(node: Node) : Component(node), Renderer.Renderable {
     override fun draw(buffer: CommandBuffer) {
 
         // Bind transform
+        transform.worldMatrix
         buffer.bindUniformBuffer(2, transform.buffer)
 
-        for ((mesh, material) in pairs) {
-
-            // Bind material information
-            if (material != null) {
-                buffer.bindUniformBuffer(3, material.buffer)
-                buffer.bindPipeline(material.pipeline)
-                buffer.bindVertexArray(material.layout)
-            }
-
-            for ((index, vertexBuffer) in mesh.vertexBuffers) {
-                buffer.bindVertexBuffer(index, vertexBuffer)
-            }
-
-            mesh.elementBuffers.forEach { indexBuffer ->
-                buffer.bindElementBuffer(indexBuffer)
-                buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
-            }
-
-            for ((index, _) in mesh.vertexBuffers) {
-                buffer.bindVertexBuffer(index, null)
-            }
-
-
-        }
+        for (group in pairs.groupBy { it.second })
+            group.key?.draw(buffer, group.value.asSequence().map { it.first })
 
     }
 

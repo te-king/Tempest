@@ -2,7 +2,7 @@ package engine.graphics
 
 import opengl.Framebuffer
 
-interface PostProcess {
+interface Effect {
 
     fun process(source: Framebuffer, target: Framebuffer)
 

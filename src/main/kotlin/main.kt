@@ -30,18 +30,6 @@ fun main() {
         val node = resourceAt("""assets/bunny.obj""").loadNode(scene) ?: return
         val nodeTransform = node.add(Transform::class)
         val nodePhysicsBody = node.add(PhysicsBody::class)
-        val nodeMeshRenderer = node.find(MeshRenderer::class) ?: return
-
-        for (mat in nodeMeshRenderer.pairs.mapNotNull { it.second }.filterIsInstance<StandardShader.Material>()) {
-
-            mat.diffuseColor = Color(
-                Random.nextDouble(.0, 1.0).toFloat(),
-                Random.nextDouble(.0, 1.0).toFloat(),
-                Random.nextDouble(.0, 1.0).toFloat(),
-                1f
-            )
-
-        }
 
         nodeTransform.translation = Float3(
             Random.nextDouble(-1.0, 1.0).toFloat(),

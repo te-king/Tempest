@@ -31,12 +31,10 @@ class StandardShader(scene: Scene) : Controller(scene) {
 
     inner class Material : engine.graphics.Material {
 
-        override val buffer = graphicsContext.device.buffer(sizeOf(Color::class, Long::class, Long::class), UniformBuffer, DynamicStorage)
-        override val pipeline get() = this@StandardShader.pipeline
-        override val layout get() = this@StandardShader.layout
+        private val buffer = graphicsContext.device.buffer(sizeOf(Color::class, Long::class, Long::class), UniformBuffer, DynamicStorage)
 
 
-        var diffuseColor = Color.transparent
+        var diffuseColor = Color.red
             set(value) {
                 buffer.setSubData(0, value.vector.toFloatArray())
                 field = value
@@ -53,6 +51,53 @@ class StandardShader(scene: Scene) : Controller(scene) {
                 buffer.setSubData(sizeOf(Color::class, Long::class), longArrayOf(value?.handle ?: 0))
                 field = value
             }
+
+
+        override fun draw(buffer: CommandBuffer, mesh: MeshBuffer) {
+
+            buffer.bindUniformBuffer(3, this.buffer)
+            buffer.bindPipeline(pipeline)
+            buffer.bindVertexArray(layout)
+
+            for ((index, vertexBuffer) in mesh.vertexBuffers) {
+                buffer.bindVertexBuffer(index, vertexBuffer)
+            }
+
+            mesh.elementBuffers.forEach { indexBuffer ->
+                buffer.bindElementBuffer(indexBuffer)
+                buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
+            }
+
+            for ((index, _) in mesh.vertexBuffers) {
+                buffer.bindVertexBuffer(index, null)
+            }
+
+        }
+
+        override fun draw(buffer: CommandBuffer, meshes: Sequence<MeshBuffer>) {
+
+            buffer.bindUniformBuffer(3, this.buffer)
+            buffer.bindPipeline(pipeline)
+            buffer.bindVertexArray(layout)
+
+            for (mesh in meshes) {
+
+                for ((index, vertexBuffer) in mesh.vertexBuffers) {
+                    buffer.bindVertexBuffer(index, vertexBuffer)
+                }
+
+                mesh.elementBuffers.forEach { indexBuffer ->
+                    buffer.bindElementBuffer(indexBuffer)
+                    buffer.drawIndexedPrimitives(indexBuffer.primitiveType, indexBuffer.indexCount, indexBuffer.indexType)
+                }
+
+                for ((index, _) in mesh.vertexBuffers) {
+                    buffer.bindVertexBuffer(index, null)
+                }
+
+            }
+
+        }
 
     }
 

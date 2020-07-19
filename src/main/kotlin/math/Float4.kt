@@ -1,6 +1,5 @@
 package math
 
-import org.lwjgl.assimp.AIColor4D
 import kotlin.math.sqrt
 
 

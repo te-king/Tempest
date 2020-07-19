@@ -6,6 +6,8 @@ import engine.world.components.MeshRenderer
 import engine.world.components.Transform
 import engine.world.controllers.GraphicsContext
 import engine.world.controllers.StandardShader
+import extensions.toFloat3
+import extensions.toQuaternion
 import math.Color
 import math.Float3
 import math.Quaternion
@@ -226,9 +228,9 @@ class Asset(val file: File) {
 
             aiDecomposeMatrix(node.mTransformation(), scaling, rotation, position)
 
-            transform.scale = Float3(scaling.x(), scaling.y(), scaling.z())
-            transform.rotation = Quaternion(rotation.x(), rotation.y(), rotation.z(), rotation.w())
-            transform.translation = Float3(position.x(), position.y(), position.z())
+            transform.scale = scaling.toFloat3()
+            transform.rotation = rotation.toQuaternion()
+            transform.translation = position.toFloat3()
 
 
             val meshRenderer = this.add(MeshRenderer::class)

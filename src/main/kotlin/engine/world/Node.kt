@@ -20,7 +20,4 @@ class Node(val scene: Scene, var name: String = "New Node") {
     fun <T : Component> contains(type: KClass<T>) = componentMap.contains(type)
     fun <T : Component> delete(type: KClass<T>) = componentMap.remove(type) as T?
 
-
-    override fun toString() = "Node(name='$name')"
-
 }

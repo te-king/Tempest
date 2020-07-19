@@ -21,7 +21,7 @@ object Client {
 
         while (!shouldClose) {
 
-            for (updatable in scene.findAll(Updatable::class))
+            for (updatable in scene.findAll<Updatable>())
                 updatable.update(mark.elapsedNow().inSeconds)
 
             mark = TimeSource.Monotonic.markNow()

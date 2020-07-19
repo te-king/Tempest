@@ -37,8 +37,8 @@ fun collideSphereSphere(first: PhysicsBody, second: PhysicsBody) =
 fun collideSphereContainer(first: PhysicsBody, second: PhysicsBody) =
     sequence {
 
-        val firstCollider = first.collider as Sphere
-        val secondCollider = second.collider as Container
+        first.collider as Sphere
+        second.collider as Container
 
         val delta = first.transform.translation - second.transform.translation
 

@@ -20,9 +20,7 @@ layout(location = 1) out vec4 outNormal;
 
 
 void main() {
-    mat3 tangentToWorldspace = mat3(tangent,
-                                    bitangent,
-                                    normal);
+    mat3 tangentToWorldspace = mat3(tangent, bitangent, normal);
 
     outAlbedo = texture(diffuseMap, uv);
     outNormal = vec4(tangentToWorldspace * (texture(normalMap, uv).xyz * 2.0 - 1.0), 1f);

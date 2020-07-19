@@ -3,7 +3,9 @@ package engine.graphics
 import opengl.*
 
 interface Material {
-    val buffer: Buffer<UniformBuffer, *>
-    val pipeline: Pipeline
-    val layout: VertexArray
+
+    fun draw(buffer: CommandBuffer, mesh: MeshBuffer)
+
+    fun draw(buffer: CommandBuffer, meshes: Sequence<MeshBuffer>) = meshes.forEach { draw(buffer, it) }
+
 }

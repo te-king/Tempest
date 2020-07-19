@@ -2,11 +2,13 @@ package engine.world.components
 
 import engine.world.*
 import engine.world.controllers.GraphicsContext
+import extensions.sizeOf
 import math.*
 import opengl.*
 import kotlin.properties.*
 
-class Transform(node: Node) : Component(node), Updatable {
+
+class Transform(node: Node) : Component(node) {
 
     private val window = controller<GraphicsContext>()
 
@@ -24,7 +26,7 @@ class Transform(node: Node) : Component(node), Updatable {
 
 
     // Buffer
-    val buffer = window.device.buffer(Int.SIZE_BYTES.toLong() * 16 * 2, UniformBuffer, DynamicStorage)
+    val buffer = window.device.buffer(sizeOf(Float4x4::class, Float4x4::class), UniformBuffer, DynamicStorage)
 
 
     // Transforms
@@ -33,20 +35,12 @@ class Transform(node: Node) : Component(node), Updatable {
     var scale by Delegates.observable(Float3.one) { _, _, _ -> invalidateLocal() }
 
 
-    fun translate(v: Float3) {
-        translation += v
-    }
-
     fun rotate(q: Quaternion) {
         rotation = q * rotation
     }
 
     fun rotate(axis: Float3, angle: Float) {
         rotate(Quaternion.fromAxisAngle(axis, angle))
-    }
-
-    fun scale(v: Float3) {
-        scale += v
     }
 
 
@@ -88,7 +82,7 @@ class Transform(node: Node) : Component(node), Updatable {
     }
 
 
-    // WorldConsumer Matrix
+    // World Matrix
     private var worldInvalid = true
 
     var worldMatrix = TransformationMatrix.identity
@@ -103,7 +97,7 @@ class Transform(node: Node) : Component(node), Updatable {
 
     private fun invalidateWorld() {
         worldInvalid = true
-        childrenSet.forEach { it.invalidateWorld() }
+        for (it in childrenSet) it.invalidateWorld()
     }
 
     private fun validateWorld() {
@@ -112,12 +106,6 @@ class Transform(node: Node) : Component(node), Updatable {
     }
 
 
-    // TODO("Temporary workaround, wont be needed with mvp generation on CPU")
-    override fun update(delta: Double) {
-        if (worldInvalid) validateWorld()
-    }
-
-
-    override fun toString() = """Position: $translation, Scale: $scale, Rotation: $rotation"""
+    override fun toString() = "Position: $translation, Scale: $scale, Rotation: $rotation"
 
 }

@@ -39,7 +39,7 @@ class PhysicsBody(node: Node) : Component(node), Updatable {
 
 
     override fun update(delta: Double) {
-        transform.translate(translationDelta * delta.toFloat())
+        transform.translation += translationDelta * delta.toFloat()
         transform.rotation = slerp(transform.rotation, transform.rotation * rotationDelta, delta.toFloat())
     }
 

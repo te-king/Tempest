@@ -1,6 +1,5 @@
 package math
 
-import java.util.*
 
 data class Int2(val x: Int, val y: Int) {
 

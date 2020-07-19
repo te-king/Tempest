@@ -1,6 +1,5 @@
 package math
 
-import org.lwjgl.assimp.AIVector3D
 import kotlin.math.sqrt
 
 

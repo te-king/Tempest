@@ -1,10 +1,7 @@
 package extensions
 
 import math.*
-import org.lwjgl.assimp.AIColor3D
-import org.lwjgl.assimp.AIColor4D
-import org.lwjgl.assimp.AIVector2D
-import org.lwjgl.assimp.AIVector3D
+import org.lwjgl.assimp.*
 import kotlin.math.*
 import kotlin.reflect.KClass
 import kotlin.system.exitProcess
@@ -110,7 +107,6 @@ inline fun sizeOf(type: KClass<ProjectionMatrix>) = sizeOf(Float4x4::class)
 inline fun sizeOf(type: KClass<TransformationMatrix>) = sizeOf(Float4x4::class)
 
 
-// sizeof others
 fun sizeOf(vararg types: KClass<*>) =
     types.map {
         when (it) {
@@ -141,3 +137,4 @@ fun AIColor3D.toColor() = Color(r(), g(), b(), 1f)
 fun AIColor4D.toColor() = Color(r(), g(), b(), a())
 fun AIVector2D.toFloat2() = Float2(x(), y())
 fun AIVector3D.toFloat3() = Float3(x(), y(), z())
+fun AIQuaternion.toQuaternion() = Quaternion(x(), y(), z(), w())

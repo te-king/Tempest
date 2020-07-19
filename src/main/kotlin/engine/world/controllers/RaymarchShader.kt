@@ -27,19 +27,19 @@ class RaymarchShader(scene: Scene) : Controller(scene) {
     )
 
 
-    inner class Material : engine.graphics.Material {
-
-        override val buffer = graphicsContext.device.buffer(sizeOf(Float::class), UniformBuffer, DynamicStorage)
-        override val pipeline get() = this@RaymarchShader.pipeline
-        override val layout get() = this@RaymarchShader.layout
-
-
-        var radius = 0f
-            set(value) {
-                buffer.setSubData(0, floatArrayOf(value))
-                field = value
-            }
-
-    }
+//    inner class Material : engine.graphics.Material {
+//
+//        override val buffer = graphicsContext.device.buffer(sizeOf(Float::class), UniformBuffer, DynamicStorage)
+//        override val pipeline get() = this@RaymarchShader.pipeline
+//        override val layout get() = this@RaymarchShader.layout
+//
+//
+//        var radius = 0f
+//            set(value) {
+//                buffer.setSubData(0, floatArrayOf(value))
+//                field = value
+//            }
+//
+//    }
 
 }
